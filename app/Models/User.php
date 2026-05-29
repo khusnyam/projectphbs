@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -10,10 +12,10 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $table      = 'users';
-    protected $primaryKey = 'id_users';
+    protected $primaryKey = 'user_id';
 
     protected $fillable = [
-        'nama_user',
+        'name',
         'username',
         'email',
         'password',

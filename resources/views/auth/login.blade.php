@@ -39,7 +39,7 @@ body{font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex}
 .right-card{background:#fff;border-radius:20px;padding:36px 32px;box-shadow:0 25px 60px rgba(0,0,0,0.4)}
 .right-header{display:flex;align-items:center;gap:12px;margin-bottom:32px}
 .logo-box{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#002277,#003399);display:flex;align-items:center;justify-content:center}
-.logo-box i{color:#FFCC00;font-size:18px}
+.logo-box i{color:#fff;font-size:18px}
 .logo-text h2{font-size:15px;font-weight:800;color:#003399;line-height:1.2}
 .logo-text p{font-size:11px;color:#888}
 .right-card h3{font-size:22px;font-weight:800;color:#0a1628;margin-bottom:4px}
@@ -60,7 +60,7 @@ body{font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex}
 .check-label input{accent-color:#003399}
 .lupa{font-size:12px;color:#003399;font-weight:600;text-decoration:none}
 .lupa:hover{text-decoration:underline}
-.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,#002277,#003399);color:#FFCC00;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s,transform .2s;font-family:'Segoe UI',sans-serif;margin-bottom:20px}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,#002277,#003399);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s,transform .2s;font-family:'Segoe UI',sans-serif;margin-bottom:20px}
 .btn-login:hover{opacity:.9;transform:translateY(-1px)}
 .btn-login:disabled{opacity:.7;cursor:not-allowed}
 .divider{text-align:center;font-size:11px;color:#aaa;margin-bottom:16px;position:relative}

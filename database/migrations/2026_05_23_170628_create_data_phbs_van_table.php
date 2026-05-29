@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        Schema::create('data_phbs', function (Blueprint $table) {
+        Schema::create('data_phbs_van', function (Blueprint $table) {
             $table->id('id_data');
             $table->unsignedBigInteger('id_puskesmas');
             $table->year('tahun');
@@ -35,6 +35,6 @@ return new class extends Migration {
         });
     }
     public function down(): void {
-        Schema::dropIfExists('data_phbs');
+        Schema::dropIfExists('data_phbs_van');
     }
 };

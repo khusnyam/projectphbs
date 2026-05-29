@@ -124,7 +124,7 @@ body{font-family:var(--fm);background:var(--bg);min-height:100vh;display:flex}
   <div class="topbar">
     <div class="topbar-left">
       <h2><i class="fa-solid fa-house" style="color:var(--blue);margin-right:7px"></i>Dashboard</h2>
-      <p>Selamat datang, {{ auth()->user()->nama_user ?? 'Admin' }} • {{ date('l, d F Y') }}</p>
+      <p>Selamat datang, {{ auth()->user()->name ?? 'Admin' }} • {{ date('l, d F Y') }}</p>
     </div>
     <div class="topbar-right">
       <div class="topbar-badge"><i class="fa-solid fa-circle" style="font-size:7px;margin-right:5px;color:#16a34a"></i>Online</div>
@@ -134,10 +134,9 @@ body{font-family:var(--fm);background:var(--bg);min-height:100vh;display:flex}
   <div class="content">
     <div class="welcome">
       <div class="welcome-text">
-        <h3>👋 Selamat Datang di SIP-PHBS!</h3>
+        <h3>Selamat Datang di SIP-PHBS!</h3>
         <p>Sistem Informasi Pelaporan PHBS Tatanan Rumah Tangga</p>
       </div>
-      <div class="welcome-icon">🏥</div>
     </div>
 
     <div class="stat-row">
