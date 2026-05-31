@@ -9,6 +9,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        //return view('dashboard');
         $stats = [
             'total_puskesmas' => DB::table('puskesmas')->count(),
             'total_laporan'   => DB::table('data_phbs')->where('tahun', date('Y'))->count(),
