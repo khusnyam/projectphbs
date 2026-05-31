@@ -3,6 +3,44 @@
 use App\Http\Controllers\DataPhbsController;
 use App\Http\Controllers\PetaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PhbsInputController;
+
+Route::get(
+    '/',
+    [PhbsInputController::class, 'create']
+);
+
+Route::get(
+    '/phbs/create',
+    [PhbsInputController::class, 'create']
+)->name('phbs.create');
+
+Route::post(
+    '/phbs/store',
+    [PhbsInputController::class, 'store']
+)->name('phbs.store');
+
+Route::get(
+    '/phbs/history',
+    [PhbsInputController::class, 'history']
+)->name('phbs.history');
+
+Route::get(
+    '/phbs/{id_phbs}/edit',
+    [PhbsInputController::class, 'edit']
+)->name('phbs.edit');
+
+
+Route::put(
+    '/phbs/{id_phbs}',
+    [PhbsInputController::class, 'update']
+)->name('phbs.update');
+
+Route::delete(
+    '/phbs/{id_phbs}',
+    [PhbsInputController::class, 'destroy']
+)->name('phbs.destroy');
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PhbsController;
@@ -22,6 +60,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 // Protected
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/dinkes', [DashboardController::class, 'dinkes'])->name('dashboard.dinkes');
 
     // PHBS
     Route::get('/phbs',              [PhbsController::class, 'index'])->name('phbs.index');

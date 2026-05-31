@@ -37,6 +37,19 @@ class data_phbs extends Model
 
     public function puskesmas()
     {
-        return $this->belongsTo(puskesmas::class, 'id_puskesmas', 'id_puskesmas');
+        return $this->belongsTo(
+            puskesmas::class,
+            'id_puskesmas',
+            'id_puskesmas'
+        );
+    }
+
+    public function details()
+    {
+        return $this->hasMany(
+            data_phbs_detail::class,
+            'id_phbs',
+            'id_phbs'
+        );
     }
 }

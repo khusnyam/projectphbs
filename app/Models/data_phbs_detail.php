@@ -6,6 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class data_phbs_detail extends Model
 {
-    //data fillable
-    protected $fillable = ['id_detail_phbs','id_phbs','id_indikator','jumlah_sasaran','jumlah_capaian','persentase','kategori_capaian','keterangan'];
+    protected $table = 'data_phbs_details';
+
+    protected $primaryKey = 'id_detail_phbs';
+
+    protected $fillable = [
+    'id_phbs',
+    'id_indikator',
+    'jumlah_sasaran',
+    'jumlah_capaian',
+    'persentase',
+    'kategori_capaian',
+    'keterangan',
+    ];
+
+    // RELASI KE DATA PHBS
+    public function phbs()
+    {
+        return $this->belongsTo(
+            data_phbs::class,
+            'id_phbs'
+        );
+    }
 }
