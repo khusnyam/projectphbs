@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class data_phbs extends Model
 {
-     protected $table = 'data_phbs';
+    protected $table = 'data_phbs';
     protected $primaryKey = 'id_phbs';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
+        'id_phbs',
         'id_puskesmas',
         'bulan',
         'tahun',
