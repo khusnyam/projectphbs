@@ -22,6 +22,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 // Protected
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/dinkes', [DashboardController::class, 'dinkes'])->name('dashboard.dinkes');
 
     // PHBS
     Route::get('/phbs',              [PhbsController::class, 'index'])->name('phbs.index');
