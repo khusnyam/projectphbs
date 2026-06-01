@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class data_phbs extends Model
+class DataPHBS extends Model
 {
     protected $table = 'data_phbs';
     protected $primaryKey = 'id_phbs';
     public $incrementing = true;
     protected $keyType = 'int';
 
+    // 3. Array $fillable untuk mass-assignment
     protected $fillable = [
-        'id_phbs',
         'id_puskesmas',
         'bulan',
         'tahun',
@@ -51,5 +54,5 @@ class data_phbs extends Model
             'id_phbs',
             'id_phbs'
         );
-    }
+    }    
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\data_phbs;
 
 class data_phbs_detail extends Model
 {
@@ -24,7 +25,7 @@ class data_phbs_detail extends Model
     public function phbs()
     {
         return $this->belongsTo(
-            data_phbs::class,
+            DataPHBS::class,
             'id_phbs'
         );
     }

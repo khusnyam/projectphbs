@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use app\Models\data_phbs;
 
 class Puskesmas extends Model
 {
     use HasFactory;
-
     protected $table = 'puskesmas';
 
     protected $primaryKey = 'id_puskesmas';
@@ -53,12 +53,12 @@ class Puskesmas extends Model
 
     public function phbs()
     {
-        return $this->hasMany(data_phbs::class, 'id_puskesmas', 'id_puskesmas');
+        return $this->hasMany(DataPHBS::class, 'id_puskesmas', 'id_puskesmas');
     }
 
     public function latestPhbs()
     {
-        return $this->hasOne(data_phbs::class, 'id_puskesmas', 'id_puskesmas')
+        return $this->hasOne(DataPHBS::class, 'id_puskesmas', 'id_puskesmas')
                     ->latestOfMany('id_phbs');
     }
 
