@@ -40,7 +40,7 @@ class DashboardController extends Controller
             ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
             ->select(
                 'p.id_puskesmas', 'p.nama_puskesmas', 'p.kecamatan', 'p.kepala_puskesmas',
-                DB::raw('COUNT(dp.id_data)         AS jumlah_laporan'),
+                DB::raw('COUNT(dp.id_phbs)         AS jumlah_laporan'),
                 DB::raw('SUM(dp.jumlah_kk_total)   AS total_kk'),
                 DB::raw('SUM(dp.ber_phbs)           AS total_ber_phbs'),
                 DB::raw('ROUND(SUM(dp.ber_phbs)/NULLIF(SUM(dp.jumlah_kk_total),0)*100,2) AS persentase_phbs'),
@@ -69,7 +69,7 @@ class DashboardController extends Controller
             ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
             ->selectRaw("
                 p.id_puskesmas, p.nama_puskesmas,
-                COUNT(dp.id_data) AS jumlah_laporan,
+                COUNT(dp.id_phbs) AS jumlah_laporan,
                 ROUND(SUM(dp.ber_phbs)/NULLIF(SUM(dp.jumlah_kk_total),0)*100,1) AS rata_rata,
                 ROUND(SUM(dp.ind1_jumlah) /NULLIF(SUM(dp.ind1_sasaran) ,0)*100,1) AS ind1_pct,
                 ROUND(SUM(dp.ind2_jumlah) /NULLIF(SUM(dp.ind2_sasaran) ,0)*100,1) AS ind2_pct,

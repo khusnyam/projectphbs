@@ -1129,7 +1129,7 @@ async function saveManual(){
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
       },
-      body: JSON.stringify({ puskesmas:pusk, bulan, tahun, jumlah_kk:total, ber_phbs:phbs })
+      body: JSON.stringify({ puskesmas:pusk, bulan, tahun, jumlah_kk_total:total, ber_phbs:phbs })
     });
     const result = await res.json();
     if(result.status === 'ok'){

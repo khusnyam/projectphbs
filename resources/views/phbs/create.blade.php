@@ -208,7 +208,7 @@ tr:hover td{background:#f8faff}
 
             <div class="fg">
               <label>Jumlah KK</label>
-              <input type="number" name="jumlah_kk" value="0">
+              <input type="number" name="jumlah_kk_total" value="0">
             </div>
           </div>
         </section>

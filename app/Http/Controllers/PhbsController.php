@@ -38,11 +38,11 @@ class PhbsController extends Controller
                 ];
             }
 
-            $raw[$pk]['total_kk'] += $row->jumlah_kk;
+            $raw[$pk]['total_kk'] += $row->jumlah_kk_total;
             $raw[$pk]['ber_phbs'] += $row->ber_phbs;
             $raw[$pk]['months'][]  = [
                 'bulan'    => $row->bulan,
-                'kk'       => (int) $row->jumlah_kk,
+                'kk'       => (int) $row->jumlah_kk_total,
                 'ber_phbs' => (int) $row->ber_phbs,
             ];
         }
@@ -83,11 +83,11 @@ class PhbsController extends Controller
                 ];
             }
 
-            $result[$pk]['total_kk'] += $row->jumlah_kk;
+            $result[$pk]['total_kk'] += $row->jumlah_kk_total;
             $result[$pk]['ber_phbs'] += $row->ber_phbs;
             $result[$pk]['months'][]  = [
                 'bulan'    => $row->bulan,
-                'kk'       => (int) $row->jumlah_kk,
+                'kk'       => (int) $row->jumlah_kk_total,
                 'ber_phbs' => (int) $row->ber_phbs,
             ];
         }
@@ -110,12 +110,12 @@ class PhbsController extends Controller
             'id_puskesmas' => 'required|string|max:100',
             'bulan'     => 'required|string|max:20',
             'tahun'     => 'required|integer|min:2000|max:2100',
-            'jumlah_kk' => 'required|integer|min:0',
+            'jumlah_kk_total' => 'required|integer|min:0',
             'ber_phbs'  => 'required|integer|min:0',
         ]);
 
-        // Jika ber_phbs lebih besar dari jumlah_kk, tolak
-        if ($request->ber_phbs > $request->jumlah_kk) {
+        // Jika ber_phbs lebih besar dari jumlah_kk_total, tolak
+        if ($request->ber_phbs > $request->jumlah_kk_total) {
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Jumlah Ber-PHBS tidak boleh melebihi Total KK.',
@@ -131,7 +131,7 @@ class PhbsController extends Controller
             ],
             // Data yang di-update atau di-insert
             [
-                'jumlah_kk'  => $request->jumlah_kk,
+                'jumlah_kk_total'  => $request->jumlah_kk_total,
                 'ber_phbs'   => $request->ber_phbs,
                 'updated_at' => now(),
             ]

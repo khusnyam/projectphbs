@@ -156,7 +156,7 @@ a{text-decoration:none;color:inherit}button,input,select{font-family:'Segoe UI',
             <div class="quick-grid">
               <div class="quick">
                 <div class="label">Jumlah KK</div>
-                <div class="value">{{ $item->jumlah_kk }}</div>
+                <div class="value">{{ $item->jumlah_kk_total }}</div>
               </div>
 
               <div class="quick">

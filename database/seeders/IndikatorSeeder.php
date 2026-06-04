@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\indikator_phbs;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\IndikatorPhbs;
@@ -14,7 +15,7 @@ class IndikatorSeeder extends Seeder
     public function run(): void
     {
         //
-        IndikatorPhbs::insert([
+        indikator_phbs::insert([
         ['kode_indikator'=>'IND01','nama_indikator'=>'Persalinan Ditolong Tenaga Kesehatan','kategori_indikator'=>'PHBS Rumah Tangga','deskripsi'=>'Persalinan ditolong oleh tenaga kesehatan yang kompeten.','target_nasional'=>100,'status_aktif'=>true,'created_at'=>now(),'updated_at'=>now()],
         ['kode_indikator'=>'IND02','nama_indikator'=>'Pemberian ASI Eksklusif','kategori_indikator'=>'PHBS Rumah Tangga','deskripsi'=>'Bayi usia 0-6 bulan mendapatkan ASI eksklusif.','target_nasional'=>100,'status_aktif'=>true,'created_at'=>now(),'updated_at'=>now()],
         ['kode_indikator'=>'IND03','nama_indikator'=>'Menimbang Balita Setiap Bulan','kategori_indikator'=>'PHBS Rumah Tangga','deskripsi'=>'Balita ditimbang secara rutin setiap bulan.','target_nasional'=>100,'status_aktif'=>true,'created_at'=>now(),'updated_at'=>now()],

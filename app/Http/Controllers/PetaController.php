@@ -45,12 +45,12 @@ class PetaController extends Controller
             'puskesmas.id_puskesmas',
             'puskesmas.nama_puskesmas',
             'puskesmas.kecamatan',
-            'puskesmas.jumlah_kk',
+            'puskesmas.jumlah_kk_total',
             'puskesmas.geojson_polygon',
             \DB::raw('COALESCE(capaian_bulanan.persentase_capaian, puskesmas.persentase_capaian) AS persentase_capaian'),
             \DB::raw('COALESCE(capaian_bulanan.status_kategori,    puskesmas.status_kategori)    AS status_kategori'),
             \DB::raw('COALESCE(capaian_bulanan.jumlah_tercapai, 0) AS jumlah_tercapai'),
-            \DB::raw('COALESCE(capaian_bulanan.jumlah_sasaran,  puskesmas.jumlah_kk) AS jumlah_sasaran'),
+            \DB::raw('COALESCE(capaian_bulanan.jumlah_sasaran,  puskesmas.jumlah_kk_total) AS jumlah_sasaran'),
         ]);
     }
 
@@ -85,7 +85,7 @@ class PetaController extends Controller
 
         $totalPuskesmas  = $rows->count();
         $rataRataCapaian = $rows->avg('persentase_capaian');
-        $totalKK   = $rows->sum('jumlah_kk');
+        $totalKK   = $rows->sum('jumlah_kk_total');
 
         $statistik = [
             'rendah'        => $rows->where('persentase_capaian', '<', 60)->count(),
@@ -135,7 +135,7 @@ class PetaController extends Controller
                     'nama_puskesmas'     => $row->nama_puskesmas,
                     'kecamatan'          => $row->kecamatan,
                     'persentase_capaian' => $pct,
-                    'jumlah_kk'    => (int) $row->jumlah_kk,
+                    'jumlah_kk_total'    => (int) $row->jumlah_kk_total,
                     'jumlah_tercapai'    => (int) $row->jumlah_tercapai,
                     'jumlah_sasaran'     => (int) $row->jumlah_sasaran,
                     'status_kategori'    => $row->status_kategori,
@@ -180,7 +180,7 @@ class PetaController extends Controller
                 'nama_puskesmas'     => $row->nama_puskesmas,
                 'kecamatan'          => $row->kecamatan,
                 'persentase_capaian' => $pct,
-                'jumlah_kk'    => number_format($row->jumlah_kk, 0, ',', '.'),
+                'jumlah_kk_total'    => number_format($row->jumlah_kk_total, 0, ',', '.'),
                 'jumlah_tercapai'    => number_format($row->jumlah_tercapai, 0, ',', '.'),
                 'status_kategori'    => $row->status_kategori,
                 'warna'              => $this->colorByPct($pct),
@@ -219,7 +219,7 @@ class PetaController extends Controller
             'nama_puskesmas'     => $row->nama_puskesmas,
             'kecamatan'          => $row->kecamatan,
             'persentase_capaian' => $pct,
-            'jumlah_kk'    => number_format($row->jumlah_kk, 0, ',', '.'),
+            'jumlah_kk_total'    => number_format($row->jumlah_kk_total, 0, ',', '.'),
             'jumlah_tercapai'    => number_format($row->jumlah_tercapai, 0, ',', '.'),
             'jumlah_sasaran'     => number_format($row->jumlah_sasaran,  0, ',', '.'),
             'status_kategori'    => $row->status_kategori,

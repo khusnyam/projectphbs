@@ -136,7 +136,7 @@ class DashboardController extends Controller
             ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
             ->select(
                 'p.id_puskesmas', 'p.nama_puskesmas', 'p.kecamatan', 'p.kepala_puskesmas',
-                DB::raw('COUNT(dp.id_data)         AS jumlah_laporan'),
+                DB::raw('COUNT(dp.id_phbs)         AS jumlah_laporan'),
                 DB::raw('SUM(dp.jumlah_kk_total)   AS total_kk'),
                 DB::raw('SUM(dp.ber_phbs)           AS total_ber_phbs'),
                 DB::raw('ROUND(SUM(dp.ber_phbs)/NULLIF(SUM(dp.jumlah_kk_total),0)*100,2) AS persentase_phbs'),
@@ -161,7 +161,7 @@ class DashboardController extends Controller
         $allIndikators = indikator_phbs::aktif()->orderBy('id_indikator')->get();
  
         $detailAgg = DB::table('data_phbs_details as dpd')
-            ->join('data_phbs as dp',   'dpd.id_phbs',      '=', 'dp.id_data')
+            ->join('data_phbs as dp',   'dpd.id_phbs',      '=', 'dp.id_phbs')
             ->join('puskesmas as p',    'dp.id_puskesmas',  '=', 'p.id_puskesmas')
             ->where('dp.tahun', $tahun)
             ->where('dp.status_laporan', 'terkirim')
@@ -203,7 +203,7 @@ class DashboardController extends Controller
             ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
             ->select(
                 'p.id_puskesmas', 'p.nama_puskesmas',
-                DB::raw('COUNT(dp.id_data) AS jumlah_laporan'),
+                DB::raw('COUNT(dp.id_phbs) AS jumlah_laporan'),
                 DB::raw('ROUND(SUM(dp.ber_phbs)/NULLIF(SUM(dp.jumlah_kk_total),0)*100,1) AS rata_rata'),
             )
             ->groupBy('p.id_puskesmas', 'p.nama_puskesmas')
@@ -213,7 +213,7 @@ class DashboardController extends Controller
         // Langkah 2: persentase per indikator per puskesmas dari data_phbs_details
         // (query terpisah → tidak ada inflasi baris akibat JOIN)
         $indPerPkm = DB::table('data_phbs_details as dpd')
-            ->join('data_phbs as dp',  'dpd.id_phbs',     '=', 'dp.id_data')
+            ->join('data_phbs as dp',  'dpd.id_phbs',     '=', 'dp.id_phbs')
             ->join('puskesmas as p',   'dp.id_puskesmas', '=', 'p.id_puskesmas')
             ->where('dp.tahun', $tahun)
             ->where('p.status_aktif', true)

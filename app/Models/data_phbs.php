@@ -17,25 +17,15 @@ class data_phbs extends Model
     // 3. Array $fillable untuk mass-assignment
     protected $fillable = [
         'id_puskesmas',
-        'bulan',
         'tahun',
-        'jumlah_kk',
-        'persalinan_nakes',
-        'asi_eksklusif',
-        'timbang_balita',
-        'air_bersih',
-        'cuci_tangan',
-        'jamban_sehat',
-        'tidak_merokok',
-        'aktivitas_fisik',
-        'makan_buah_sayur',
-        'pengelolaan_air_minum',
-        'pengelolaan_limbah',
-        'buang_sampah',
-        'pemberantasan_jentik',
-        'total_indikator_phbs',
-        'kategori_phbs',
-        'user_penginput',
+        'bulan',
+        'jumlah_kk_l',
+        'jumlah_kk_p',
+        'jumlah_kk_total',
+        'ber_phbs',
+        'persen_phbs',
+        'status_laporan',
+        'user_penginput'
     ];
 
     public function scopeTerkirim($query)

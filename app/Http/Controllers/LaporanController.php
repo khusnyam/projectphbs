@@ -83,7 +83,7 @@ class LaporanController extends Controller
 
     public function edit($id)
     {
-        $data          = DB::table('data_phbs')->where('id_data', $id)->first();
+        $data          = DB::table('data_phbs')->where('id_phbs', $id)->first();
         $puskesmasList = DB::table('puskesmas')->orderBy('nama_puskesmas')->get();
         $namaBulan     = $this->namaBulan;
         return view('phbs.form', compact('data','puskesmasList','namaBulan'));
@@ -97,7 +97,7 @@ class LaporanController extends Controller
         $data = $req->except(['_token','_method']);
         $data['persen_phbs'] = $persen;
 
-        DB::table('data_phbs')->where('id_data', $id)->update($data);
+        DB::table('data_phbs')->where('id_phbs', $id)->update($data);
 
         return redirect()->route('phbs.index')
                          ->with('success', 'Laporan berhasil diperbarui!');
@@ -105,7 +105,7 @@ class LaporanController extends Controller
 
     public function destroy($id)
     {
-        DB::table('data_phbs')->where('id_data', $id)->delete();
+        DB::table('data_phbs')->where('id_phbs', $id)->delete();
         return redirect()->route('phbs.index')
                          ->with('success', 'Laporan berhasil dihapus!');
     }

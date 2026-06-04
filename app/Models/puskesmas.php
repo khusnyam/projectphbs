@@ -34,7 +34,7 @@ class Puskesmas extends Model
 
         // tambahan peta
         'persentase_capaian',
-        'jumlah_kk',
+        'jumlah_kk_total',
         'status_kategori',
         'geojson_polygon',
         'warna',
@@ -106,7 +106,7 @@ class Puskesmas extends Model
                 'nama_puskesmas' => $this->nama_puskesmas,
                 'kecamatan' => $this->kecamatan,
                 'persentase_capaian' => $this->persentase_capaian,
-                'jumlah_kk' => $this->jumlah_kk,
+                'jumlah_kk_total' => $this->jumlah_kk_total,
                 'status_kategori' => $this->getStatusByPersentase(),
                 'warna' => $this->getWarnaByPersentase(),
             ],

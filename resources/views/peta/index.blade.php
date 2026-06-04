@@ -144,7 +144,7 @@ function styleHighlight(feature) {
 function buildPopup(props) {
     const col  = getColor(props.persentase_capaian);
     const pct  = parseFloat(props.persentase_capaian).toFixed(1);
-    const pddk = Number(props.jumlah_kk).toLocaleString('id-ID');
+    const pddk = Number(props.jumlah_kk_total).toLocaleString('id-ID');
     const capaian = Number(props.jumlah_tercapai).toLocaleString('id-ID');
     const [sbg, stxt] = getStatusColors(props.status_kategori);
     return `
@@ -177,7 +177,7 @@ function openInfoPanel(props) {
     document.getElementById('infoPanelBar').style.width      = pct + '%';
     document.getElementById('infoPanelBar').style.background = col;
     document.getElementById('infoPanelKec').textContent      = props.kecamatan;
-    document.getElementById('infoPanelPenduduk').textContent = Number(props.jumlah_kk).toLocaleString('id-ID') + ' jiwa';
+    document.getElementById('infoPanelPenduduk').textContent = Number(props.jumlah_kk_total).toLocaleString('id-ID') + ' jiwa';
     document.getElementById('infoPanelTercapai').textContent = Number(props.jumlah_tercapai).toLocaleString('id-ID') + ' jiwa';
     document.getElementById('infoPanelCapaian').textContent  = pct + '%';
     document.getElementById('infoPanelCapaian').style.color  = col;
@@ -243,7 +243,7 @@ function renderList(data) {
                 <div class="pkm-name">${p.nama_puskesmas}</div>
                 <div class="pkm-sub">
                     <span>${p.kecamatan}</span><span>·</span>
-                    <span>${p.jumlah_kk} jiwa</span>
+                    <span>${p.jumlah_kk_total} jiwa</span>
                 </div>
                 <div class="pct-bar">
                     <div class="pct-fill" style="width:${p.persentase_capaian}%;background:${p.warna}"></div>

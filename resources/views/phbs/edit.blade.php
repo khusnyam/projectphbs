@@ -257,7 +257,7 @@
                     </label>
 
                     <input type="number"
-                    name="jumlah_kk"
+                    name="jumlah_kk_total"
                     value="0"
                     class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-200 outline-none">
 

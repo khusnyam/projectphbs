@@ -52,7 +52,7 @@ class DataPhbsController extends Controller
             'id_puskesmas' => 'required|exists:puskesmas,id_puskesmas',
             'bulan'        => 'required|in:' . implode(',', self::NAMA_BULAN),
             'tahun'        => 'required|integer|min:2000|max:2100',
-            'jumlah_kk'    => 'required|integer|min:1',
+            'jumlah_kk_total'    => 'required|integer|min:1',
             'indikator'    => 'required|array|min:1',
             'indikator.*.id_indikator'    => 'required|exists:indikator_phbs,id_indikator',
             'indikator.*.jumlah_sasaran'  => 'required|integer|min:0',
@@ -82,7 +82,7 @@ class DataPhbsController extends Controller
                 'id_puskesmas'        => $request->id_puskesmas,
                 'bulan'               => $request->bulan,
                 'tahun'               => $request->tahun,
-                'jumlah_kk'           => $request->jumlah_kk,
+                'jumlah_kk_total'           => $request->jumlah_kk_total,
                 'total_indikator_phbs'=> $totalCapaian,
                 'kategori_phbs'       => $this->statusByPct($pct),
                 'user_penginput'      => auth()->id() ?? 1,
@@ -172,7 +172,7 @@ class DataPhbsController extends Controller
                     'pemberantasan_jentik'  => 'Pemberantasan jentik',
                 ];
 
-                $jumlahKk     = (int) ($data['jumlah_kk'] ?? 0);
+                $jumlahKk     = (int) ($data['jumlah_kk_total'] ?? 0);
                 $totalSasaran = 0;
                 $totalCapaian = 0;
                 $indDetails   = [];
@@ -217,7 +217,7 @@ class DataPhbsController extends Controller
                     'id_puskesmas'         => $pkm->id_puskesmas,
                     'bulan'                => $bulan,
                     'tahun'                => $tahun,
-                    'jumlah_kk'            => $jumlahKk,
+                    'jumlah_kk_total'            => $jumlahKk,
                     'total_indikator_phbs' => $totalCapaian,
                     'kategori_phbs'        => $this->statusByPct($pct),
                     'user_penginput'       => auth()->id() ?? 1,
@@ -274,7 +274,7 @@ class DataPhbsController extends Controller
             ->selectRaw('
                 SUM(data_phbs_details.jumlah_sasaran) AS total_sasaran,
                 SUM(data_phbs_details.jumlah_capaian) AS total_capaian,
-                MAX(data_phbs.jumlah_kk) AS jumlah_kk
+                MAX(data_phbs.jumlah_kk_total) AS jumlah_kk_total
             ')
             ->first();
 

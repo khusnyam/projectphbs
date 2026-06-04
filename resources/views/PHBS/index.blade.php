@@ -325,10 +325,10 @@ tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
               </td>
               <td>
                 <div class="acts">
-                  <a href="{{ route('phbs.edit',$row->id_data) }}" class="btn-sm-edit">
+                  <a href="{{ route('phbs.edit',$row->id_phbs) }}" class="btn-sm-edit">
                     <i class="fa-solid fa-pen"></i> Edit
                   </a>
-                  <form method="POST" action="{{ route('phbs.destroy',$row->id_data) }}"
+                  <form method="POST" action="{{ route('phbs.destroy',$row->id_phbs) }}"
                         onsubmit="return confirm('Hapus data ini?')">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn-sm-del">

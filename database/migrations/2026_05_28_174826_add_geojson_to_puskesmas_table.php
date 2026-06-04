@@ -14,13 +14,13 @@ return new class extends Migration
                   ->default(0)
                   ->after('longitude');
 
-            $table->integer('jumlah_kk')
+            $table->integer('jumlah_kk_total')
                   ->nullable()
                   ->after('persentase_capaian');
 
             $table->string('status_kategori')
                   ->nullable()
-                  ->after('jumlah_kk');
+                  ->after('jumlah_kk_total');
 
             $table->json('geojson_polygon')
                   ->nullable()
@@ -38,7 +38,7 @@ return new class extends Migration
 
             $table->dropColumn([
                 'persentase_capaian',
-                'jumlah_kk',
+                'jumlah_kk_total',
                 'status_kategori',
                 'geojson_polygon',
                 'warna'

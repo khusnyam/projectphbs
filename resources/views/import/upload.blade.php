@@ -61,7 +61,7 @@
             <input type="file" name="file" accept=".csv,.txt" required
                    style="width:100%;background:var(--bg-card2);border:1px solid var(--border);border-radius:6px;padding:.45rem .7rem;color:var(--text-primary);font-family:inherit;font-size:.82rem">
             <p style="font-size:.68rem;color:var(--text-muted);margin-top:.35rem">
-                Format kolom CSV: <code>nama_puskesmas, jumlah_kk, persalinan_nakes, asi_eksklusif, timbang_balita, air_bersih, cuci_tangan, jamban_sehat, tidak_merokok, aktivitas_fisik, makan_buah_sayur, pengelolaan_air_minum, pengelolaan_limbah, buang_sampah, pemberantasan_jentik</code>
+                Format kolom CSV: <code>nama_puskesmas, jumlah_kk_total, persalinan_nakes, asi_eksklusif, timbang_balita, air_bersih, cuci_tangan, jamban_sehat, tidak_merokok, aktivitas_fisik, makan_buah_sayur, pengelolaan_air_minum, pengelolaan_limbah, buang_sampah, pemberantasan_jentik</code>
             </p>
         </div>
 

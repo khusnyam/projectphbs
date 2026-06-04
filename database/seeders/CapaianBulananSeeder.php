@@ -25,7 +25,7 @@ class CapaianBulananSeeder extends Seeder
                 $noise    = mt_rand(-400, 400) / 100;
                 $pct      = max(0, min(100, round($base + $noise, 2)));
 
-                $sasaran  = $pkm->jumlah_kk ?? 0;        // jumlah_kk
+                $sasaran  = $pkm->jumlah_kk_total ?? 0;        // jumlah_kk_total
                 $tercapai = (int) round($sasaran * $pct / 100);
 
                 CapaianBulanan::create([
