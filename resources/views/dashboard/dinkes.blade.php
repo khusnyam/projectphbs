@@ -42,10 +42,10 @@ a{text-decoration:none;color:inherit}
   width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue-mid));
   color:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:16px;
 }
-.sb-logo h1{font-size:.85rem;font-weight:800;color:#fff}
+.sb-logo h1{font-size:.85rem;font-weight:600;color:#fff}
 .sb-logo p{font-size:.62rem;color:rgba(255,255,255,.45);margin-top:1px;line-height:1.35}
 .sb-nav{padding:14px 10px;flex:1;overflow:auto}
-.nav-section{font-size:.58rem;font-weight:800;letter-spacing:.1em;color:rgba(255,255,255,.28);text-transform:uppercase;padding:0 10px;margin:14px 0 5px}
+.nav-section{font-size:.58rem;font-weight:600;letter-spacing:.1em;color:rgba(255,255,255,.28);text-transform:uppercase;padding:0 10px;margin:14px 0 5px}
 .nav-item{
   display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;
   color:rgba(255,255,255,.58);font-size:.8rem;font-weight:600;transition:.15s;margin-bottom:2px;
@@ -63,7 +63,7 @@ a{text-decoration:none;color:inherit}
 .card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);border:1px solid rgba(15,23,42,.05)}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:9px;
-  padding:9px 13px;font-size:.78rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;
+  padding:9px 13px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'Segoe UI',sans-serif;
 }
 .btn-primary{background:var(--blue);color:#fff}
 .btn-primary:hover{background:var(--blue-dark)}
@@ -77,27 +77,27 @@ a{text-decoration:none;color:inherit}
   color:#fff;border-radius:16px;padding:24px 28px;box-shadow:0 4px 20px rgba(0,51,153,.18);
   display:grid;grid-template-columns:1.45fr .75fr;gap:22px;align-items:center;
 }
-.header-card h1{font-size:1.35rem;font-weight:900;margin-bottom:8px;letter-spacing:.2px}
+.header-card h1{font-size:1.35rem;font-weight:700;margin-bottom:8px;letter-spacing:.2px}
 .header-card p{font-size:.84rem;color:rgba(255,255,255,.75);line-height:1.55;max-width:820px}
-.header-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.header-tags{display:flex;flex-wrap:wrap;gap:px;margin-top:14px}
 .header-tag{
   display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.13);
   font-size:.69rem;font-weight:800;padding:6px 10px;border-radius:999px;color:rgba(255,255,255,.92);
 }
 .header-score{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:13px;padding:16px}
-.header-score .label{font-size:.64rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.68)}
-.header-score .value{font-size:2.05rem;font-weight:900;margin:5px 0;color:#fff}
+.header-score .label{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.68)}
+.header-score .value{font-size:2.05rem;font-weight:700;margin:5px 0;color:#fff}
 .progress{height:6px;background:rgba(255,255,255,.24);border-radius:999px;overflow:hidden}
 .progress span{display:block;height:100%;border-radius:999px;background:var(--yellow)}
 
 /* 2. FILTER DASHBOARD */
 .filter-card{padding:17px 20px}
 .section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
-.section-head h3{font-size:.95rem;font-weight:900;color:var(--text);display:flex;align-items:center;gap:8px}
+.section-head h3{font-size:.95rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
 .section-head h3 i{color:var(--blue)}
 .section-head p{font-size:.72rem;color:var(--muted);margin-top:3px;line-height:1.45}
 .filter-form{display:grid;grid-template-columns:1fr 1fr 1.65fr auto auto;gap:10px;align-items:end}
-.fg label{display:block;font-size:.66rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.fg label{display:block;font-size:.66rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
 .fg select{
   width:100%;height:41px;border-radius:8px;border:1.5px solid #cbd5e1;background:#fff;
   padding:0 11px;font-size:.8rem;color:var(--text);font-family:'Segoe UI',sans-serif;
@@ -111,8 +111,8 @@ a{text-decoration:none;color:inherit}
 .qico.good{background:#dcfce7;color:#166534}
 .qico.bad{background:#fee2e2;color:#991b1b}
 .qico.warn{background:#fef3c7;color:#92400e}
-.quick .label{font-size:.65rem;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-.quick .value{font-size:.98rem;font-weight:900;color:var(--text);margin-top:4px;line-height:1.25}
+.quick .label{font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.quick .value{font-size:.98rem;font-weight:600;color:var(--text);margin-top:4px;line-height:1.25}
 .quick .sub{font-size:.7rem;color:var(--muted);margin-top:4px;line-height:1.35}
 
 /* 4. MATRIKS */
@@ -121,22 +121,22 @@ a{text-decoration:none;color:inherit}
 .matrix{width:100%;border-collapse:separate;border-spacing:0;min-width:1260px}
 .matrix th{
   position:sticky;top:0;background:linear-gradient(135deg,var(--blue-dark),var(--blue));
-  color:#fff;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+  color:#fff;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
   padding:10px 9px;text-align:center;z-index:2;white-space:nowrap;
 }
 .matrix th:first-child{left:0;z-index:3;text-align:left}
 .matrix td{padding:9px;border-bottom:1px solid #f1f5f9;font-size:.72rem;text-align:center;background:#fff;white-space:nowrap}
-.matrix td:first-child{position:sticky;left:0;z-index:1;text-align:left;background:#fff;min-width:235px;font-weight:900;color:var(--blue)}
+.matrix td:first-child{position:sticky;left:0;z-index:1;text-align:left;background:#fff;min-width:235px;font-weight:700;color:var(--blue)}
 .matrix tr:hover td{background:#f8faff}
 .matrix tr:hover td:first-child{background:#f8faff}
 .pkm-small{display:block;color:var(--muted);font-weight:600;font-size:.65rem;margin-top:2px}
-.cell{display:inline-flex;min-width:49px;justify-content:center;padding:4px 8px;border-radius:999px;font-size:.67rem;font-weight:900}
+.cell{display:inline-flex;min-width:49px;justify-content:center;padding:4px 8px;border-radius:999px;font-size:.67rem;font-weight:700}
 .cell.good{background:#dcfce7;color:#166534}
 .cell.mid{background:#fef3c7;color:#92400e}
 .cell.low{background:#fee2e2;color:#991b1b}
 .cell.empty{background:#f1f5f9;color:#64748b}
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
-.legend span{font-size:.68rem;font-weight:900;padding:5px 9px;border-radius:999px}
+.legend span{font-size:.68rem;font-weight:700;padding:5px 9px;border-radius:999px}
 .legend .good{background:#dcfce7;color:#166534}
 .legend .mid{background:#fef3c7;color:#92400e}
 .legend .low{background:#fee2e2;color:#991b1b}
@@ -150,10 +150,10 @@ a{text-decoration:none;color:inherit}
 .ind-card{border:1px solid var(--line);border-radius:12px;background:#fff;padding:12px}
 .ind-num{
   width:28px;height:28px;border-radius:8px;background:#eef2ff;color:var(--blue);
-  font-size:.72rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:8px;
+  font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:8px;
 }
-.ind-title{font-size:.72rem;line-height:1.34;font-weight:900;color:var(--text);min-height:39px}
-.ind-pct{font-size:1.35rem;font-weight:900;margin:7px 0 2px}
+.ind-title{font-size:.72rem;line-height:1.34;font-weight:700;color:var(--text);min-height:39px}
+.ind-pct{font-size:1.35rem;font-weight:700;margin:7px 0 2px}
 .ind-meta{font-size:.65rem;color:var(--muted)}
 .mini-track{height:6px;background:#f1f5f9;border-radius:999px;overflow:hidden;margin-top:8px}
 .mini-fill{height:100%;border-radius:999px}
@@ -294,7 +294,7 @@ a{text-decoration:none;color:inherit}
       <div class="sb-icon"><i class="fa-solid fa-heart-pulse"></i></div>
       <div>
         <h1>SIP-PHBS</h1>
-        <p>Sistem Informasi Pelaporan PHBS</p>
+        <p>Sistem Informasi Pelaporan PHBS RT - Kab. Sleman</p>
       </div>
     </div>
   </div>
@@ -304,16 +304,18 @@ a{text-decoration:none;color:inherit}
     <a href="{{ route('dashboard') }}" class="nav-item">
       <i class="fa-solid fa-house"></i> Beranda
     </a>
-    <a href="{{ route('dashboard.dinkes') }}" class="nav-item active">
-      <i class="fa-solid fa-chart-line"></i> Dashboard PHBS
+    <a href="{{ route('phbs.dashboard') }}" class="nav-item active">
+      <i class="fa-solid fa-chart-line"></i> Ringkasan PHBS
+    </a>
+    <a href="{{ route('peta.index') }}" class="nav-item">
+      <i class="fa-solid fa-map"></i> Peta
     </a>
     <a href="{{ route('phbs.index') }}" class="nav-item">
-      <i class="fa-solid fa-chart-bar"></i> Laporan PHBS
+      <i class="fa-solid fa-chart-bar"></i> Laporan Rekapitulasi
     </a>
-    <a href="{{ route('phbs.form') }}" class="nav-item">
+    {{-- <a href="{{ route('phbs.form') }}" class="nav-item">
       <i class="fa-solid fa-plus"></i> Input Laporan
-    </a>
-
+    </a> --}}
     <div class="nav-section">Akun</div>
     <form method="POST" action="{{ route('logout') }}">
       @csrf
@@ -365,7 +367,7 @@ a{text-decoration:none;color:inherit}
         </div>
       </div>
 
-      <form method="GET" action="{{ route('dashboard.dinkes') }}" class="filter-form">
+      <form method="GET" action="{{ route('phbs.dashboard') }}" class="filter-form">
         <div class="fg">
           <label>Tahun</label>
           <select name="tahun">
@@ -400,7 +402,7 @@ a{text-decoration:none;color:inherit}
         <button type="submit" class="btn btn-primary">
           <i class="fa-solid fa-magnifying-glass-chart"></i> Terapkan
         </button>
-        <a href="{{ route('dashboard.dinkes') }}" class="btn btn-outline">
+        <a href="{{ route('phbs.dashboard') }}" class="btn btn-outline">
           <i class="fa-solid fa-rotate-left"></i> Reset
         </a>
       </form>

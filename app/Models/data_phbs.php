@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class DataPHBS extends Model
+class data_phbs extends Model
 {
     protected $table = 'data_phbs';
     protected $primaryKey = 'id_phbs';
@@ -37,6 +37,31 @@ class DataPHBS extends Model
         'kategori_phbs',
         'user_penginput',
     ];
+
+    public function scopeTerkirim($query)
+    {
+        return $query->where('status_laporan', 'terkirim');
+    }
+ 
+    public function scopeDraft($query)
+    {
+        return $query->where('status_laporan', 'draft');
+    }
+ 
+    public function scopeTahun($query, int $tahun)
+    {
+        return $query->where('tahun', $tahun);
+    }
+
+    public static function namaBulan(int $bulan): string
+    {
+        return [
+            1  => 'Januari',   2  => 'Februari',  3  => 'Maret',
+            4  => 'April',     5  => 'Mei',        6  => 'Juni',
+            7  => 'Juli',      8  => 'Agustus',    9  => 'September',
+            10 => 'Oktober',   11 => 'November',   12 => 'Desember',
+        ][$bulan] ?? '-';
+    }
 
     public function puskesmas()
     {

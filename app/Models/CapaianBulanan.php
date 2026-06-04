@@ -35,6 +35,14 @@ class CapaianBulanan extends Model
         if ($pct < 80) return 'Sedang';
         return 'Tinggi';
     }
+
+    protected $casts = [
+        'bulan'              => 'integer',
+        'tahun'              => 'integer',
+        'persentase_capaian' => 'float',
+        'jumlah_sasaran'     => 'integer',
+        'jumlah_tercapai'    => 'integer',
+    ];
     
     public function puskesmas()
     {

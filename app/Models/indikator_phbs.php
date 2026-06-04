@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class IndikatorPhbs extends Model
+class indikator_phbs extends Model
 {
     use HasFactory;
 
@@ -28,5 +29,16 @@ class IndikatorPhbs extends Model
     // 4. ✨ BONUS TIPS: Mengubah tipe data saat dibaca di Laravel/Filament
     protected $casts = [
         'status_aktif' => 'boolean', // Mengubah 1/0 di database menjadi true/false di program
+        'target_nasional' => 'integer'
     ];
+
+    public function scopeAktif($query)
+    {
+        return $query->where('status_aktif', true);
+    }
+ 
+    public function details(): HasMany
+    {
+        return $this->hasMany(data_phbs_detail::class, 'id_indikator', 'id_indikator');
+    }
 }

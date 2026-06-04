@@ -21,11 +21,17 @@ class data_phbs_detail extends Model
     'keterangan',
     ];
 
+    protected $casts = [
+        'jumlah_sasaran' => 'integer',
+        'jumlah_capaian' => 'integer',
+        'persentase'     => 'integer',
+    ];
+
     // RELASI KE DATA PHBS
     public function phbs()
     {
         return $this->belongsTo(
-            DataPHBS::class,
+            data_phbs::class,
             'id_phbs'
         );
     }

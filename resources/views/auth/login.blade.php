@@ -16,6 +16,7 @@ body{font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex}
 .bg-c1{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,51,153,0.3) 0%,transparent 70%);top:-150px;left:-150px;pointer-events:none}
 .bg-c2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(10,80,60,0.25) 0%,transparent 70%);bottom:-100px;right:-100px;pointer-events:none}
 .bg-c3{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(0,51,153,0.15) 0%,transparent 70%);bottom:5%;left:30%;pointer-events:none}
+/* .bg-c4{position:absolute;width:600px;border-radius:50%;background-image: @assets('image/logo-phbs.jpg',,transparent 70%);bottom:5%;left:30%;pointer-events:none} */
 
 /* ── KIRI ── */
 .left{width:55%;display:flex;flex-direction:column;justify-content:center;padding:60px 64px;position:relative;z-index:1}
@@ -83,9 +84,11 @@ body{font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex}
 </head>
 <body>
 <div class="wrap">
+  <div class="bg-c4"></div>
   <div class="bg-c1"></div>
   <div class="bg-c2"></div>
   <div class="bg-c3"></div>
+  
 
   {{-- KIRI --}}
   <div class="left">

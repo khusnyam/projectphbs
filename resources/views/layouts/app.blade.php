@@ -89,6 +89,26 @@
         .btn-nav:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
         .btn-nav:disabled { opacity: .3; cursor: default; }
 
+        /* Button close */
+        .btn-close{
+            width:35px;
+            height:35px;
+            border:none;
+            border-radius:50%;
+            background:#dc3545;
+            color:white;
+            font-size:22px;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            transition:0.3s;
+        }
+
+        .btn-close:hover{
+            transform:scale(1.1);
+        }
+
         /* Active badge */
         .periode-active {
             font-size: .72rem; font-weight: 700; font-family: 'Roboto Mono',monospace;
@@ -237,9 +257,11 @@
 
 <header class="app-header">
     <div class="header-brand">
-        <div class="brand-icon"><i class="fa-solid fa-map-location-dot" style="color:#fff"></i></div>
+        <button class="btn-close" onclick="history.back()"><i class="fa-solid fa-square-xmark"></i></button>
+        {{-- <button class="btn-close" id="btnClose" onclick="history.back()" title="Close"><i class="fa-solid fa-square-xmark"></i></button> --}}
+        {{-- <div class="brand-icon"><i class="fa-solid fa-map-location-dot" style="color:#fff"></i></div> --}}
         <div class="brand-text">
-            <h1>SIG Puskesmas Sleman</h1>
+            <h1>SIG Pola Hidup Bersih dan Sehat</h1>
             <p>Kabupaten Sleman · D.I. Yogyakarta</p>
         </div>
     </div>

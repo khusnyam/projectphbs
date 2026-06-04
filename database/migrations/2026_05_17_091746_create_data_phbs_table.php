@@ -10,23 +10,23 @@ return new class extends Migration {
             $table->unsignedBigInteger('id_puskesmas');
             $table->year('tahun');
             $table->tinyInteger('bulan');
-            $table->integer('jumlah_kk_l')->default(0);
-            $table->integer('jumlah_kk_p')->default(0);
+            $table->integer('jumlah_kk_l')->default(0); //lakilaki
+            $table->integer('jumlah_kk_p')->default(0); //perempuan
             $table->integer('jumlah_kk_total')->default(0);
-            // 13 Indikator
-            $table->integer('ind1_sasaran')->default(0);  $table->integer('ind1_jumlah')->default(0);
-            $table->integer('ind2_sasaran')->default(0);  $table->integer('ind2_jumlah')->default(0);
-            $table->integer('ind3_sasaran')->default(0);  $table->integer('ind3_jumlah')->default(0);
-            $table->integer('ind4_sasaran')->default(0);  $table->integer('ind4_jumlah')->default(0);
-            $table->integer('ind5_sasaran')->default(0);  $table->integer('ind5_jumlah')->default(0);
-            $table->integer('ind6_sasaran')->default(0);  $table->integer('ind6_jumlah')->default(0);
-            $table->integer('ind7_sasaran')->default(0);  $table->integer('ind7_jumlah')->default(0);
-            $table->integer('ind8_sasaran')->default(0);  $table->integer('ind8_jumlah')->default(0);
-            $table->integer('ind9_sasaran')->default(0);  $table->integer('ind9_jumlah')->default(0);
-            $table->integer('ind10_sasaran')->default(0); $table->integer('ind10_jumlah')->default(0);
-            $table->integer('ind11_sasaran')->default(0); $table->integer('ind11_jumlah')->default(0);
-            $table->integer('ind12_sasaran')->default(0); $table->integer('ind12_jumlah')->default(0);
-            $table->integer('ind13_sasaran')->default(0); $table->integer('ind13_jumlah')->default(0);
+            // // 13 Indikator
+            // $table->integer('persalinan_nakes_sasaran')->default(0);      $table->integer('persalinan_nakes_jumlah')->default(0);
+            // $table->integer('asi_eksklusif_sasaran')->default(0);         $table->integer('asi_eksklusif_jumlah')->default(0);
+            // $table->integer('timbang_balita_sasaran')->default(0);        $table->integer('timbang_balita_jumlah')->default(0);
+            // $table->integer('air_bersih_sasaran')->default(0);            $table->integer('air_bersih_jumlah')->default(0);
+            // $table->integer('cuci_tangan_sasaran')->default(0);           $table->integer('cuci_tangan_jumlah')->default(0);
+            // $table->integer('pengelolaan_air_minum_sasaran')->default(0); $table->integer('pengelolaan_air_minum_jumlah')->default(0);
+            // $table->integer('jamban_sehat_sasaran')->default(0);          $table->integer('jamban_sehat_jumlah')->default(0);
+            // $table->integer('pengelolaan_limbah_sasaran')->default(0);    $table->integer('pengelolaan_limbah_jumlah')->default(0);
+            // $table->integer('buang_sampah_sasaran')->default(0);          $table->integer('buang_sampah_jumlah')->default(0);
+            // $table->integer('pemberantasan_jentik_sasaran')->default(0);  $table->integer('pemberantasan_jentik_jumlah')->default(0);
+            // $table->integer('makan_buah_sayur_sasaran')->default(0);      $table->integer('makan_buah_sayur_jumlah')->default(0);
+            // $table->integer('aktivitas_fisik_sasaran')->default(0);       $table->integer('aktivitas_fisik_jumlah')->default(0);
+            // $table->integer('tidak_merokok_sasaran')->default(0);         $table->integer('tidak_merokok_jumlah')->default(0);
             $table->integer('ber_phbs')->default(0);
             $table->decimal('persen_phbs', 5, 2)->default(0);
             $table->enum('status_laporan', ['draft','terkirim'])->default('draft');

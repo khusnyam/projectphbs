@@ -127,12 +127,17 @@ tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
     <a href="{{ route('dashboard') }}" class="nav-item">
       <i class="fa-solid fa-house"></i> Beranda
     </a>
+    @can('akses-dinkes')
+    <a href="{{ route('phbs.dashboard') }}" class="nav-item">
+      <i class="fa-solid fa-chart-bar"></i> Ringkasan PHBS
+    </a>
     <a href="{{ route('phbs.index') }}" class="nav-item active">
       <i class="fa-solid fa-chart-bar"></i> Laporan PHBS
     </a>
     <a href="{{ route('phbs.form') }}" class="nav-item">
       <i class="fa-solid fa-plus"></i> Input Laporan
     </a>
+    @endcan
     <div class="nav-section">Akun</div>
     <form method="POST" action="{{ route('logout') }}">
       @csrf
@@ -158,9 +163,9 @@ tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
       <a href="{{ route('phbs.export', request()->query()) }}" class="btn btn-export">
         <i class="fa-solid fa-file-excel"></i> Export Excel
       </a>
-      <a href="{{ route('phbs.form') }}" class="btn btn-primary">
+      {{-- <a href="{{ route('phbs.form') }}" class="btn btn-primary">
         <i class="fa-solid fa-plus"></i> Input Laporan
-      </a>
+      </a> --}}
     </div>
   </div>
 

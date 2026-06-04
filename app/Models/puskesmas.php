@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use app\Models\data_phbs;
+use App\Models\data_phbs as ModelsData_phbs;
 
 class Puskesmas extends Model
 {
@@ -45,6 +46,11 @@ class Puskesmas extends Model
         'status_aktif' => 'boolean',
     ];
 
+    public function scopeAktif($query)
+    {
+        return $query->where('status_aktif', true);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELASI
@@ -53,12 +59,12 @@ class Puskesmas extends Model
 
     public function phbs()
     {
-        return $this->hasMany(DataPHBS::class, 'id_puskesmas', 'id_puskesmas');
+        return $this->hasMany(data_phbs::class, 'id_puskesmas', 'id_puskesmas');
     }
 
     public function latestPhbs()
     {
-        return $this->hasOne(DataPHBS::class, 'id_puskesmas', 'id_puskesmas')
+        return $this->hasOne(data_phbs::class, 'id_puskesmas', 'id_puskesmas')
                     ->latestOfMany('id_phbs');
     }
 

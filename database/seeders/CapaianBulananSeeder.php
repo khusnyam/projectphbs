@@ -25,11 +25,11 @@ class CapaianBulananSeeder extends Seeder
                 $noise    = mt_rand(-400, 400) / 100;
                 $pct      = max(0, min(100, round($base + $noise, 2)));
 
-                $sasaran  = $pkm->jumlah_kk ?? 0;        // ✅ jumlah_kk
+                $sasaran  = $pkm->jumlah_kk ?? 0;        // jumlah_kk
                 $tercapai = (int) round($sasaran * $pct / 100);
 
                 CapaianBulanan::create([
-                    'id_puskesmas'       => $pkm->id_puskesmas,  // ✅ id_puskesmas
+                    'id_puskesmas'       => $pkm->id_puskesmas,  // id_puskesmas
                     'bulan'              => $bulan,
                     'tahun'              => $tahun,
                     'persentase_capaian' => $pct,

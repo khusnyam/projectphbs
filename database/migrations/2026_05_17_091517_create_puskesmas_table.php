@@ -16,15 +16,15 @@ return new class extends Migration
             $table->string('nama_puskesmas');
             $table->text('alamat');
             $table->string('kecamatan');
-            $table->string('kabupaten');
-            $table->string('provinsi');
-            $table->string('kode_pos');
-            $table->string('no_telepon');
+            $table->string('kabupaten')->default('Sleman');
+            $table->string('provinsi')->default('Daerah Istimewa Yogyakarta');
+            $table->string('kode_pos')->default('Tidak Ada Data');
+            $table->string('no_telepon')->default('Tidak Ada Data');
             $table->string('email');
-            $table->string('kepala_puskesmas');
-            $table->integer('latitude');
-            $table->integer('longitude');
-            $table->boolean('status_aktif');
+            $table->string('kepala_puskesmas')->default('Tidak Ada Data');
+            $table->integer('latitude')->nullable();
+            $table->integer('longitude')->nullable();
+            $table->boolean('status_aktif')->default(true);
             $table->timestamps();
         });
     }

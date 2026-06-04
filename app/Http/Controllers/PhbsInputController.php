@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\data_phbs;
 use App\Models\data_phbs_detail;
 use App\Models\puskesmas;
+use Illuminate\Support\Facades\Auth;
 
 class PhbsInputController extends Controller
 {
@@ -22,10 +23,11 @@ class PhbsInputController extends Controller
     {
 
         $request->validate([
-            'id_puskesmas' => 'required',
             'bulan' => 'required',
             'tahun' => 'required',
         ]);
+
+        $id_puskesmas = Auth::user()->id_puskesmas;
 
         $jumlah = $request->input('jumlah_input', []);
 
@@ -40,10 +42,10 @@ class PhbsInputController extends Controller
         }
 
         $phbs = data_phbs::create([
-            'id_puskesmas' => $request->id_puskesmas,
+            'id_puskesmas' => Auth::user()->id_puskesmas,
             'bulan' => $request->bulan,
             'tahun' => $request->tahun,
-            'jumlah_kk' => $request->jumlah_kk,
+            'jumlah_kk_total' => $request->jumlah_kk_total,
 
             'persalinan_nakes'      => $jumlah[1] ?? 0,
             'asi_eksklusif'         => $jumlah[2] ?? 0,
@@ -108,7 +110,9 @@ for ($i = 1; $i <= 13; $i++) {
     'details'
 ]);
 
-    if ($request->puskesmas) {
+    if (Auth::user()->id_role == 2) { // role puskesmas
+        $query->where('id_puskesmas', auth()->user()->id_puskesmas);
+    } elseif ($request->puskesmas) {
         $query->where('id_puskesmas', $request->puskesmas);
     }
 
