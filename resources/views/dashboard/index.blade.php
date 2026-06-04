@@ -49,7 +49,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-b);min-height:100vh;}
-a{text-decoration:none;}
+a{text-decoration:none;color:inherit;}
 
 /* ─── SIDEBAR ───────────────────────────────────────────────────── */
 .sidebar{
@@ -83,7 +83,8 @@ a{text-decoration:none;}
     padding:9px 10px;border-radius:var(--radius-sm);
     color:var(--sb-text);font-size:13px;font-weight:500;
     transition:background .15s,color .15s;cursor:pointer;
-    position:relative;
+    position:relative;width:100%;border:0;background:transparent;
+    font-family:'Inter',sans-serif;text-align:left;
 }
 .sb-item:hover{background:var(--sb-hover);color:#fff;}
 .sb-item.active{
@@ -108,8 +109,8 @@ a{text-decoration:none;}
     display:flex;align-items:center;justify-content:center;
     font-size:12px;font-weight:700;color:#fff;
 }
-.sb-user-info strong{display:block;font-size:13px;font-weight:600;color:#fff;}
-.sb-user-info span{display:block;font-size:11px;color:var(--sb-text);}
+.sb-user-info strong{display:block;font-size:13px;font-weight:600;color:#fff;line-height:1.2;}
+.sb-user-info span{display:block;font-size:11px;color:var(--sb-text);margin-top:1px;}
 
 /* ─── MAIN ──────────────────────────────────────────────────────── */
 .main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;}
@@ -350,6 +351,11 @@ a{text-decoration:none;}
 </style>
 </head>
 <body>
+@php
+    $authUser = auth()->user();
+    $userName = $authUser->nama_user ?? $authUser->name ?? 'Admin Dinkes';
+    $userRole = ucfirst($authUser->role ?? 'Dinkes');
+@endphp
 
 {{-- ══════════════ SIDEBAR ══════════════ --}}
 <aside class="sidebar">
@@ -367,25 +373,33 @@ a{text-decoration:none;}
 
     <div class="sb-section">
         <span class="sb-label">Menu Utama</span>
-        <a href="#" class="sb-item">
+
+        <a href="{{ \Illuminate\Support\Facades\Route::has('dashboard') ? route('dashboard') : '#' }}"
+           class="sb-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
             </svg>
             Beranda
         </a>
-        <a href="{{ route('dashboard') }}" class="sb-item active">
+
+        <a href="{{ \Illuminate\Support\Facades\Route::has('phbs.dashboard') ? route('phbs.dashboard') : '#' }}"
+           class="sb-item {{ request()->routeIs('phbs.dashboard') ? 'active' : '' }}">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
             </svg>
             Ringkasan PHBS
         </a>
-        <a href="#" class="sb-item">
+
+        <a href="{{ \Illuminate\Support\Facades\Route::has('peta.index') ? route('peta.index') : '#' }}"
+           class="sb-item {{ request()->routeIs('peta.index') ? 'active' : '' }}">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
             </svg>
             Peta
         </a>
-        <a href="#" class="sb-item">
+
+        <a href="{{ \Illuminate\Support\Facades\Route::has('phbs.index') ? route('phbs.index') : '#' }}"
+           class="sb-item {{ request()->routeIs('phbs.index') ? 'active' : '' }}">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path d="M3 10h18M3 14h18M10 3v18M14 3v18"/>
             </svg>
@@ -395,24 +409,23 @@ a{text-decoration:none;}
 
     <div class="sb-section">
         <span class="sb-label">Akun</span>
-        <a href="{{ route('logout') ?? '#' }}" class="sb-item"
-           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-            </svg>
-            Logout
-        </a>
-        <form id="logout-form" action="{{ route('logout') ?? '#' }}" method="POST" style="display:none;">
+        <form method="POST" action="{{ \Illuminate\Support\Facades\Route::has('logout') ? route('logout') : '#' }}">
             @csrf
+            <button type="submit" class="sb-item">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Logout
+            </button>
         </form>
     </div>
 
     <div class="sb-footer">
         <div class="sb-user">
-            <div class="sb-avatar">{{ substr(auth()->user()->name ?? 'A', 0, 1) }}</div>
+            <div class="sb-avatar">{{ strtoupper(substr($userName, 0, 1)) }}</div>
             <div class="sb-user-info">
-                <strong>{{ auth()->user()->name ?? 'Admin Dinkes' }}</strong>
-                <span>Dinkes &bull; SIP-PHBS</span>
+                <strong>{{ $userName }}</strong>
+                <span>{{ $userRole }} &bull; SIP-PHBS</span>
             </div>
         </div>
     </div>
@@ -426,7 +439,7 @@ a{text-decoration:none;}
         <div class="hero-left">
             <div class="hero-title">
                 <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                 </svg>
                 Dashboard PHBS
             </div>
