@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
         RoleSeeder::class,
         PuskesmasSeeder::class,
         CapaianBulananSeeder::class,
-        IndikatorSeeder::class
+        IndikatorSeeder::class,
+        KategoriSeeder::class
         // Kamu bisa tambah seeder lain di sini nanti, misal: PuskesmasSeeder::class
     ]);
     }

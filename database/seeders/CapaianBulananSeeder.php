@@ -12,7 +12,7 @@ class CapaianBulananSeeder extends Seeder
     {
         CapaianBulanan::truncate();
 
-        $tahun = 2024;
+        $tahun = date('Y');
         $puskesmasList = Puskesmas::all();
 
         foreach ($puskesmasList as $pkm) {

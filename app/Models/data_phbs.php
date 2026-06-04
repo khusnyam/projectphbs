@@ -25,8 +25,9 @@ class data_phbs extends Model
         'ber_phbs',
         'persen_phbs',
         'status_laporan',
-        'user_penginput'
-    ];
+        'user_penginput',
+        'kategori_phbs'
+        ];
 
     public function scopeTerkirim($query)
     {

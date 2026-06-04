@@ -72,9 +72,9 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/laporan-phbs/export',       [LaporanController::class, 'exportExcel'])->name('phbs.export');
         Route::get('/laporan-phbs/form',         [LaporanController::class, 'form'])->name('phbs.form');
         // Route::post('/laporan-phbs',             [LaporanController::class, 'store'])->name('phbs.store');
-        Route::get('/laporan-phbs/{id}/edit',    [LaporanController::class, 'edit'])->name('phbs.edit');
-        Route::put('/laporan-phbs/{id}',         [LaporanController::class, 'update'])->name('phbs.update');
-        Route::delete('/laporan-phbs/{id}',      [LaporanController::class, 'destroy'])->name('phbs.destroy');
+        Route::get('/laporan-phbs/{id}/edit',    [LaporanController::class, 'edit'])->name('laporan.edit');
+        Route::put('/laporan-phbs/{id}',         [LaporanController::class, 'update'])->name('laporan.update');
+        Route::delete('/laporan-phbs/{id}',      [LaporanController::class, 'destroy'])->name('laporan.destroy');
     
     });
 

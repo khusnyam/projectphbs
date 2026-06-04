@@ -15,7 +15,7 @@ class PhbsController extends Controller
         // Ambil semua data tahun 2025
         $data = DB::table('data_phbs')
             ->join('puskesmas', 'data_phbs.id_puskesmas', '=', 'puskesmas.id_puskesmas')
-            ->where('tahun', 2025)
+            ->where('tahun', date('Y'))
             ->orderBy('puskesmas.nama_puskesmas', 'asc')
             ->orderByRaw("FIELD(bulan,
                 'Januari','Februari','Maret','April','Mei','Juni',
@@ -72,7 +72,7 @@ class PhbsController extends Controller
 
         $result = [];
         foreach ($data as $row) {
-            $pk = $row->puskesmas;
+            $pk = $row->nama_puskesmas;
 
             if (!isset($result[$pk])) {
                 $result[$pk] = [
@@ -107,11 +107,11 @@ class PhbsController extends Controller
         Gate::authorize('akses-puskesmas');
 
         $request->validate([
-            'id_puskesmas' => 'required|string|max:100',
-            'bulan'     => 'required|string|max:20',
-            'tahun'     => 'required|integer|min:2000|max:2100',
-            'jumlah_kk_total' => 'required|integer|min:0',
-            'ber_phbs'  => 'required|integer|min:0',
+            'id_puskesmas' => $request->id_puskesmas ?? 'required|exists:puskesmas,id_puskesmas',
+            'bulan'     => $request->bulan ?? 'required|string|max:20',
+            'tahun'     => $request->tahun ?? 'required|integer|min:2000|max:2100',
+            'jumlah_kk_total' => $request->jumlah_kk_total ?? 'required|integer|min:0',
+            'ber_phbs'  => $request->ber_phbs ?? 'required|integer|min:0',
         ]);
 
         // Jika ber_phbs lebih besar dari jumlah_kk_total, tolak

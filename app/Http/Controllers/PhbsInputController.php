@@ -25,6 +25,7 @@ class PhbsInputController extends Controller
         $request->validate([
             'bulan' => 'required',
             'tahun' => 'required',
+            'jumlah_kk_total' => 'required|integer|min:0',
         ]);
 
         $id_puskesmas = Auth::user()->id_puskesmas;
@@ -32,6 +33,10 @@ class PhbsInputController extends Controller
         $jumlah = $request->input('jumlah_input', []);
 
         $total = array_sum($jumlah);
+
+        $persenPhbs = $request->jumlah_kk_total > 0
+            ? round($total / $request->jumlah_kk_total * 100, 2)
+            : 0;
 
         if ($total >= 100) {
             $kategori = 'Baik';
@@ -54,8 +59,8 @@ class PhbsInputController extends Controller
             'jumlah_kk_p'     => $request->jumlah_kk_p,
             'jumlah_kk_total' => $request->jumlah_kk_total,
             'ber_phbs'        => $total,
-            // 'persen_phbs'     => $persenPhbs,
-            'status_laporan'  => 'draft'
+            'persen_phbs'     => $persenPhbs,
+            'status_laporan'  => 'draft',
 
             // 'persalinan_nakes'      => $jumlah[1] ?? 0,
             // 'asi_eksklusif'         => $jumlah[2] ?? 0,
@@ -72,7 +77,7 @@ class PhbsInputController extends Controller
             // 'tidak_merokok'         => $jumlah[13] ?? 0,
 
             // 'total_indikator_phbs' => $total,
-            // 'kategori_phbs' => $kategori,
+            'kategori_phbs' => $kategori
             // 'user_penginput' => 1,
         ]);
 
@@ -151,6 +156,8 @@ for ($i = 1; $i <= 13; $i++) {
     // =====================
     public function edit($id_phbs)
     {
+        $id_puskesmas = Auth::user()->id_puskesmas;
+        
         $phbs = data_phbs::findOrFail($id_phbs);
 
         $puskesmas = puskesmas::all();
@@ -169,6 +176,8 @@ for ($i = 1; $i <= 13; $i++) {
     // =====================
     public function update(Request $request, $id_phbs)
     {
+        $puskesmas = puskesmas::all();
+        
         $phbs = data_phbs::findOrFail($id_phbs);
 
         $phbs->update([
@@ -188,6 +197,8 @@ for ($i = 1; $i <= 13; $i++) {
     // =====================
     public function destroy($id_phbs)
     {
+        $puskesmas = puskesmas::all();
+        
         $phbs = data_phbs::findOrFail($id_phbs);
 
         $phbs->delete();
