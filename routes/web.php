@@ -35,20 +35,20 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/dashboard-phbs', [DashboardController::class, 'dinkes'])->name('phbs.dashboard');
 Route::get('/peta', [PetaController::class, 'index'])->name('peta.index');
 
-        // // 3. Kelompok Rute API Puskesmas & Peta (Dibutuhkan oleh AJAX / JavaScript)
-        // Route::prefix('api')->group(function () {
+        // 3. Kelompok Rute API Puskesmas & Peta (Dibutuhkan oleh AJAX / JavaScript)
+        Route::prefix('api')->group(function () {
         
-        //     // Ambil data GeoJSON wilayah koordinat Puskesmas Sleman
-        //     Route::get('/puskesmas/geojson', [PetaController::class, 'geojson'])->name('api.puskesmas.geojson');
+            // Ambil data GeoJSON wilayah koordinat Puskesmas Sleman
+            Route::get('/puskesmas/geojson', [PetaController::class, 'geojson'])->name('api.puskesmas.geojson');
             
-        //     // Ambil data list tabel / datatable capaian PHBS Puskesmas
-        //     Route::get('/puskesmas/list', [PetaController::class, 'list'])->name('api.puskesmas.list');
+            // Ambil data list tabel / datatable capaian PHBS Puskesmas
+            Route::get('/puskesmas/list', [PetaController::class, 'list'])->name('api.puskesmas.list');
             
-        //     // Ambil data periode bulan dan tahun filter laporan
-        //     Route::get('/puskesmas/periode', [PetaController::class, 'periode'])->name('api.puskesmas.periode');
+            // Ambil data periode bulan dan tahun filter laporan
+            Route::get('/puskesmas/periode', [PetaController::class, 'periode'])->name('api.puskesmas.periode');
             
-        //     // Ambil data detail info window ketika salah satu wilayah di peta diklik
-        //     Route::get('/peta/detail/{id}', [PetaController::class, 'show'])->name('api.peta.detail');
+            // Ambil data detail info window ketika salah satu wilayah di peta diklik
+            Route::get('/peta/detail/{id}', [PetaController::class, 'show'])->name('api.peta.detail');
         });
 
         // PHBS puskesmas gatau ini punya siapa, vanda keknya. iya punya vanda. laporan phbs
@@ -77,7 +77,7 @@ Route::get('/peta', [PetaController::class, 'index'])->name('peta.index');
         Route::get('/phbs/{id_phbs}/edit',[PhbsInputController::class, 'edit'])->name('phbs.edit');
         Route::put('/phbs/{id_phbs}',[PhbsInputController::class, 'update'])->name('phbs.update');
         Route::delete('/phbs/{id_phbs}',[PhbsInputController::class, 'destroy'])->name('phbs.destroy');
-
+});
     //dinkes
     // Route::middleware(['can:akses-dinkes'])->group(function(){
         //anies

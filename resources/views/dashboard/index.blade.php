@@ -473,14 +473,14 @@ a{text-decoration:none;color:inherit;}
         </div>
 
         <div class="hero-right">
-            <div class="rata-card">
+            {{-- <div class="rata-card">
                 <div class="rata-label">Rata-rata PHBS Periode Ini</div>
                 <div class="rata-value">{{ number_format($rataRataPhbs, 1) }}<span style="font-size:22px">%</span></div>
                 <div class="rata-bar">
                     <div class="rata-fill" style="width:{{ min($rataRataPhbs, 100) }}%"></div>
                 </div>
                 <div class="rata-sub">{{ $statusTerkirim }} laporan terpantau</div>
-            </div>
+            </div> --}}
         </div>
     </div>{{-- /hero --}}
 
@@ -689,7 +689,7 @@ a{text-decoration:none;color:inherit;}
         </div>
 
         {{-- Tren Bulanan (full width) --}}
-        <div style="padding:16px 0 0;">
+        {{-- <div style="padding:16px 0 0;">
             <div class="chart-card">
                 <div class="card-head">
                     <div class="card-head-left">
@@ -702,7 +702,7 @@ a{text-decoration:none;color:inherit;}
                 </div>
                 <div style="height:200px;"><canvas id="chartTren"></canvas></div>
             </div>
-        </div>
+        </div> --}}
 
         {{-- ── MATRIKS 13 INDIKATOR ── --}}
         <div style="padding:20px 0 0;">
@@ -848,7 +848,7 @@ a{text-decoration:none;color:inherit;}
 
         {{-- ── REKAP PER INDIKATOR ── --}}
         <div style="padding:20px 0 0;">
-            <div class="section-card">
+            {{-- <div class="section-card">
                 <div class="section-head">
                     <div class="section-head-left">
                         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2.5">
@@ -901,7 +901,7 @@ a{text-decoration:none;color:inherit;}
                     </table>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="footer">SIP-PHBS &mdash; Dinas Kesehatan Kabupaten Sleman &copy; {{ date('Y') }}</div>
 

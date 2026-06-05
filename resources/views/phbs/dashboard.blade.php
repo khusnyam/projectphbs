@@ -931,7 +931,7 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
           </a>
         </div>
 
-        <div class="sb-section">
+        {{-- <div class="sb-section">
           <span class="sb-label">Analisis</span>
 
           <button type="button" class="sb-item nav-item" data-page="per-indikator" onclick="showPage('per-indikator')">
@@ -941,7 +941,7 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
             <span>Per Indikator</span>
           </button>
 
-          {{-- <button type="button" class="sb-item nav-item" data-page="perbandingan" onclick="showPage('perbandingan')">
+          <button type="button" class="sb-item nav-item" data-page="perbandingan" onclick="showPage('perbandingan')">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 3v18"/>
               <path d="M5 7h14"/>
@@ -950,8 +950,8 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
               <path d="M8 21h8"/>
             </svg>
             <span>Perbandingan</span>
-          </button> --}}
-        </div>
+          </button>
+        </div> --}}
 
         <div class="sb-section sb-account-section">
           <span class="sb-label">Akun</span>

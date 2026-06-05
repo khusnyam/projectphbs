@@ -897,15 +897,15 @@ tbody tr:hover td{
       </a>
     </div>
 
-    <div class="sb-section">
-      <span class="sb-label">Analisis</span>
+    {{-- <div class="sb-section">
+      <span class="sb-label">Analisis</span> --}}
 
-      <a href="{{ route('puskesmas.dashboard') }}#per-indikator" class="sb-item">
+      {{-- <a href="{{ route('puskesmas.dashboard') }}#per-indikator" class="sb-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M3 10h18M3 14h18M10 3v18M14 3v18"/>
         </svg>
         <span>Per Indikator</span>
-      </a>
+      </a> --}}
 
       {{-- <a href="{{ route('puskesmas.dashboard') }}#perbandingan" class="sb-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -916,8 +916,8 @@ tbody tr:hover td{
           <path d="M8 21h8"/>
         </svg>
         <span>Perbandingan</span> --}}
-      </a>
-    </div>
+      {{-- </a>
+    </div> --}}
 
     <div class="sb-section">
       <span class="sb-label">Akun</span>
@@ -1028,15 +1028,20 @@ tbody tr:hover td{
               </div>
 
               <div class="quick">
+                <div class="label">Rata-rata Capaian PHBS</div>
+                <h2>{{ round($item->details->avg('persentase'),1) }}%</h2>
+              </div> 
+
+              {{-- <div class="quick">
                 <div class="label">Kategori</div>
                 <div class="value">{{ $item->kategori_phbs }}</div>
-              </div>
+              </div> --}}
             </div>
 
-            <div class="avg-card">
+            {{-- <div class="avg-card">
               <p>Rata-rata Capaian PHBS</p>
               <h2>{{ round($item->details->avg('persentase'),1) }}%</h2>
-            </div>
+            </div> --}}
 
             @php
               $namaIndikator = [

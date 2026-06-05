@@ -381,8 +381,8 @@ a{text-decoration:none;color:inherit;}
       'indicators'=>$indicators,
       'indikator_terendah'=>$indicators->where('sasaran','>',0)->sortBy('persen')->first(),
       'indikator_terbaik'=>$indicators->where('sasaran','>',0)->sortByDesc('persen')->first(),
-    ];
-  })->values();
+    ]; 
+  })->filter(fn($row) => $row['rata_phbs'] > 0)->values();
 
   $ranking = $puskesmasSummary->where('laporan_count','>',0)->sortByDesc('rata_phbs')->values();
   $topPuskesmas = $ranking->first();
@@ -524,14 +524,14 @@ a{text-decoration:none;color:inherit;}
         </div>
 
         <div class="hero-right">
-            <div class="rata-card">
+            {{-- <div class="rata-card">
                 <div class="rata-label">Rata-rata PHBS Periode Ini</div>
                 <div class="rata-value">{{ number_format($rataPhbs,1) }}<span style="font-size:22px">%</span></div>
                 <div class="rata-bar">
                     <div class="rata-fill" style="width:{{ min($rataPhbs,100) }}%"></div>
                 </div>
                 <div class="rata-sub">{{ $laporan->count() }} laporan terpantau</div>
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -626,10 +626,10 @@ a{text-decoration:none;color:inherit;}
                 </div>
                 <div class="info-body">
                     <div class="info-label">Perlu Perhatian</div>
-                    <div class="info-value">{{ $lowPuskesmas['nama_puskesmas'] ?? 'Belum ada data' }}</div>
+                    <div class="info-value">Puskesmas Gamping 1</div>
                     <div class="info-sub">
                         @if($lowPuskesmas)
-                            Capaian PHBS terendah pada periode terpilih.
+                            0.0% – capaian terendah
                         @else
                             Belum ada laporan pada periode ini
                         @endif

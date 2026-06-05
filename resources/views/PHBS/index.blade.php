@@ -357,8 +357,8 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
       $barColor = $rata >= 80 ? '#16a34a' : ($rata >= 60 ? '#f59e0b' : '#ef4444');
       $katTxt   = $rata >= 80 ? 'Kategori Baik' : ($rata >= 60 ? 'Kategori Cukup' : 'Kategori Kurang');
     @endphp
-    <div class="stat-row">
-      <div class="sc">
+    {{-- <div class="stat-row"> --}}
+      {{-- <div class="sc">
         <div class="sc-top">
           <div>
             <div class="lbl">Total Laporan</div>
@@ -367,8 +367,8 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
           </div>
           <div class="sc-ico sc-ico-blue"><i class="fa-solid fa-file-lines"></i></div>
         </div>
-      </div>
-      <div class="sc">
+      </div> --}}
+      {{-- <div class="sc">
         <div class="sc-top">
           <div>
             <div class="lbl">Total KK Dipantau</div>
@@ -377,8 +377,8 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
           </div>
           <div class="sc-ico sc-ico-blue"><i class="fa-solid fa-house-user"></i></div>
         </div>
-      </div>
-      <div class="sc">
+      </div> --}}
+      {{-- <div class="sc">
         <div class="sc-top">
           <div>
             <div class="lbl">KK Ber-PHBS</div>
@@ -387,8 +387,8 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
           </div>
           <div class="sc-ico sc-ico-yellow"><i class="fa-solid fa-circle-check"></i></div>
         </div>
-      </div>
-      <div class="sc">
+      </div> --}}
+      {{-- <div class="sc">
         <div class="sc-top">
           <div>
             <div class="lbl">Rata-rata % PHBS</div>
@@ -398,8 +398,8 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
         </div>
         <div class="pbar"><div class="pbar-fill" style="width:{{ $rata }}%;background:{{ $barColor }}"></div></div>
         <div class="sub" style="margin-top:6px">{{ $katTxt }}</div>
-      </div>
-    </div>
+      </div> --}}
+    {{-- </div> --}}
 
     {{-- FILTER --}}
     <div class="filter-card">

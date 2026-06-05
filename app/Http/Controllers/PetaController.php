@@ -31,12 +31,41 @@ class PetaController extends Controller
             ->toArray();
     }
 
+    private function normalizeMonth($bulan): int
+    {
+        if (is_numeric($bulan)) {
+            return (int) $bulan;
+        }
+
+        $bulan = trim(strtolower((string) $bulan));
+        $names = [
+            1 => 'januari',
+            2 => 'februari',
+            3 => 'maret',
+            4 => 'april',
+            5 => 'mei',
+            6 => 'juni',
+            7 => 'juli',
+            8 => 'agustus',
+            9 => 'september',
+            10 => 'oktober',
+            11 => 'november',
+            12 => 'desember',
+        ];
+
+        $key = array_search($bulan, array_map('strtolower', $names), true);
+
+        return $key ?: date('n');
+    }
+
     /**
      * Query capaian bulan+tahun tertentu, di-join ke puskesmas.
      * Jika bulan/tahun tidak ada, fallback ke persentase_capaian di tabel puskesmas.
      */
     private function queryCapaian($bulan, int $tahun)
     {
+        $bulan = $this->normalizeMonth($bulan);
+
         return Puskesmas::leftJoin('capaian_bulanan', function ($join) use ($bulan, $tahun) {
             $join->on('puskesmas.id_puskesmas', '=', 'capaian_bulanan.id_puskesmas')
                  ->where('capaian_bulanan.bulan', $bulan)
@@ -60,24 +89,8 @@ class PetaController extends Controller
     public function index(Request $request)
     {
         $tahunList = $this->availableYears();
-        $tahun     = (int) $request->get('tahun', $tahunList[0] ?? date('Y'));
-        // $tahun = (int) $request->get('tahun', date('Y'));
-        if (!in_array($tahun, $tahunList) && count($tahunList)) {
-            $tahun = $tahunList[0];
-        }
-        $bulan = $request->get('bulan', [
-            1 => 'Januari',
-            2 => 'Februari',
-            3 => 'Maret',
-            4 => 'April',
-            5 => 'Mei',
-            6 => 'Juni',
-            7 => 'Juli',
-            8 => 'Agustus',
-            9 => 'September',
-            10 => 'Oktober',
-            11 => 'November',
-            12 => 'Desember', ][date('n')]);
+        $tahun     = (int) $request->get('tahun', date('Y'));
+        $bulan     = $this->normalizeMonth($request->get('bulan', date('n')));
         $bulanList = $this->availableMonths($tahun);
 
         // Pastikan bulan valid untuk tahun yg dipilih
@@ -105,57 +118,32 @@ class PetaController extends Controller
 
     // ── API JSON ──────────────────────────────────────────────────────────────
 
-    /** GeoJSON FeatureCollection dengan kecamatan (bukan puskesmas). */
+    /** GeoJSON FeatureCollection dengan filter bulan+tahun. */
     public function geojson(Request $request): JsonResponse
     {
-        $tahunList = $this->availableYears();
-        $tahun = (int) $request->get('tahun', $tahunList[0] ?? date('Y'));
-        if (!in_array($tahun, $tahunList) && count($tahunList)) {
-            $tahun = $tahunList[0];
-        }
-        
-        // Parse bulan: bisa dari ?bulan=1 atau ?bulan=Januari
-        $bulanInput = $request->get('bulan', date('n'));
-        $bulanInt = is_numeric($bulanInput) ? (int)$bulanInput : array_search($bulanInput, ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember']);
-        $bulanInt = $bulanInt ?: (int)date('n');
+        $tahun = (int) $request->get('tahun', date('Y'));
+        $bulan = $this->normalizeMonth($request->get('bulan', date('n')));
 
-        // Ambil kecamatan dengan geojson boundary
-        $kecamatans = DB::table('kecamatans')->get();
+        $rows = $this->queryCapaian($bulan, $tahun)->get();
 
-        $features = $kecamatans->map(function ($kecamatan) use ($bulanInt, $tahun) {
-            // Aggregasi data capaian per kecamatan
-            $capaianData = DB::table('puskesmas')
-                ->leftJoin('capaian_bulanan', function ($join) use ($bulanInt, $tahun) {
-                    $join->on('puskesmas.id_puskesmas', '=', 'capaian_bulanan.id_puskesmas')
-                         ->where('capaian_bulanan.bulan', $bulanInt)
-                         ->where('capaian_bulanan.tahun', $tahun);
-                })
-                ->where('puskesmas.kecamatan', $kecamatan->nama_kecamatan)
-                ->select([
-                    DB::raw('AVG(COALESCE(capaian_bulanan.persentase_capaian, puskesmas.persentase_capaian)) AS avg_capaian'),
-                    DB::raw('SUM(puskesmas.jumlah_kk_total) AS total_kk'),
-                    DB::raw('SUM(COALESCE(capaian_bulanan.jumlah_tercapai, 0)) AS total_tercapai'),
-                    DB::raw('COUNT(DISTINCT puskesmas.id_puskesmas) AS jumlah_puskesmas'),
-                ])
-                ->first();
-
-            $pct   = (float) ($capaianData->avg_capaian ?? 0);
+        $features = $rows->map(function ($row) {
+            $pct   = (float) $row->persentase_capaian;
             $warna = $this->colorByPct($pct);
 
             return [
                 'type'     => 'Feature',
-                'geometry' => is_string($kecamatan->geojson_polygon)
-                    ? json_decode($kecamatan->geojson_polygon, true)
-                    : $kecamatan->geojson_polygon,
+                'geometry' => is_string($row->geojson_polygon)
+                    ? json_decode($row->geojson_polygon, true)
+                    : $row->geojson_polygon,
                 'properties' => [
-                    'id'                 => $kecamatan->id,
-                    'nama_puskesmas'     => $kecamatan->nama_kecamatan,
-                    'kecamatan'          => $kecamatan->nama_kecamatan,
-                    'persentase_capaian' => round($pct, 1),
-                    'jumlah_kk_total'    => (int) ($capaianData->total_kk ?? 0),
-                    'jumlah_tercapai'    => (int) ($capaianData->total_tercapai ?? 0),
-                    'jumlah_puskesmas'   => (int) ($capaianData->jumlah_puskesmas ?? 0),
-                    'status_kategori'    => $pct >= 80 ? 'Tercapai' : ($pct >= 60 ? 'Cukup Tercapai' : 'Belum Tercapai'),
+                    'id'                 => $row->id_puskesmas,
+                    'nama_puskesmas'     => $row->nama_puskesmas,
+                    'kecamatan'          => $row->kecamatan,
+                    'persentase_capaian' => $pct,
+                    'jumlah_kk_total'    => (int) $row->jumlah_kk_total,
+                    'jumlah_tercapai'    => (int) $row->jumlah_tercapai,
+                    'jumlah_sasaran'     => (int) $row->jumlah_sasaran,
+                    'status_kategori'    => $row->status_kategori,
                     'warna'              => $warna,
                 ],
             ];
@@ -164,25 +152,17 @@ class PetaController extends Controller
         return response()->json([
             'type'     => 'FeatureCollection',
             'features' => $features,
-            'meta'     => ['bulan' => $bulanInt, 'tahun' => $tahun],
+            'meta'     => ['bulan' => $bulan, 'tahun' => $tahun],
         ]);
     }
 
     /** Daftar puskesmas (sidebar) dengan filter bulan+tahun. */
     public function list(Request $request): JsonResponse
     {
-        $tahunList = $this->availableYears();
-        $tahun = (int) $request->get('tahun', $tahunList[0] ?? date('Y'));
-        if (!in_array($tahun, $tahunList) && count($tahunList)) {
-            $tahun = $tahunList[0];
-        }
-        
-        // Parse bulan: bisa dari ?bulan=1 atau ?bulan=Januari
-        $bulanInput = $request->get('bulan', date('n'));
-        $bulanInt = is_numeric($bulanInput) ? (int)$bulanInput : array_search($bulanInput, ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember']);
-        $bulanInt = $bulanInt ?: (int)date('n');
+        $tahun = (int) $request->get('tahun', date('Y'));
+        $bulan = $this->normalizeMonth($request->get('bulan', date('n')));
 
-        $rows = $this->queryCapaian($bulanInt, $tahun)
+        $rows = $this->queryCapaian($bulan, $tahun)
             ->orderBy('puskesmas.nama_puskesmas')
             ->get();
 
@@ -207,19 +187,7 @@ class PetaController extends Controller
     public function show(int $id, Request $request): JsonResponse
     {
         $tahun = (int) $request->get('tahun', date('Y'));
-        $bulan = $request->get('bulan', [
-            1 => 'Januari',
-            2 => 'Februari',
-            3 => 'Maret',
-            4 => 'April',
-            5 => 'Mei',
-            6 => 'Juni',
-            7 => 'Juli',
-            8 => 'Agustus',
-            9 => 'September',
-            10 => 'Oktober',
-            11 => 'November',
-            12 => 'Desember', ][date('n')]);
+        $bulan = $this->normalizeMonth($request->get('bulan', date('n')));
 
         $row = $this->queryCapaian($bulan, $tahun)
             ->where('puskesmas.id_puskesmas', $id)
