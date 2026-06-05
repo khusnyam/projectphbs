@@ -629,7 +629,7 @@ a{text-decoration:none;color:inherit;}
                     <div class="info-value">{{ $lowPuskesmas['nama_puskesmas'] ?? 'Belum ada data' }}</div>
                     <div class="info-sub">
                         @if($lowPuskesmas)
-                            Puskesmas dengan capaian terendah untuk prioritas pemantauan.
+                            Capaian PHBS terendah pada periode terpilih.
                         @else
                             Belum ada laporan pada periode ini
                         @endif

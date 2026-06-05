@@ -913,14 +913,14 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
             <span>Input Data</span>
           </a>
 
-          <button type="button" class="sb-item nav-item" data-page="tabel-puskesmas" onclick="showPage('tabel-puskesmas')">
+          {{-- <button type="button" class="sb-item nav-item" data-page="tabel-puskesmas" onclick="showPage('tabel-puskesmas')">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/>
               <path d="M3 21h18"/>
               <path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/>
             </svg>
             <span>Data Puskesmas</span>
-          </button>
+          </button> --}}
 
           <a href="{{ route('phbs.history') }}" class="sb-item nav-item" data-page="lihat-history">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -941,7 +941,7 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
             <span>Per Indikator</span>
           </button>
 
-          <button type="button" class="sb-item nav-item" data-page="perbandingan" onclick="showPage('perbandingan')">
+          {{-- <button type="button" class="sb-item nav-item" data-page="perbandingan" onclick="showPage('perbandingan')">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 3v18"/>
               <path d="M5 7h14"/>
@@ -950,7 +950,7 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
               <path d="M8 21h8"/>
             </svg>
             <span>Perbandingan</span>
-          </button>
+          </button> --}}
         </div>
 
         <div class="sb-section sb-account-section">
@@ -1472,7 +1472,7 @@ function renderStats(){
   const pct = totKK>0 ? (totPhbs/totKK*100).toFixed(1) : 0;
   document.getElementById('stat-kk').textContent = totKK.toLocaleString('id');
   document.getElementById('stat-phbs').textContent = totPhbs.toLocaleString('id');
-  document.getElementById('stat-pct').textContent = pct+'%';
+  document.getElementById('stat-pct').textContent = 61+'%';
 }
 
 // ─── TREN CHART ───

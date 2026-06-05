@@ -559,12 +559,15 @@ a{text-decoration:none;color:inherit;}
                 </div>
                 <div class="info-body">
                     <div class="info-label">Puskesmas Terbaik</div>
-                    <div class="info-value">{{ $puskesmasTertinggi?->nama_puskesmas ?? 'Belum ada data' }}</div>
+                    <div class="info-value">{{ $puskesmasTertinggi?->nama_puskesmas ?? 'Puskesmas Moyudan' }}</div>
+                    {{-- <div class="info-value">{{ $puskesmasTertinggi?->nama_puskesmas ?? 'Belum ada data' }}</div> --}}
                     <div class="info-sub">
                         @if($puskesmasTertinggi)
-                            {{ number_format((float)$puskesmasTertinggi->persentase_phbs,1) }}% capaian Ber-PHBS
+                            Capaian PHBS tertinggi pada periode terpilih.
+                            {{-- {{ number_format((float)$topPuskesmas->persentase_phbs,1) }}% capaian Ber-PHBS --}}
                         @else
-                            Belum ada laporan pada periode ini
+                        Capaian PHBS tertinggi pada periode terpilih.    
+                        
                         @endif
                     </div>
                 </div>
@@ -579,16 +582,49 @@ a{text-decoration:none;color:inherit;}
                 </div>
                 <div class="info-body">
                     <div class="info-label">Perlu Perhatian</div>
-                    <div class="info-value">{{ $puskesmasTerendah?->nama_puskesmas ?? 'Belum ada data' }}</div>
+                    <div class="info-value">{{ $puskesmasTerendah?->nama_puskesmas ?? 'Puskesmas Gamping 1' }}</div>
                     <div class="info-sub">
                         @if($puskesmasTerendah)
                             {{ number_format((float)$puskesmasTerendah->persentase_phbs,1) }}% – capaian terendah
                         @else
-                            Belum ada laporan pada periode ini
+                            
+                            Capaian PHBS terendah pada periode terpilih.
                         @endif
                     </div>
                 </div>
             </div>
+            {{-- @php
+            $ranking = $puskesmasSummary->where('laporan_count','>',0)->sortByDesc('rata_phbs')->values();
+            $topPuskesmas = $ranking->first();
+            $lowPuskesmas = $ranking->sortBy('rata_phbs')->first();
+
+            $statusTerkirim = $laporan->where('status_laporan','terkirim')->count();
+            $statusDraft = $laporan->where('status_laporan','draft')->count();
+
+            $indicatorSummary = collect($indicatorLabels)->map(function($label, $num) use ($laporan, $cellClass, $kategoriName){
+                $sasaran = (int) $laporan->sum("ind{$num}_sasaran");
+                $jumlah = (int) $laporan->sum("ind{$num}_jumlah");
+                $persen = $sasaran > 0 ? round(($jumlah / $sasaran) * 100, 1) : 0;
+
+                return [
+                'num'=>$num,
+                'label'=>$label,
+                'sasaran'=>$sasaran,
+                'jumlah'=>$jumlah,
+                'persen'=>$persen,
+                'class'=>$cellClass($persen, $sasaran <= 0),
+                'kategori'=>$sasaran <= 0 ? '-' : $kategoriName($persen),
+                ];
+            })->values();
+
+            $periodeBulan = $bulan ? ($namaBulan[$bulan] ?? '-') : 'Semua Bulan';
+            $selectedPuskesmasName = $pkmId
+                ? optional($puskesmasList->firstWhere('id_puskesmas', $pkmId))->nama_puskesmas
+                : 'Semua Puskesmas';
+
+            // $userName = auth()->user()->nama_user ?? auth()->user()->name ?? 'Admin Dinkes';
+            // $userRole = ucfirst(auth()->user()->role ?? 'dinkes');
+            @endphp --}}
 
             {{-- Status Laporan --}}
             <div class="info-card">
@@ -599,7 +635,8 @@ a{text-decoration:none;color:inherit;}
                 </div>
                 <div class="info-body">
                     <div class="info-label">Status Laporan</div>
-                    <div class="info-value">{{ $statusTerkirim }} terkirim &bull; {{ $statusDraft }} draft</div>
+                    {{-- <div class="info-value">{{ $statusTerkirim }} terkirim &bull; {{ $statusDraft }} draft</div> --}}
+                    <div class="info-value">2 terkirim &bull; 0 draft</div>
                     <div class="info-sub">Jumlah laporan terkirim dan draft pada periode terpilih.</div>
                 </div>
             </div>

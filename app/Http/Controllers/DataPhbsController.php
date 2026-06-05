@@ -9,7 +9,7 @@ use App\Models\Puskesmas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Auth;
+use Illuminate\Support\Facades\Auth;
 
 class DataPhbsController extends Controller
 {
@@ -86,7 +86,7 @@ class DataPhbsController extends Controller
                 'jumlah_kk_total'           => $request->jumlah_kk_total,
                 'total_indikator_phbs'=> $totalCapaian,
                 'kategori_phbs'       => $this->statusByPct($pct),
-                'user_penginput'      => auth()->id() ?? 1,
+                'user_penginput'      => Auth::id() ?? 1,
             ]);
 
             // Simpan detail per indikator

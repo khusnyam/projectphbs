@@ -25,7 +25,7 @@ class PhbsInputController extends Controller
         $request->validate([
             'bulan' => 'required',
             'tahun' => 'required',
-            'jumlah_kk_total' => 'required|integer|min:0',
+            'jumlah_kk_total' => 'integer|min:0|default:20',
         ]);
 
         $id_puskesmas = Auth::user()->id_puskesmas;

@@ -127,10 +127,10 @@ class DashboardController extends Controller
  
         // ── Rekapitulasi Ber-PHBS per Puskesmas ──────────────────────────────
         // Query hanya ke data_phbs (ber_phbs & jumlah_kk_total sudah tersimpan di sana)
+        // Note: Tidak filter status_laporan supaya ambil semua data (terkirim dan draft)
         $rekapData = DB::table('data_phbs as dp')
             ->join('puskesmas as p', 'dp.id_puskesmas', '=', 'p.id_puskesmas')
             ->where('dp.tahun', $tahun)
-            ->where('dp.status_laporan', 'terkirim')
             ->where('p.status_aktif', true)
             ->when($bulan,        fn($q) => $q->where('dp.bulan',        $bulan))
             ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
@@ -141,7 +141,7 @@ class DashboardController extends Controller
                 DB::raw('SUM(dp.ber_phbs)           AS total_ber_phbs'),
                 DB::raw('ROUND(SUM(dp.ber_phbs)/NULLIF(SUM(dp.jumlah_kk_total),0)*100,2) AS persentase_phbs'),
             )
-            ->groupBy('p.id_puskesmas', 'p.nama_puskesmas', 'p.kecamatan', 'p.kepala_puskesmas')
+            ->groupBy('p.id_puskesmas')
             ->orderBy('persentase_phbs', 'desc')
             ->get();
  

@@ -1157,10 +1157,10 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
             <span>Input Data</span>
           </a>
 
-          <a href="{{ route('puskesmas.dashboard') }}#page-tabel-puskesmas" class="sb-item nav-item">
+          {{-- <a href="{{ route('puskesmas.dashboard') }}#page-tabel-puskesmas" class="sb-item nav-item">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/><path d="M3 21h18"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/></svg>
             <span>Data Puskesmas</span>
-          </a>
+          </a> --}}
 
           <a href="{{ route('phbs.history') }}" class="sb-item nav-item">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
@@ -1176,10 +1176,10 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
             <span>Per Indikator</span>
           </a>
 
-          <a href="{{ route('puskesmas.dashboard') }}#page-perbandingan" class="sb-item nav-item">
+          {{-- <a href="{{ route('puskesmas.dashboard') }}#page-perbandingan" class="sb-item nav-item">
             <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M7 7l-3 6h6L7 7z"/><path d="M17 7l-3 6h6l-3-6z"/><path d="M8 21h8"/></svg>
             <span>Perbandingan</span>
-          </a>
+          </a> --}}
         </div>
 
         <div class="sb-section sb-account-section">

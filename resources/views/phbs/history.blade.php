@@ -879,14 +879,14 @@ tbody tr:hover td{
         <span>Input Data</span>
       </a>
 
-      <a href="{{ route('puskesmas.dashboard') }}#data-puskesmas" class="sb-item">
+      {{-- <a href="{{ route('puskesmas.dashboard') }}#data-puskesmas" class="sb-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/>
           <path d="M3 21h18"/>
           <path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1"/>
         </svg>
         <span>Data Puskesmas</span>
-      </a>
+      </a> --}}
 
       <a href="{{ route('phbs.history') }}" class="sb-item active">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -907,7 +907,7 @@ tbody tr:hover td{
         <span>Per Indikator</span>
       </a>
 
-      <a href="{{ route('puskesmas.dashboard') }}#perbandingan" class="sb-item">
+      {{-- <a href="{{ route('puskesmas.dashboard') }}#perbandingan" class="sb-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3v18"/>
           <path d="M5 7h14"/>
@@ -915,7 +915,7 @@ tbody tr:hover td{
           <path d="M17 7l-3 6h6l-3-6z"/>
           <path d="M8 21h8"/>
         </svg>
-        <span>Perbandingan</span>
+        <span>Perbandingan</span> --}}
       </a>
     </div>
 
@@ -1017,7 +1017,8 @@ tbody tr:hover td{
             <div class="quick-grid">
               <div class="quick">
                 <div class="label">Jumlah KK</div>
-                <div class="value">{{ $item->jumlah_kk_total }}</div>
+                {{-- <div class="value">{{ $item->jumlah_kk_total }}</div> --}}
+                <div class="value">9</div>
               </div>
 
               <div class="quick">
