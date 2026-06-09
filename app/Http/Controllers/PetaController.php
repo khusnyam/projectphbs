@@ -6,6 +6,7 @@ use App\Models\CapaianBulanan;
 use App\Models\Puskesmas;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PetaController extends Controller
 {
@@ -30,12 +31,41 @@ class PetaController extends Controller
             ->toArray();
     }
 
+    private function normalizeMonth($bulan): int
+    {
+        if (is_numeric($bulan)) {
+            return (int) $bulan;
+        }
+
+        $bulan = trim(strtolower((string) $bulan));
+        $names = [
+            1 => 'januari',
+            2 => 'februari',
+            3 => 'maret',
+            4 => 'april',
+            5 => 'mei',
+            6 => 'juni',
+            7 => 'juli',
+            8 => 'agustus',
+            9 => 'september',
+            10 => 'oktober',
+            11 => 'november',
+            12 => 'desember',
+        ];
+
+        $key = array_search($bulan, array_map('strtolower', $names), true);
+
+        return $key ?: date('n');
+    }
+
     /**
      * Query capaian bulan+tahun tertentu, di-join ke puskesmas.
      * Jika bulan/tahun tidak ada, fallback ke persentase_capaian di tabel puskesmas.
      */
     private function queryCapaian($bulan, int $tahun)
     {
+        $bulan = $this->normalizeMonth($bulan);
+
         return Puskesmas::leftJoin('capaian_bulanan', function ($join) use ($bulan, $tahun) {
             $join->on('puskesmas.id_puskesmas', '=', 'capaian_bulanan.id_puskesmas')
                  ->where('capaian_bulanan.bulan', $bulan)
@@ -45,12 +75,12 @@ class PetaController extends Controller
             'puskesmas.id_puskesmas',
             'puskesmas.nama_puskesmas',
             'puskesmas.kecamatan',
-            'puskesmas.jumlah_kk',
+            'puskesmas.jumlah_kk_total',
             'puskesmas.geojson_polygon',
-            \DB::raw('COALESCE(capaian_bulanan.persentase_capaian, puskesmas.persentase_capaian) AS persentase_capaian'),
-            \DB::raw('COALESCE(capaian_bulanan.status_kategori,    puskesmas.status_kategori)    AS status_kategori'),
-            \DB::raw('COALESCE(capaian_bulanan.jumlah_tercapai, 0) AS jumlah_tercapai'),
-            \DB::raw('COALESCE(capaian_bulanan.jumlah_sasaran,  puskesmas.jumlah_kk) AS jumlah_sasaran'),
+            DB::raw('COALESCE(capaian_bulanan.persentase_capaian, puskesmas.persentase_capaian) AS persentase_capaian'),
+            DB::raw('COALESCE(capaian_bulanan.status_kategori,    puskesmas.status_kategori)    AS status_kategori'),
+            DB::raw('COALESCE(capaian_bulanan.jumlah_tercapai, 0) AS jumlah_tercapai'),
+            DB::raw('COALESCE(capaian_bulanan.jumlah_sasaran,  puskesmas.jumlah_kk_total) AS jumlah_sasaran'),
         ]);
     }
 
@@ -59,21 +89,8 @@ class PetaController extends Controller
     public function index(Request $request)
     {
         $tahunList = $this->availableYears();
-        $tahun     = (int) $request->get('tahun', $tahunList[0] ?? date('Y'));
-        $tahun = (int) $request->get('tahun', date('Y'));
-        $bulan = $request->get('bulan', [
-            1 => 'Januari',
-            2 => 'Februari',
-            3 => 'Maret',
-            4 => 'April',
-            5 => 'Mei',
-            6 => 'Juni',
-            7 => 'Juli',
-            8 => 'Agustus',
-            9 => 'September',
-            10 => 'Oktober',
-            11 => 'November',
-            12 => 'Desember', ][date('n')]);
+        $tahun     = (int) $request->get('tahun', date('Y'));
+        $bulan     = $this->normalizeMonth($request->get('bulan', date('n')));
         $bulanList = $this->availableMonths($tahun);
 
         // Pastikan bulan valid untuk tahun yg dipilih
@@ -85,7 +102,7 @@ class PetaController extends Controller
 
         $totalPuskesmas  = $rows->count();
         $rataRataCapaian = $rows->avg('persentase_capaian');
-        $totalKK   = $rows->sum('jumlah_kk');
+        $totalKK   = $rows->sum('jumlah_kk_total');
 
         $statistik = [
             'rendah'        => $rows->where('persentase_capaian', '<', 60)->count(),
@@ -105,19 +122,7 @@ class PetaController extends Controller
     public function geojson(Request $request): JsonResponse
     {
         $tahun = (int) $request->get('tahun', date('Y'));
-        $bulan = $request->get('bulan', [
-            1 => 'Januari',
-            2 => 'Februari',
-            3 => 'Maret',
-            4 => 'April',
-            5 => 'Mei',
-            6 => 'Juni',
-            7 => 'Juli',
-            8 => 'Agustus',
-            9 => 'September',
-            10 => 'Oktober',
-            11 => 'November',
-            12 => 'Desember', ][date('n')]);
+        $bulan = $this->normalizeMonth($request->get('bulan', date('n')));
 
         $rows = $this->queryCapaian($bulan, $tahun)->get();
 
@@ -135,7 +140,7 @@ class PetaController extends Controller
                     'nama_puskesmas'     => $row->nama_puskesmas,
                     'kecamatan'          => $row->kecamatan,
                     'persentase_capaian' => $pct,
-                    'jumlah_kk'    => (int) $row->jumlah_kk,
+                    'jumlah_kk_total'    => (int) $row->jumlah_kk_total,
                     'jumlah_tercapai'    => (int) $row->jumlah_tercapai,
                     'jumlah_sasaran'     => (int) $row->jumlah_sasaran,
                     'status_kategori'    => $row->status_kategori,
@@ -155,19 +160,7 @@ class PetaController extends Controller
     public function list(Request $request): JsonResponse
     {
         $tahun = (int) $request->get('tahun', date('Y'));
-        $bulan = $request->get('bulan', [
-            1 => 'Januari',
-            2 => 'Februari',
-            3 => 'Maret',
-            4 => 'April',
-            5 => 'Mei',
-            6 => 'Juni',
-            7 => 'Juli',
-            8 => 'Agustus',
-            9 => 'September',
-            10 => 'Oktober',
-            11 => 'November',
-            12 => 'Desember', ][date('n')]);
+        $bulan = $this->normalizeMonth($request->get('bulan', date('n')));
 
         $rows = $this->queryCapaian($bulan, $tahun)
             ->orderBy('puskesmas.nama_puskesmas')
@@ -180,7 +173,7 @@ class PetaController extends Controller
                 'nama_puskesmas'     => $row->nama_puskesmas,
                 'kecamatan'          => $row->kecamatan,
                 'persentase_capaian' => $pct,
-                'jumlah_kk'    => number_format($row->jumlah_kk, 0, ',', '.'),
+                'jumlah_kk_total'    => number_format($row->jumlah_kk_total, 0, ',', '.'),
                 'jumlah_tercapai'    => number_format($row->jumlah_tercapai, 0, ',', '.'),
                 'status_kategori'    => $row->status_kategori,
                 'warna'              => $this->colorByPct($pct),
@@ -194,19 +187,7 @@ class PetaController extends Controller
     public function show(int $id, Request $request): JsonResponse
     {
         $tahun = (int) $request->get('tahun', date('Y'));
-        $bulan = $request->get('bulan', [
-            1 => 'Januari',
-            2 => 'Februari',
-            3 => 'Maret',
-            4 => 'April',
-            5 => 'Mei',
-            6 => 'Juni',
-            7 => 'Juli',
-            8 => 'Agustus',
-            9 => 'September',
-            10 => 'Oktober',
-            11 => 'November',
-            12 => 'Desember', ][date('n')]);
+        $bulan = $this->normalizeMonth($request->get('bulan', date('n')));
 
         $row = $this->queryCapaian($bulan, $tahun)
             ->where('puskesmas.id_puskesmas', $id)
@@ -219,7 +200,7 @@ class PetaController extends Controller
             'nama_puskesmas'     => $row->nama_puskesmas,
             'kecamatan'          => $row->kecamatan,
             'persentase_capaian' => $pct,
-            'jumlah_kk'    => number_format($row->jumlah_kk, 0, ',', '.'),
+            'jumlah_kk_total'    => number_format($row->jumlah_kk_total, 0, ',', '.'),
             'jumlah_tercapai'    => number_format($row->jumlah_tercapai, 0, ',', '.'),
             'jumlah_sasaran'     => number_format($row->jumlah_sasaran,  0, ',', '.'),
             'status_kategori'    => $row->status_kategori,

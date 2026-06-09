@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\data_phbs;
 use App\Models\data_phbs_detail;
 use App\Models\puskesmas;
+use Illuminate\Support\Facades\Auth;
+use App\Models\indikator_phbs;
 
 class PhbsInputController extends Controller
 {
@@ -13,8 +15,10 @@ class PhbsInputController extends Controller
     public function create()
     {
         $puskesmas = puskesmas::all();
+        $allIndikator = indikator_phbs::pluck('nama_indikator')->toArray();
+        $targetIndikator = indikator_phbs::pluck('target_nasional')->toArray();
 
-        return view('phbs.create', compact('puskesmas'));
+        return view('phbs.create', compact('puskesmas', 'allIndikator', 'targetIndikator'));
     }
 
     // SIMPAN DATA
@@ -22,14 +26,20 @@ class PhbsInputController extends Controller
     {
 
         $request->validate([
-            'id_puskesmas' => 'required',
             'bulan' => 'required',
             'tahun' => 'required',
+            'jumlah_kk_total' => 'integer|min:0|default:20',
         ]);
+
+        $id_puskesmas = Auth::user()->id_puskesmas;
 
         $jumlah = $request->input('jumlah_input', []);
 
         $total = array_sum($jumlah);
+
+        $persenPhbs = $request->jumlah_kk_total > 0
+            ? round($total / $request->jumlah_kk_total * 100, 2)
+            : 0;
 
         if ($total >= 100) {
             $kategori = 'Baik';
@@ -40,28 +50,38 @@ class PhbsInputController extends Controller
         }
 
         $phbs = data_phbs::create([
-            'id_puskesmas' => $request->id_puskesmas,
-            'bulan' => $request->bulan,
-            'tahun' => $request->tahun,
-            'jumlah_kk' => $request->jumlah_kk,
+            // 'id_puskesmas' => Auth::user()->id_puskesmas,
+            // 'bulan' => $request->bulan,
+            // 'tahun' => $request->tahun,
+            // 'jumlah_kk_total' => $request->jumlah_kk_total,
 
-            'persalinan_nakes'      => $jumlah[1] ?? 0,
-            'asi_eksklusif'         => $jumlah[2] ?? 0,
-            'timbang_balita'        => $jumlah[3] ?? 0,
-            'air_bersih'            => $jumlah[4] ?? 0,
-            'cuci_tangan'           => $jumlah[5] ?? 0,
-            'pengelolaan_air_minum' => $jumlah[6] ?? 0,
-            'jamban_sehat'          => $jumlah[7] ?? 0,
-            'pengelolaan_limbah'    => $jumlah[8] ?? 0,
-            'buang_sampah'          => $jumlah[9] ?? 0,
-            'pemberantasan_jentik'  => $jumlah[10] ?? 0,
-            'makan_buah_sayur'      => $jumlah[11] ?? 0,
-            'aktivitas_fisik'       => $jumlah[12] ?? 0,
-            'tidak_merokok'         => $jumlah[13] ?? 0,
+            'id_puskesmas'    => Auth::user()->id_puskesmas,
+            'bulan'           => $request->bulan,
+            'tahun'           => $request->tahun,
+            'jumlah_kk_l'     => $request->jumlah_kk_l,
+            'jumlah_kk_p'     => $request->jumlah_kk_p,
+            'jumlah_kk_total' => $request->jumlah_kk_total,
+            'ber_phbs'        => $total,
+            'persen_phbs'     => $persenPhbs,
+            'status_laporan'  => 'draft',
 
-            'total_indikator_phbs' => $total,
-            'kategori_phbs' => $kategori,
-            'user_penginput' => 1,
+            // 'persalinan_nakes'      => $jumlah[1] ?? 0,
+            // 'asi_eksklusif'         => $jumlah[2] ?? 0,
+            // 'timbang_balita'        => $jumlah[3] ?? 0,
+            // 'air_bersih'            => $jumlah[4] ?? 0,
+            // 'cuci_tangan'           => $jumlah[5] ?? 0,
+            // 'pengelolaan_air_minum' => $jumlah[6] ?? 0,
+            // 'jamban_sehat'          => $jumlah[7] ?? 0,
+            // 'pengelolaan_limbah'    => $jumlah[8] ?? 0,
+            // 'buang_sampah'          => $jumlah[9] ?? 0,
+            // 'pemberantasan_jentik'  => $jumlah[10] ?? 0,
+            // 'makan_buah_sayur'      => $jumlah[11] ?? 0,
+            // 'aktivitas_fisik'       => $jumlah[12] ?? 0,
+            // 'tidak_merokok'         => $jumlah[13] ?? 0,
+
+            // 'total_indikator_phbs' => $total,
+            'kategori_phbs' => $kategori
+            // 'user_penginput' => 1,
         ]);
 
         $sasaran = $request->input('sasaran_input', []);
@@ -108,7 +128,9 @@ for ($i = 1; $i <= 13; $i++) {
     'details'
 ]);
 
-    if ($request->puskesmas) {
+    if (Auth::user()->id_role1 == 2) { // role puskesmas
+        $query->where('id_puskesmas', Auth::user()->id_puskesmas);
+    } elseif ($request->puskesmas) {
         $query->where('id_puskesmas', $request->puskesmas);
     }
 
@@ -137,6 +159,8 @@ for ($i = 1; $i <= 13; $i++) {
     // =====================
     public function edit($id_phbs)
     {
+        $id_puskesmas = Auth::user()->id_puskesmas;
+        
         $phbs = data_phbs::findOrFail($id_phbs);
 
         $puskesmas = puskesmas::all();
@@ -155,13 +179,15 @@ for ($i = 1; $i <= 13; $i++) {
     // =====================
     public function update(Request $request, $id_phbs)
     {
+        $puskesmas = puskesmas::all();
+        
         $phbs = data_phbs::findOrFail($id_phbs);
 
         $phbs->update([
             'id_puskesmas' => $request->id_puskesmas,
             'bulan' => $request->bulan,
             'tahun' => $request->tahun,
-            'jumlah_kk' => $request->jumlah_kk,
+            'jumlah_kk_total' => $request->jumlah_kk_total,
         ]);
 
         return redirect()
@@ -174,6 +200,8 @@ for ($i = 1; $i <= 13; $i++) {
     // =====================
     public function destroy($id_phbs)
     {
+        $puskesmas = puskesmas::all();
+        
         $phbs = data_phbs::findOrFail($id_phbs);
 
         $phbs->delete();

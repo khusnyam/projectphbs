@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use app\Models\data_phbs;
+use App\Models\data_phbs as ModelsData_phbs;
 
 class Puskesmas extends Model
 {
     use HasFactory;
-
     protected $table = 'puskesmas';
 
     protected $primaryKey = 'id_puskesmas';
@@ -30,7 +31,7 @@ class Puskesmas extends Model
         'longitude',
         'status_aktif',
         'persentase_capaian',
-        'jumlah_kk',
+        'jumlah_kk_total',
         'status_kategori',
         'geojson_polygon',
         'warna',
@@ -41,6 +42,11 @@ class Puskesmas extends Model
         'persentase_capaian' => 'float',
         'status_aktif' => 'boolean',
     ];
+
+    public function scopeAktif($query)
+    {
+        return $query->where('status_aktif', true);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -115,7 +121,7 @@ class Puskesmas extends Model
                 'nama_puskesmas' => $this->nama_puskesmas,
                 'kecamatan' => $this->kecamatan,
                 'persentase_capaian' => $this->persentase_capaian,
-                'jumlah_kk' => $this->jumlah_kk,
+                'jumlah_kk_total' => $this->jumlah_kk_total,
                 'status_kategori' => $this->getStatusByPersentase(),
                 'warna' => $this->getWarnaByPersentase(),
             ],

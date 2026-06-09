@@ -16,6 +16,7 @@ body{font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex}
 .bg-c1{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,51,153,0.3) 0%,transparent 70%);top:-150px;left:-150px;pointer-events:none}
 .bg-c2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(10,80,60,0.25) 0%,transparent 70%);bottom:-100px;right:-100px;pointer-events:none}
 .bg-c3{position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(0,51,153,0.15) 0%,transparent 70%);bottom:5%;left:30%;pointer-events:none}
+/* .bg-c4{position:absolute;width:600px;border-radius:50%;background-image: @assets('image/logo-phbs.jpg',,transparent 70%);bottom:5%;left:30%;pointer-events:none} */
 
 /* ── KIRI ── */
 .left{width:55%;display:flex;flex-direction:column;justify-content:center;padding:60px 64px;position:relative;z-index:1}
@@ -39,7 +40,7 @@ body{font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex}
 .right-card{background:#fff;border-radius:20px;padding:36px 32px;box-shadow:0 25px 60px rgba(0,0,0,0.4)}
 .right-header{display:flex;align-items:center;gap:12px;margin-bottom:32px}
 .logo-box{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#002277,#003399);display:flex;align-items:center;justify-content:center}
-.logo-box i{color:#FFCC00;font-size:18px}
+.logo-box i{color:#fff;font-size:18px}
 .logo-text h2{font-size:15px;font-weight:800;color:#003399;line-height:1.2}
 .logo-text p{font-size:11px;color:#888}
 .right-card h3{font-size:22px;font-weight:800;color:#0a1628;margin-bottom:4px}
@@ -60,7 +61,7 @@ body{font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex}
 .check-label input{accent-color:#003399}
 .lupa{font-size:12px;color:#003399;font-weight:600;text-decoration:none}
 .lupa:hover{text-decoration:underline}
-.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,#002277,#003399);color:#FFCC00;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s,transform .2s;font-family:'Segoe UI',sans-serif;margin-bottom:20px}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,#002277,#003399);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s,transform .2s;font-family:'Segoe UI',sans-serif;margin-bottom:20px}
 .btn-login:hover{opacity:.9;transform:translateY(-1px)}
 .btn-login:disabled{opacity:.7;cursor:not-allowed}
 .divider{text-align:center;font-size:11px;color:#aaa;margin-bottom:16px;position:relative}
@@ -83,9 +84,11 @@ body{font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex}
 </head>
 <body>
 <div class="wrap">
+  <div class="bg-c4"></div>
   <div class="bg-c1"></div>
   <div class="bg-c2"></div>
   <div class="bg-c3"></div>
+  
 
   {{-- KIRI --}}
   <div class="left">
@@ -189,7 +192,7 @@ body{font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex}
       <div class="role-row">
         <div class="role-badge"><i class="fa-solid fa-hospital"></i>Puskesmas</div>
         <div class="role-badge"><i class="fa-solid fa-building-columns"></i>Dinkes</div>
-        <div class="role-badge"><i class="fa-solid fa-user-shield"></i>Admin</div>
+        {{-- <div class="role-badge"><i class="fa-solid fa-user-shield"></i>Admin</div> --}}
       </div>
       <div class="foot">SIP-PHBS &copy; {{ date('Y') }}</div>
     </div>

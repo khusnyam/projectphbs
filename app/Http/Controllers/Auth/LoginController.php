@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PhbsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,7 +12,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect('/dashboard');
+            return redirect('/beranda');
         }
         return view('auth.login');
     }
@@ -38,9 +39,12 @@ class LoginController extends Controller
             return back()->withErrors(['email' => 'Akun Anda tidak aktif. Hubungi Admin.'])->withInput($request->only('email'));
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->has('remember'))) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role1'=>1], $request->has('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('/beranda');
+        }elseif (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role1'=>2], $request->has('remember'))) {
+            $request->session()->regenerate();    
+            return redirect()->intended('/dashboard-puskesmas');
         }
 
         return back()->withErrors(['password' => 'Password yang Anda masukkan salah.'])->withInput($request->only('email'));

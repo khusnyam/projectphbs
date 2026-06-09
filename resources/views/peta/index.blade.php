@@ -109,7 +109,7 @@ let activeFilter = null;
 // ─── Leaflet init ────────────────────────────────────────────────────────────
 const map = L.map('map', { center: [-7.7200, 110.3550], zoom: 12, zoomControl: false });
 L.control.zoom({ position: 'bottomleft' }).addTo(map);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '© OpenStreetMap contributors © CARTO',
     subdomains: 'abcd', maxZoom: 20,
 }).addTo(map);
@@ -144,7 +144,7 @@ function styleHighlight(feature) {
 function buildPopup(props) {
     const col  = getColor(props.persentase_capaian);
     const pct  = parseFloat(props.persentase_capaian).toFixed(1);
-    const pddk = Number(props.jumlah_kk).toLocaleString('id-ID');
+    const pddk = Number(props.jumlah_kk_total).toLocaleString('id-ID');
     const capaian = Number(props.jumlah_tercapai).toLocaleString('id-ID');
     const [sbg, stxt] = getStatusColors(props.status_kategori);
     return `
@@ -177,7 +177,7 @@ function openInfoPanel(props) {
     document.getElementById('infoPanelBar').style.width      = pct + '%';
     document.getElementById('infoPanelBar').style.background = col;
     document.getElementById('infoPanelKec').textContent      = props.kecamatan;
-    document.getElementById('infoPanelPenduduk').textContent = Number(props.jumlah_kk).toLocaleString('id-ID') + ' jiwa';
+    document.getElementById('infoPanelPenduduk').textContent = Number(props.jumlah_kk_total).toLocaleString('id-ID') + ' jiwa';
     document.getElementById('infoPanelTercapai').textContent = Number(props.jumlah_tercapai).toLocaleString('id-ID') + ' jiwa';
     document.getElementById('infoPanelCapaian').textContent  = pct + '%';
     document.getElementById('infoPanelCapaian').style.color  = col;
@@ -193,32 +193,44 @@ function closeInfoPanel() {
 async function loadGeoJSON(showLoading = true) {
     if (showLoading) showLoader('Memuat data ' + NAMA_BULAN[activeBulan] + ' ' + activeTahun + '...');
 
-    const res  = await fetch(`${URL_GEOJSON}?bulan=${activeBulan}&tahun=${activeTahun}`);
-    const data = await res.json();
+    try {
+        const res  = await fetch(`${URL_GEOJSON}?bulan=${activeBulan}&tahun=${activeTahun}`);
+        if (!res.ok) {
+            throw new Error('Gagal memuat GeoJSON: ' + res.status);
+        }
 
-    if (geojsonLayer) { map.removeLayer(geojsonLayer); geojsonLayer = null; }
+        const data = await res.json();
 
-    geojsonLayer = L.geoJSON(data, {
-        style: styleFeature,
-        onEachFeature(feature, layer) {
-            const p = feature.properties;
-            layer.bindTooltip(
-                `<b>${p.nama_puskesmas}</b><br>${parseFloat(p.persentase_capaian).toFixed(1)}% · ${p.kecamatan}`,
-                { sticky: true, direction: 'top', offset: [0, -6] }
-            );
-            layer.bindPopup(buildPopup(p), { maxWidth: 270, minWidth: 210 });
-            layer.on('mouseover', () => { layer.setStyle(styleHighlight(feature)); layer.bringToFront(); });
-            layer.on('mouseout',  () => { geojsonLayer.resetStyle(layer); });
-            layer.on('click', () => {
-                openInfoPanel(p);
-                highlightListItem(p.id);
-                map.fitBounds(layer.getBounds(), { padding: [40, 40], maxZoom: 16 });
-            });
-        },
-    }).addTo(map);
+        if (geojsonLayer) { map.removeLayer(geojsonLayer); geojsonLayer = null; }
 
-    if (showLoading && geojsonLayer.getLayers().length > 0) {
-    map.fitBounds(geojsonLayer.getBounds(), { padding: [20, 20] });}
+        geojsonLayer = L.geoJSON(data, {
+            style: styleFeature,
+            onEachFeature: (feature, layer) => {
+                const p = feature.properties;
+                layer.bindTooltip(
+                    `<b>${p.nama_puskesmas}</b><br>${p.kecamatan}`,
+                    { direction: 'top', offset: [0, -6], opacity: 0.9 }
+                );
+                layer.bindPopup(buildPopup(feature.properties), { maxWidth: 280 });
+                layer.on('click', () => {
+                    openInfoPanel(feature.properties);
+                    highlightListItem(feature.properties.id);
+                    map.fitBounds(layer.getBounds(), { padding: [60, 60], maxZoom: 16 });
+                });
+                layer.on('mouseover', () => layer.setStyle(styleHighlight(feature)));
+                layer.on('mouseout', () => geojsonLayer.resetStyle(layer));
+            }
+        }).addTo(map);
+
+        if (showLoading && geojsonLayer.getLayers().length > 0) {
+            map.fitBounds(geojsonLayer.getBounds(), { padding: [20, 20] });
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Gagal memuat data peta. Silakan coba lagi.');
+    } finally {
+        if (showLoading) hideLoader();
+    }
 }
 
 // ─── Load sidebar list ────────────────────────────────────────────────────────
@@ -243,7 +255,7 @@ function renderList(data) {
                 <div class="pkm-name">${p.nama_puskesmas}</div>
                 <div class="pkm-sub">
                     <span>${p.kecamatan}</span><span>·</span>
-                    <span>${p.jumlah_kk} jiwa</span>
+                    <span>${p.jumlah_kk_total} jiwa</span>
                 </div>
                 <div class="pct-bar">
                     <div class="pct-fill" style="width:${p.persentase_capaian}%;background:${p.warna}"></div>

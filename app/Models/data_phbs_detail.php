@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\data_phbs;
 
 class data_phbs_detail extends Model
 {
@@ -18,6 +19,12 @@ class data_phbs_detail extends Model
     'persentase',
     'kategori_capaian',
     'keterangan',
+    ];
+
+    protected $casts = [
+        'jumlah_sasaran' => 'integer',
+        'jumlah_capaian' => 'integer',
+        'persentase'     => 'integer',
     ];
 
     // RELASI KE DATA PHBS

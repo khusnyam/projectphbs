@@ -3,165 +3,345 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Laporan PHBS – SIP-PHBS</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<title>Laporan Rekapitulasi PHBS – SIP-PHBS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
+/* ─── DESIGN TOKENS: sama seperti resources/views/dashboard/index.blade.php ─── */
 :root{
-  --blue-dark:#002277;
-  --blue:#003399;
-  --blue-mid:#0044cc;
-  --yellow:#FFCC00;
-  --yellow-light:#fff8cc;
-  --bg:#f0f4ff;
-  --s9:#0a1628;
-  --s7:#1e3a5f;
-  --s5:#64748b;
-  --s3:#cbd5e1;
-  --s1:#f1f5f9;
-  --red:#ef4444;
-  --amber:#f59e0b;
-  --fm:'Segoe UI',sans-serif;
-  --mono:'Courier New',monospace;
+    --green:#22c55e;--green-bg:#f0fdf4;--green-ring:#bbf7d0;
+    --teal:#14b8a6;--teal-bg:#f0fdfa;
+    --sky:#0ea5e9;--sky-bg:#f0f9ff;
+    --amber:#f59e0b;--amber-bg:#fffbeb;--amber-ring:#fde68a;
+    --red:#ef4444;--red-bg:#fef2f2;--red-ring:#fecaca;
+    --primary:#2563eb;--primary-dk:#1d4ed8;--primary-lt:#eff6ff;
+    --sb-bg:#0f1629;
+    --sb-hover:rgba(255,255,255,.06);
+    --sb-active:rgba(255,255,255,.09);
+    --sb-border:rgba(255,255,255,.07);
+    --sb-text:rgba(255,255,255,.65);
+    --sb-head:rgba(255,255,255,.30);
+    --surface:#ffffff;
+    --bg:#f1f5f9;
+    --border:#e2e8f0;
+    --text:#0f172a;
+    --text-b:#475569;
+    --text-muted:#94a3b8;
+    --radius:12px;
+    --radius-sm:8px;
+    --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+    --shadow-lg:0 10px 25px rgba(0,0,0,.12);
+    --sidebar-w:220px;
+    --mono:'JetBrains Mono',monospace;--s5:var(--text-muted);--blue:var(--primary);--blue-dark:#1e40af;--yellow:#facc15;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--fm);background:var(--bg);min-height:100vh;display:flex}
 
-/* SIDEBAR */
-.sidebar{width:230px;flex-shrink:0;background:linear-gradient(180deg,#0a1628 0%,#0d2137 60%,#0a3d2e 100%);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;z-index:100}
-.sb-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
-.sb-logo-row{display:flex;align-items:center;gap:10px}
-.sb-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue-mid));display:flex;align-items:center;justify-content:center;color:var(--yellow);font-size:16px}
-.sb-logo h1{font-size:.85rem;font-weight:800;color:#fff;line-height:1.2}
-.sb-logo p{font-size:.62rem;color:rgba(255,255,255,.45);margin-top:1px}
-.sb-nav{padding:14px 10px;flex:1;overflow-y:auto}
-.nav-section{font-size:.58rem;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,.25);text-transform:uppercase;padding:0 10px;margin:14px 0 5px}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:8px;color:rgba(255,255,255,.55);font-size:.8rem;font-weight:500;transition:.15s;margin-bottom:2px;text-decoration:none;cursor:pointer}
-.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
-.nav-item.active{background:rgba(255,204,0,.12);color:var(--yellow);border-left:3px solid var(--yellow)}
-.nav-item i{width:16px;text-align:center;font-size:.8rem}
-.sb-footer{padding:14px 20px;border-top:1px solid rgba(255,255,255,.08)}
-.sb-footer .user-name{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.7)}
-.sb-footer .user-role{font-size:.62rem;color:rgba(255,255,255,.3);margin-top:2px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-b);min-height:100vh;}
+a{text-decoration:none;color:inherit;}
 
-/* MAIN */
-.main{margin-left:230px;flex:1;display:flex;flex-direction:column}
-.topbar{background:#fff;border-bottom:1px solid #e5e7eb;padding:13px 26px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.tb-left h2{font-size:.95rem;font-weight:800;color:var(--s9)}
-.tb-left p{font-size:.72rem;color:var(--s5);margin-top:1px}
-.tb-right{display:flex;gap:9px;align-items:center}
-.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border-radius:9px;font-size:.78rem;font-weight:600;cursor:pointer;border:none;font-family:var(--fm);transition:.15s;text-decoration:none}
-.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--blue-dark)}
-.btn-export{background:var(--yellow);color:var(--blue-dark)}.btn-export:hover{opacity:.9}
-.btn-outline{background:#fff;color:var(--s7);border:1.5px solid var(--s3)}.btn-outline:hover{border-color:var(--blue)}
-.btn-sm-edit{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:.7rem;font-weight:600;background:var(--blue);color:#fff;text-decoration:none}
-.btn-sm-del{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:.7rem;font-weight:600;background:var(--red);color:#fff;border:none;cursor:pointer;font-family:var(--fm)}
+/* ─── SIDEBAR: copy gaya dashboard/index.blade.php ─── */
+.sidebar{
+    position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
+    background:var(--sb-bg);display:flex;flex-direction:column;
+    border-right:1px solid var(--sb-border);z-index:200;overflow-y:auto;
+}
+.sb-brand{padding:20px 16px 18px;border-bottom:1px solid var(--sb-border);display:flex;align-items:center;gap:11px;}
+.sb-logo{width:38px;height:38px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,#2563eb,#0ea5e9);display:flex;align-items:center;justify-content:center;}
+.sb-logo svg{color:#fff;}
+.sb-name{line-height:1;}
+.sb-name strong{display:block;font-size:14px;font-weight:800;color:#fff;letter-spacing:-.2px;}
+.sb-name span{display:block;font-size:10px;color:var(--sb-text);margin-top:2px;line-height:1.3;}
+.sb-section{padding:18px 10px 6px;}
+.sb-label{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--sb-head);padding:0 8px;margin-bottom:4px;display:block;}
+.sb-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--radius-sm);color:var(--sb-text);font-size:13px;font-weight:500;transition:background .15s,color .15s;cursor:pointer;position:relative;width:100%;background:transparent;border:0;font-family:'Inter',sans-serif;text-align:left;}
+.sb-item:hover{background:var(--sb-hover);color:#fff;}
+.sb-item.active{background:var(--sb-active);color:#fff;font-weight:600;}
+.sb-item.active::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--amber);}
+.sb-item svg{flex-shrink:0;opacity:.75;}
+.sb-item.active svg{opacity:1;}
+.sb-footer{margin-top:auto;padding:14px 16px;border-top:1px solid var(--sb-border);}
+.sb-user{display:flex;align-items:center;gap:10px;}
+.sb-avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--primary),var(--teal));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;}
+.sb-user-info strong{display:block;font-size:13px;font-weight:600;color:#fff;line-height:1.2;}
+.sb-user-info span{display:block;font-size:11px;color:var(--sb-text);margin-top:1px;}
 
-.content{padding:22px 26px;flex:1}
+/* ─── MAIN ─── */
+.main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;background:var(--bg);}
+.content{padding:0 28px 40px;display:flex;flex-direction:column;gap:0;}
 
-/* ALERT */
-.alert{padding:11px 15px;border-radius:9px;font-size:.8rem;font-weight:500;margin-bottom:18px;display:flex;align-items:center;gap:9px}
-.alert-ok{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
-.alert-err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+/* ─── HERO: topbar lama dibuat sama seperti hero beranda ─── */
+.topbar{
+    background:linear-gradient(135deg,#1a3a7a 0%,#1e4db7 55%,#1260ae 100%);
+    padding:30px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+    margin-bottom:0;border:0;box-shadow:none;position:relative;top:auto;z-index:1;color:#fff;
+}
+.tb-left{flex:1;min-width:0;}
+.tb-left h2{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:0;}
+.tb-left h2 i{color:#fff!important;opacity:.9;margin-right:0!important;}
+.tb-left p{font-size:13px;color:rgba(255,255,255,.75);margin-top:0;line-height:1.5;}
+.tb-right{flex-shrink:0;display:flex;align-items:center;gap:10px;}
+.tb-right::before{display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:8px;}
+.tb-right{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:18px 22px;min-width:220px;backdrop-filter:blur(6px);flex-direction:column;align-items:flex-start;}
+.tb-right .btn-export{height:auto;padding:8px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.18);}
+.tb-right .btn-export:hover{background:rgba(255,255,255,.2);}
 
-/* STAT CARDS */
-.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.sc{background:#fff;border-radius:14px;padding:16px 18px;box-shadow:0 1px 6px rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.04);transition:.2s}
-.sc:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,51,153,.1)}
-.sc .sc-top{display:flex;align-items:flex-start;justify-content:space-between}
-.sc .sc-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem}
-.sc-ico-blue{background:#eef2ff;color:var(--blue)}
-.sc-ico-yellow{background:var(--yellow-light);color:#92700a}
-.sc .lbl{font-size:.68rem;font-weight:700;color:var(--s5);text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
-.sc .val{font-size:1.65rem;font-weight:800;color:var(--s9);line-height:1}
-.sc .sub{font-size:.68rem;color:var(--s5);margin-top:4px}
-.pbar{height:5px;background:var(--s1);border-radius:99px;margin-top:8px;overflow:hidden}
-.pbar-fill{height:100%;border-radius:99px}
+/* ─── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:background .15s,transform .1s;text-decoration:none;}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover{background:var(--primary-dk);}
+.btn-outline{background:transparent;color:var(--text-b);border:1px solid var(--border);}
+.btn-outline:hover{background:var(--bg);}
+.btn-export{background:var(--primary);color:#fff;}
+.btn-sm-edit{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;background:var(--primary);color:#fff;text-decoration:none;}
+.btn-sm-del{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;background:var(--red);color:#fff;border:none;cursor:pointer;font-family:'Inter',sans-serif;}
 
-/* FILTER */
-.filter-card{background:#fff;border-radius:14px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:18px}
-.filter-card form{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
-.fg{display:flex;flex-direction:column;gap:4px}
-.fg label{font-size:.68rem;font-weight:700;color:var(--s5);text-transform:uppercase;letter-spacing:.04em}
-.fg select{padding:7px 11px;border-radius:8px;border:1.5px solid var(--s3);font-size:.8rem;font-family:var(--fm);color:var(--s9);min-width:130px;background:#fff}
-.fg select:focus{outline:none;border-color:var(--blue)}
+/* ─── ALERT ─── */
+.alert{order:0;padding:12px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;margin:20px 0 0;display:flex;align-items:center;gap:9px;}
+.alert-ok{background:var(--green-bg);color:#166534;border:1px solid var(--green-ring);}
+.alert-err{background:var(--red-bg);color:#991b1b;border:1px solid var(--red-ring);}
 
-/* TABLE */
-.table-card{background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden}
-.table-head{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--s1)}
-.table-head h3{font-size:.85rem;font-weight:700;color:var(--s9)}
-.count-badge{font-size:.72rem;color:var(--s5);background:var(--s1);padding:3px 10px;border-radius:99px}
-.tw{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-thead th{background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:rgba(255,255,255,.9);font-size:.65rem;font-weight:600;letter-spacing:.04em;padding:10px 13px;text-align:left;white-space:nowrap;text-transform:uppercase}
-tbody tr{border-bottom:1px solid var(--s1);transition:.1s}
-tbody tr:hover{background:#f8faff}
-tbody tr:last-child{border-bottom:none}
-tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
-.td-pkm{font-weight:700;color:var(--blue)}
-.td-num{font-family:var(--mono);text-align:right;font-size:.75rem}
-.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:99px;font-size:.67rem;font-weight:700}
-.b-baik{background:#dcfce7;color:#166534}
-.b-cukup{background:#fef3c7;color:#92400e}
-.b-kurang{background:#fee2e2;color:#991b1b}
-.b-draft{background:var(--s1);color:var(--s5)}
-.b-kirim{background:#eef2ff;color:var(--blue)}
-.acts{display:flex;gap:5px}
-.empty td{text-align:center;padding:40px;color:var(--s5)}
+/* ─── FILTER SECTION: rapi, tidak nabrak, dan sejajar dengan dashboard ─── */
+.filter-card{
+    order:1;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:20px 22px 22px;
+    margin:20px 0 22px;
+    overflow:hidden;
+}
+.filter-card::before{
+    content:'Filter Dashboard';
+    display:block;
+    font-size:15px;
+    font-weight:800;
+    color:var(--text);
+    letter-spacing:-.1px;
+    margin-bottom:5px;
+}
+.filter-card::after{
+    content:'Pilih tahun, bulan, puskesmas, atau kategori untuk menampilkan data sesuai kebutuhan.';
+    display:block;
+    font-size:12.5px;
+    line-height:1.45;
+    color:var(--text-muted);
+    margin:0 0 18px;
+    pointer-events:none;
+}
+.filter-card form{
+    display:grid;
+    grid-template-columns:160px 200px minmax(260px,1fr) 190px 108px 116px;
+    gap:14px;
+    align-items:end;
+    margin-top:0;
+}
+.fg{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+    min-width:0;
+}
+.fg label{
+    font-size:11px;
+    font-weight:800;
+    color:var(--text-muted);
+    text-transform:uppercase;
+    letter-spacing:.7px;
+}
+.fg select,.fg input{
+    width:100%;
+    height:44px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:0 14px;
+    font-size:14px;
+    font-family:'Inter',sans-serif;
+    font-weight:500;
+    color:var(--text);
+    background:#f8fafc;
+    outline:none;
+    transition:border-color .15s,box-shadow .15s,background .15s;
+}
+.fg select:hover,.fg input:hover{
+    background:#fff;
+    border-color:#cbd5e1;
+}
+.fg select:focus,.fg input:focus{
+    background:#fff;
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+.filter-card .btn{
+    height:44px;
+    padding:0 18px;
+    justify-content:center;
+    border-radius:10px;
+    white-space:nowrap;
+}
+.filter-card .btn-primary{
+    box-shadow:0 8px 18px rgba(37,99,235,.20);
+}
+.filter-card .btn-outline{
+    background:#fff;
+    color:var(--text-b);
+}
+.filter-card .btn-outline:hover{
+    background:#f8fafc;
+    border-color:#cbd5e1;
+}
+
+@media(max-width:1180px){
+    .filter-card form{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .filter-card .btn{width:100%;}
+}
+@media(max-width:640px){
+    .filter-card{padding:18px;margin:16px 0 20px;}
+    .filter-card form{grid-template-columns:1fr;}
+}
+
+/* ─── STAT CARDS: tetap isinya, style mengikuti kartu beranda ─── */
+.stat-row{order:2;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:0 0 20px;}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.sc:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:14px 14px 0 0;background:var(--primary);}
+.sc:nth-child(1)::before{background:var(--green);}
+.sc:nth-child(2)::before{background:var(--teal);}
+.sc:nth-child(3)::before{background:var(--sky);}
+.sc:nth-child(4)::before{background:var(--amber);}
+.sc .sc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.sc .sc-ico{font-size:28px;position:absolute;right:18px;top:18px;opacity:.15;background:transparent!important;color:var(--text)!important;width:auto;height:auto;border-radius:0;}
+.sc .lbl{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.sc .val{font-size:30px;font-weight:800;font-family:'JetBrains Mono',monospace;letter-spacing:-1px;color:var(--text);line-height:1.05;}
+.sc .sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
+.pbar{height:5px;border-radius:99px;background:var(--border);overflow:hidden;margin-top:8px;}
+.pbar-fill{height:100%;border-radius:99px;}
+
+/* ─── TABLE ─── */
+.table-card{order:3;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:28px;}
+.table-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.table-head h3{font-size:14px;font-weight:700;color:var(--text);}
+.count-badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:var(--primary-lt);color:var(--primary);}
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead tr{background:var(--bg);}
+thead th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);border-bottom:1px solid var(--border);white-space:nowrap;background:var(--bg);}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:#f8fafc;}
+tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
+.td-pkm{font-weight:600;color:var(--text);}
+.td-num{font-family:'JetBrains Mono',monospace;text-align:right;font-size:12px;font-weight:600;}
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;}
+.b-baik{background:#dcfce7;color:#15803d;}
+.b-cukup{background:#fef9c3;color:#a16207;}
+.b-kurang{background:#fee2e2;color:#b91c1c;}
+.b-draft{background:#f1f5f9;color:#94a3b8;}
+.b-kirim{background:var(--primary-lt);color:var(--primary);}
+.acts{display:flex;gap:6px;align-items:center;}
+.empty td{text-align:center;padding:48px 20px;color:var(--text-muted);font-size:13px;}
+
+@media(max-width:900px){
+    .sidebar{display:none;}
+    .main{margin-left:0;}
+    .topbar{flex-direction:column;align-items:flex-start;}
+    .tb-right{width:100%;}
+    .stat-row{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
 {{-- SIDEBAR --}}
 <aside class="sidebar">
-  <div class="sb-logo">
-    <div class="sb-logo-row">
-      <div class="sb-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-      <div>
-        <h1>SIP-PHBS</h1>
-        <p>Sistem Informasi Pelaporan PHBS</p>
-      </div>
+    <div class="sb-brand">
+        <div class="sb-logo">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/>
+            </svg>
+        </div>
+        <div class="sb-name">
+            <strong>SIP-PHBS</strong>
+            <span>Sistem Informasi Pelaporan PHBS</span>
+        </div>
     </div>
-  </div>
-  <nav class="sb-nav">
-    <div class="nav-section">Menu Utama</div>
-    <a href="{{ route('dashboard') }}" class="nav-item">
-      <i class="fa-solid fa-house"></i> Beranda
-    </a>
-    <a href="{{ route('phbs.index') }}" class="nav-item active">
-      <i class="fa-solid fa-chart-bar"></i> Laporan PHBS
-    </a>
-    <a href="{{ route('phbs.form') }}" class="nav-item">
-      <i class="fa-solid fa-plus"></i> Input Laporan
-    </a>
-    <div class="nav-section">Akun</div>
-    <form method="POST" action="{{ route('logout') }}">
-      @csrf
-      <button type="submit" class="nav-item" style="width:100%;background:none;border:none;cursor:pointer;text-align:left">
-        <i class="fa-solid fa-right-from-bracket"></i> Logout
-      </button>
-    </form>
-  </nav>
-  <div class="sb-footer">
-    <div class="user-name">{{ auth()->user()->nama_user ?? 'User' }}</div>
-    <div class="user-role">{{ ucfirst(auth()->user()->role ?? 'dinkes') }} • SIP-PHBS</div>
-  </div>
+
+    <div class="sb-section">
+        <span class="sb-label">Menu Utama</span>
+
+        <a href="{{ route('dashboard') }}" class="sb-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            Beranda
+        </a>
+
+        <a href="{{ route('phbs.dashboard') }}" class="sb-item {{ request()->routeIs('phbs.dashboard') ? 'active' : '' }}">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+            </svg>
+            Ringkasan PHBS
+        </a>
+
+        <a href="{{ route('peta.index') }}" class="sb-item {{ request()->routeIs('peta.index') ? 'active' : '' }}">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+            </svg>
+            Peta
+        </a>
+
+        <a href="{{ route('phbs.index') }}" class="sb-item {{ request()->routeIs('phbs.index') ? 'active' : '' }}">
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path d="M3 10h18M3 14h18M10 3v18M14 3v18"/>
+            </svg>
+            Laporan Rekapitulasi
+        </a>
+    </div>
+
+    <div class="sb-section">
+        <span class="sb-label">Akun</span>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="sb-item">
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Logout
+            </button>
+        </form>
+    </div>
+
+    <div class="sb-footer">
+        <div class="sb-user">
+            <div class="sb-avatar">{{ strtoupper(substr(auth()->user()->nama_user ?? auth()->user()->name ?? 'A', 0, 1)) }}</div>
+            <div class="sb-user-info">
+                <strong>{{ auth()->user()->nama_user ?? auth()->user()->name ?? 'Admin Dinkes' }}</strong>
+                <span>{{ ucfirst(auth()->user()->role ?? 'dinkes') }} &bull; SIP-PHBS</span>
+            </div>
+        </div>
+    </div>
 </aside>
 
 {{-- MAIN --}}
 <div class="main">
-  <div class="topbar">
+  <div class="topbar">  
     <div class="tb-left">
       <h2><i class="fa-solid fa-chart-bar" style="color:var(--blue);margin-right:7px"></i>Laporan Rekapitulasi PHBS</h2>
       <p>Tatanan Rumah Tangga • Tahun {{ $tahun }}</p>
     </div>
-    <div class="tb-right">
+    {{-- <div class="tb-right"> --}}
       <a href="{{ route('phbs.export', request()->query()) }}" class="btn btn-export">
         <i class="fa-solid fa-file-excel"></i> Export Excel
       </a>
-      <a href="{{ route('phbs.form') }}" class="btn btn-primary">
+      {{-- <a href="{{ route('phbs.form') }}" class="btn btn-primary">
         <i class="fa-solid fa-plus"></i> Input Laporan
-      </a>
-    </div>
+      </a> --}}
+    {{-- </div> --}}
   </div>
 
   <div class="content">
@@ -177,8 +357,8 @@ tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
       $barColor = $rata >= 80 ? '#16a34a' : ($rata >= 60 ? '#f59e0b' : '#ef4444');
       $katTxt   = $rata >= 80 ? 'Kategori Baik' : ($rata >= 60 ? 'Kategori Cukup' : 'Kategori Kurang');
     @endphp
-    <div class="stat-row">
-      <div class="sc">
+    {{-- <div class="stat-row"> --}}
+      {{-- <div class="sc">
         <div class="sc-top">
           <div>
             <div class="lbl">Total Laporan</div>
@@ -187,8 +367,8 @@ tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
           </div>
           <div class="sc-ico sc-ico-blue"><i class="fa-solid fa-file-lines"></i></div>
         </div>
-      </div>
-      <div class="sc">
+      </div> --}}
+      {{-- <div class="sc">
         <div class="sc-top">
           <div>
             <div class="lbl">Total KK Dipantau</div>
@@ -197,8 +377,8 @@ tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
           </div>
           <div class="sc-ico sc-ico-blue"><i class="fa-solid fa-house-user"></i></div>
         </div>
-      </div>
-      <div class="sc">
+      </div> --}}
+      {{-- <div class="sc">
         <div class="sc-top">
           <div>
             <div class="lbl">KK Ber-PHBS</div>
@@ -207,8 +387,8 @@ tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
           </div>
           <div class="sc-ico sc-ico-yellow"><i class="fa-solid fa-circle-check"></i></div>
         </div>
-      </div>
-      <div class="sc">
+      </div> --}}
+      {{-- <div class="sc">
         <div class="sc-top">
           <div>
             <div class="lbl">Rata-rata % PHBS</div>
@@ -218,8 +398,8 @@ tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
         </div>
         <div class="pbar"><div class="pbar-fill" style="width:{{ $rata }}%;background:{{ $barColor }}"></div></div>
         <div class="sub" style="margin-top:6px">{{ $katTxt }}</div>
-      </div>
-    </div>
+      </div> --}}
+    {{-- </div> --}}
 
     {{-- FILTER --}}
     <div class="filter-card">
@@ -305,7 +485,7 @@ tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
             <tr>
               <td style="color:var(--s5);font-size:.7rem">{{ $i+1 }}</td>
               <td class="td-pkm">{{ $row->nama_puskesmas }}</td>
-              <td style="font-size:.73rem;color:var(--s5)">{{ $namaBulan[$row->bulan]??'-' }}</td>
+              <td style="font-size:.73rem;color:var(--s5)">{{ $namaBulan[$row->bulan]??'Januari' }}</td>
               <td style="font-size:.73rem;color:var(--s5)">{{ $row->tahun }}</td>
               <td class="td-num">{{ number_format($row->jumlah_kk_l) }}</td>
               <td class="td-num">{{ number_format($row->jumlah_kk_p) }}</td>
@@ -320,10 +500,10 @@ tbody td{padding:10px 13px;font-size:.78rem;vertical-align:middle}
               </td>
               <td>
                 <div class="acts">
-                  <a href="{{ route('phbs.edit',$row->id_data) }}" class="btn-sm-edit">
+                  <a href="{{ route('phbs.edit',$row->id_phbs) }}" class="btn-sm-edit">
                     <i class="fa-solid fa-pen"></i> Edit
                   </a>
-                  <form method="POST" action="{{ route('phbs.destroy',$row->id_data) }}"
+                  <form method="POST" action="{{ route('phbs.destroy',$row->id_phbs) }}"
                         onsubmit="return confirm('Hapus data ini?')">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn-sm-del">
