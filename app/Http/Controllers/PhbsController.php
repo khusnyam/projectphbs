@@ -18,8 +18,8 @@ class PhbsController extends Controller
         // dd(Auth::user()->toArray());
 
         dd(
-    Auth::user()->id_user,
-    \App\Models\NewPuskesmas::where('id_user', Auth::user()->id_user)->first()
+    Auth::user()->id_user1,
+    \App\Models\NewPuskesmas::where('id_user1', Auth::user()->id_user1)->first()
 );
 
 
@@ -76,7 +76,7 @@ class PhbsController extends Controller
 
     //     // $data = 
     //     $data = DB::table('data_phbs')
-    //         ->join('puskesmas', 'data_phbs.id_puskesmas', '=', 'puskesmas.id_puskesmas')
+    //         ->join('puskesmas', 'data_phbs.id_puskesmas1', '=', 'puskesmas.id_puskesmas1')
     //         ->where('tahun', $tahun)
     //         ->orderBy('puskesmas.nama_puskesmas', 'asc')
     //         ->orderByRaw("FIELD(bulan,
@@ -138,7 +138,7 @@ class PhbsController extends Controller
         Gate::authorize('akses-puskesmas');
 
         $request->validate([
-            'id_puskesmas' => $request->id_puskesmas ?? 'required|exists:puskesmas,id_puskesmas',
+            'id_puskesmas1' => $request->id_puskesmas1 ?? 'required|exists:puskesmas,id_puskesmas1',
             'bulan'     => $request->bulan ?? 'required|string|max:20',
             'tahun'     => $request->tahun ?? 'required|integer|min:2000|max:2100',
             'jumlah_kk_total' => $request->jumlah_kk_total ?? 'required|integer|min:0',
@@ -156,7 +156,7 @@ class PhbsController extends Controller
         DB::table('data_phbs')->updateOrInsert(
             // Kunci unik: puskesmas + bulan + tahun
             [
-                'id_puskesmas' => $request->puskesmas,
+                'id_puskesmas1' => $request->puskesmas,
                 'bulan'     => $request->bulan,
                 'tahun'     => $request->tahun,
             ],

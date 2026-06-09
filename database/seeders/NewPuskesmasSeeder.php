@@ -11,6 +11,10 @@ class NewPuskesmasSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        NewPuskesmas::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
         $data = [
             ['id_user1'=>2,'id_kecamatan1'=>1,'nama_puskesmas'=>'Puskesmas Gamping I','alamat'=>'Jl. Wates KM 6, Gamping','email'=>'gamping1@phbs.test','status_aktif'=>true],
             ['id_user1'=>3,'id_kecamatan1'=>1,'nama_puskesmas'=>'Puskesmas Gamping II','alamat'=>'Jl. Kabupaten, Trihanggo, Gamping','email'=>'gamping2@phbs.test','status_aktif'=>true],

@@ -23,12 +23,12 @@ class LaporanController extends Controller
         $kategori = $req->get('kategori', '');
 
         $query = DB::table('data_phbs as d')
-            ->join('puskesmas as p', 'd.id_puskesmas', '=', 'p.id_puskesmas')
+            ->join('puskesmas as p', 'd.id_puskesmas1', '=', 'p.id_puskesmas1')
             ->select('d.*', 'p.nama_puskesmas')
             ->where('d.tahun', $tahun);
 
         if ($bulan)    $query->where('d.bulan', $bulan);
-        if ($pkmId)    $query->where('d.id_puskesmas', $pkmId);
+        if ($pkmId)    $query->where('d.id_puskesmas1', $pkmId);
         if ($kategori === 'baik')   $query->where('d.persen_phbs', '>=', 80);
         if ($kategori === 'cukup')  $query->whereBetween('d.persen_phbs', [60, 79.99]);
         if ($kategori === 'kurang') $query->where('d.persen_phbs', '<', 60);
@@ -60,7 +60,7 @@ class LaporanController extends Controller
     public function store(Request $req)
     {
         $req->validate([
-            'id_puskesmas'    => 'required',
+            'id_puskesmas1'    => 'required',
             'tahun'           => 'required|integer',
             'bulan'           => 'required|integer|min:1|max:12',
             'jumlah_kk_l'     => 'required|integer|min:0',
@@ -118,12 +118,12 @@ class LaporanController extends Controller
         $kategori = $req->get('kategori', '');
 
         $query = DB::table('data_phbs as d')
-            ->join('puskesmas as p', 'd.id_puskesmas', '=', 'p.id_puskesmas')
+            ->join('puskesmas as p', 'd.id_puskesmas1', '=', 'p.id_puskesmas1')
             ->select('d.*', 'p.nama_puskesmas')
             ->where('d.tahun', $tahun);
 
         if ($bulan)    $query->where('d.bulan', $bulan);
-        if ($pkmId)    $query->where('d.id_puskesmas', $pkmId);
+        if ($pkmId)    $query->where('d.id_puskesmas1', $pkmId);
         if ($kategori === 'baik')   $query->where('d.persen_phbs', '>=', 80);
         if ($kategori === 'cukup')  $query->whereBetween('d.persen_phbs', [60, 79.99]);
         if ($kategori === 'kurang') $query->where('d.persen_phbs', '<', 60);

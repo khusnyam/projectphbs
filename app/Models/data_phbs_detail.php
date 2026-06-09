@@ -1,38 +1,38 @@
 <?php
 
-namespace App\Models;
+// namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\data_phbs;
+// use Illuminate\Database\Eloquent\Model;
+// use App\Models\data_phbs;
 
-class data_phbs_detail extends Model
-{
-    protected $table = 'data_phbs_details';
+// class data_phbs_detail extends Model
+// {
+//     protected $table = 'data_phbs_details';
 
-    protected $primaryKey = 'id_detail_phbs';
+//     protected $primaryKey = 'id_detail_phbs';
 
-    protected $fillable = [
-    'id_phbs',
-    'id_indikator',
-    'jumlah_sasaran',
-    'jumlah_capaian',
-    'persentase',
-    'kategori_capaian',
-    'keterangan',
-    ];
+//     protected $fillable = [
+//     'id_phbs',
+//     'id_indikator',
+//     'jumlah_sasaran',
+//     'jumlah_capaian',
+//     'persentase',
+//     'kategori_capaian',
+//     'keterangan',
+//     ];
 
-    protected $casts = [
-        'jumlah_sasaran' => 'integer',
-        'jumlah_capaian' => 'integer',
-        'persentase'     => 'integer',
-    ];
+//     protected $casts = [
+//         'jumlah_sasaran' => 'integer',
+//         'jumlah_capaian' => 'integer',
+//         'persentase'     => 'integer',
+//     ];
 
-    // RELASI KE DATA PHBS
-    public function phbs()
-    {
-        return $this->belongsTo(
-            data_phbs::class,
-            'id_phbs'
-        );
-    }
-}
+//     // RELASI KE DATA PHBS
+//     public function phbs()
+//     {
+//         return $this->belongsTo(
+//             data_phbs::class,
+//             'id_phbs'
+//         );
+//     }
+// }

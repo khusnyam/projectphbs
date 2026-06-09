@@ -67,12 +67,12 @@ class PetaController extends Controller
         $bulan = $this->normalizeMonth($bulan);
 
         return Puskesmas::leftJoin('capaian_bulanan', function ($join) use ($bulan, $tahun) {
-            $join->on('puskesmas.id_puskesmas', '=', 'capaian_bulanan.id_puskesmas')
+            $join->on('puskesmas.id_puskesmas1', '=', 'capaian_bulanan.id_puskesmas1')
                  ->where('capaian_bulanan.bulan', $bulan)
                  ->where('capaian_bulanan.tahun', $tahun);
         })
         ->select([
-            'puskesmas.id_puskesmas',
+            'puskesmas.id_puskesmas1',
             'puskesmas.nama_puskesmas',
             'puskesmas.kecamatan',
             'puskesmas.jumlah_kk_total',
@@ -136,7 +136,7 @@ class PetaController extends Controller
                     ? json_decode($row->geojson_polygon, true)
                     : $row->geojson_polygon,
                 'properties' => [
-                    'id'                 => $row->id_puskesmas,
+                    'id'                 => $row->id_puskesmas1,
                     'nama_puskesmas'     => $row->nama_puskesmas,
                     'kecamatan'          => $row->kecamatan,
                     'persentase_capaian' => $pct,
@@ -169,7 +169,7 @@ class PetaController extends Controller
         $data = $rows->map(function ($row) {
             $pct = (float) $row->persentase_capaian;
             return [
-                'id'                 => $row->id_puskesmas,
+                'id'                 => $row->id_puskesmas1,
                 'nama_puskesmas'     => $row->nama_puskesmas,
                 'kecamatan'          => $row->kecamatan,
                 'persentase_capaian' => $pct,
@@ -190,13 +190,13 @@ class PetaController extends Controller
         $bulan = $this->normalizeMonth($request->get('bulan', date('n')));
 
         $row = $this->queryCapaian($bulan, $tahun)
-            ->where('puskesmas.id_puskesmas', $id)
+            ->where('puskesmas.id_puskesmas1', $id)
             ->firstOrFail();
 
         $pct = (float) $row->persentase_capaian;
 
         return response()->json([
-            'id'                 => $row->id_puskesmas,
+            'id'                 => $row->id_puskesmas1,
             'nama_puskesmas'     => $row->nama_puskesmas,
             'kecamatan'          => $row->kecamatan,
             'persentase_capaian' => $pct,

@@ -50,7 +50,7 @@ class DataPhbsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_puskesmas' => 'required|exists:puskesmas,id_puskesmas',
+            'id_puskesmas1' => 'required|exists:puskesmas,id_puskesmas1',
             'bulan'        => 'required|in:' . implode(',', self::NAMA_BULAN),
             'tahun'        => 'required|integer|min:2000|max:2100',
             'jumlah_kk_total'    => 'required|integer|min:1',
@@ -63,7 +63,7 @@ class DataPhbsController extends Controller
         DB::transaction(function () use ($request) {
             // Hapus data lama jika ada (upsert)
             $old = DataPhbs::where([
-                'id_puskesmas' => $request->id_puskesmas,
+                'id_puskesmas1' => $request->id_puskesmas1,
                 'bulan'        => $request->bulan,
                 'tahun'        => $request->tahun,
             ])->first();
@@ -80,7 +80,7 @@ class DataPhbsController extends Controller
 
             // Simpan header data_phbs
             $dataPhbs = DataPhbs::create([
-                'id_puskesmas'        => $request->id_puskesmas,
+                'id_puskesmas1'        => $request->id_puskesmas1,
                 'bulan'               => $request->bulan,
                 'tahun'               => $request->tahun,
                 'jumlah_kk_total'           => $request->jumlah_kk_total,
@@ -107,7 +107,7 @@ class DataPhbsController extends Controller
             }
 
             // ✅ Otomatis update capaian_bulanan → peta terupdate
-            $this->syncCapaianBulanan($request->id_puskesmas, $request->bulan, $request->tahun);
+            $this->syncCapaianBulanan($request->id_puskesmas1, $request->bulan, $request->tahun);
         });
 
         return redirect()->route('data-phbs.index')
@@ -204,7 +204,7 @@ class DataPhbsController extends Controller
 
                 // Upsert data_phbs
                 $old = DataPhbs::where([
-                    'id_puskesmas' => $pkm->id_puskesmas,
+                    'id_puskesmas1' => $pkm->id_puskesmas1,
                     'bulan'        => $bulan,
                     'tahun'        => $tahun,
                 ])->first();
@@ -215,7 +215,7 @@ class DataPhbsController extends Controller
                 }
 
                 $dataPhbs = DataPhbs::create([
-                    'id_puskesmas'         => $pkm->id_puskesmas,
+                    'id_puskesmas1'         => $pkm->id_puskesmas1,
                     'bulan'                => $bulan,
                     'tahun'                => $tahun,
                     'jumlah_kk_total'            => $jumlahKk,
@@ -239,7 +239,7 @@ class DataPhbsController extends Controller
                 }
 
                 // ✅ Sync ke capaian_bulanan → peta update otomatis
-                $this->syncCapaianBulanan($pkm->id_puskesmas, $bulan, $tahun);
+                $this->syncCapaianBulanan($pkm->id_puskesmas1, $bulan, $tahun);
                 $success++;
             }
         });
@@ -269,7 +269,7 @@ class DataPhbsController extends Controller
         // Hitung dari data_phbs_details
         $agg = DB::table('data_phbs')
             ->join('data_phbs_details', 'data_phbs.id_phbs', '=', 'data_phbs_details.id_phbs')
-            ->where('data_phbs.id_puskesmas', $idPuskesmas)
+            ->where('data_phbs.id_puskesmas1', $idPuskesmas)
             ->where('data_phbs.bulan', $bulan)
             ->where('data_phbs.tahun', $tahun)
             ->selectRaw('
@@ -286,13 +286,13 @@ class DataPhbsController extends Controller
 
         // Upsert ke capaian_bulanan
         $existing = CapaianBulanan::where([
-            'id_puskesmas' => $idPuskesmas,
+            'id_puskesmas1' => $idPuskesmas,
             'bulan'        => $bulanAngka,
             'tahun'        => $tahun,
         ])->first();
 
         $payload = [
-            'id_puskesmas'       => $idPuskesmas,
+            'id_puskesmas1'       => $idPuskesmas,
             'bulan'              => $bulanAngka,
             'tahun'              => $tahun,
             'persentase_capaian' => $pct,
@@ -309,7 +309,7 @@ class DataPhbsController extends Controller
 
         // Update juga kolom persentase_capaian di tabel puskesmas (cache)
         DB::table('puskesmas')
-            ->where('id_puskesmas', $idPuskesmas)
+            ->where('id_puskesmas1', $idPuskesmas)
             ->update([
                 'persentase_capaian' => $pct,
                 'status_kategori'    => $status,
@@ -326,7 +326,7 @@ class DataPhbsController extends Controller
             // Hapus juga dari capaian_bulanan
             $bulanAngka = array_search($data->bulan, self::NAMA_BULAN);
             CapaianBulanan::where([
-                'id_puskesmas' => $data->id_puskesmas,
+                'id_puskesmas1' => $data->id_puskesmas1,
                 'bulan'        => $bulanAngka,
                 'tahun'        => $data->tahun,
             ])->delete();

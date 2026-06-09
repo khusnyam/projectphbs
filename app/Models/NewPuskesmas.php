@@ -11,7 +11,7 @@ class NewPuskesmas extends Model
     protected $primaryKey = 'id_puskesmas1';
 
     protected $fillable = [
-        'id_user',
+        'id_user1',
         'id_kecamatan1',
         'nama_puskesmas',
         'alamat',
@@ -28,8 +28,8 @@ class NewPuskesmas extends Model
     {
         return $this->belongsTo(
             User::class,
-            'id_user',
-            'id_user'
+            'id_user1',
+            'id_user1'
         );
     }
 

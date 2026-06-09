@@ -122,10 +122,10 @@ body{font-family:var(--fm);background:#f0f7f3;min-height:100vh;display:flex}
           <div class="fr3">
             <div class="fg">
               <label>Puskesmas <span>*</span></label>
-              <select name="id_puskesmas" required>
+              <select name="id_puskesmas1" required>
                 <option value="">-- Pilih Puskesmas --</option>
                 @foreach($puskesmasList as $pkm)
-                  <option value="{{ $pkm->id_puskesmas }}" {{ $v('id_puskesmas')==$pkm->id_puskesmas?'selected':'' }}>
+                  <option value="{{ $pkm->id_puskesmas1 }}" {{ $v('id_puskesmas1')==$pkm->id_puskesmas1?'selected':'' }}>
                     {{ $pkm->nama_puskesmas }}
                   </option>
                 @endforeach

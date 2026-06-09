@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models;
+// namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 
-class Kecamatan extends Model
-{
-    protected $fillable = ['nama_kecamatan', 'geojson_polygon'];
+// class Kecamatan extends Model
+// {
+//     protected $fillable = ['nama_kecamatan', 'geojson_polygon'];
     
-    protected $casts = [
-        'geojson_polygon' => 'array',
-    ];
-}
+//     protected $casts = [
+//         'geojson_polygon' => 'array',
+//     ];
+// }

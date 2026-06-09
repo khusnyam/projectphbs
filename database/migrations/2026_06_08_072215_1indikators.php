@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('1indikator_phbs', function (Blueprint $table) {
             $table->id('id_indikator1');
-            $table->unsignedBigInteger('id_puskesmas1');
             $table->string('kode_indikator')->unique();
             $table->string('nama_indikator');
             $table->string('deskripsi');

@@ -1261,10 +1261,10 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
                 <div class="form-grid">
                   <div class="fg">
                     <label>Puskesmas</label>
-                    <select name="id_puskesmas">
+                    <select name="id_puskesmas1">
                       <option value="">Pilih Puskesmas</option>
                       @foreach($puskesmas as $item)
-                        <option value="{{ $item->id_puskesmas }}">{{ $item->nama_puskesmas }}</option>
+                        <option value="{{ $item->id_puskesmas1 }}">{{ $item->nama_puskesmas }}</option>
                       @endforeach
                     </select>
                   </div>

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         
         schema::table('1puskesmas', function (Blueprint $table) {
-            $table->foreign('id_user1')->references('id_user1')->on('1users')->onDelete('cascade');
+            $table->foreign('id_user1')->references('id_user1')->on('users')->onDelete('cascade');
             $table->foreign('id_kecamatan1')->references('id_kecamatan1')->on('1kecamatans')->onDelete('cascade');
         });
 
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreign('id_data_phbs_detail1')->references('id_detail_phbs1')->on('1data_phbs_details')->onDelete('cascade');
         });
 
-        schema::table('1users', function (Blueprint $table) {
+        schema::table('users', function (Blueprint $table) {
             $table->foreign('id_role1')->references('id_role1')->on('1roles')->onDelete('cascade');
         });
 

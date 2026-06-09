@@ -11,20 +11,20 @@ class RoleSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
-        //Dinkes
-        role::create([
-            'id_role'       => '1',
-            'nama_role'     => 'Dinas Kesehatan',
-            'role'          => 'dinkes',
-        ]);
+    // public function run(): void
+    // {
+    //     //Dinkes
+    //     role::create([
+    //         'id_role'       => '1',
+    //         'nama_role'     => 'Dinas Kesehatan',
+    //         'role'          => 'dinkes',
+    //     ]);
 
-        //Puskesmas
-        role::create([
-            'id_role'       => '2',
-            'nama_role'     => 'Puskesmas',
-            'role'          => 'puskesmas',
-        ]);
-    }
+    //     //Puskesmas
+    //     role::create([
+    //         'id_role'       => '2',
+    //         'nama_role'     => 'Puskesmas',
+    //         'role'          => 'puskesmas',
+    //     ]);
+    // }
 }

@@ -31,7 +31,7 @@ class PhbsInputController extends Controller
             'jumlah_kk_total' => 'integer|min:0|default:20',
         ]);
 
-        $id_puskesmas = Auth::user()->id_puskesmas;
+        $id_puskesmas1 = Auth::user()->id_puskesmas1;
 
         $jumlah = $request->input('jumlah_input', []);
 
@@ -50,12 +50,12 @@ class PhbsInputController extends Controller
         }
 
         $phbs = data_phbs::create([
-            // 'id_puskesmas' => Auth::user()->id_puskesmas,
+            // 'id_puskesmas1' => Auth::user()->id_puskesmas1,
             // 'bulan' => $request->bulan,
             // 'tahun' => $request->tahun,
             // 'jumlah_kk_total' => $request->jumlah_kk_total,
 
-            'id_puskesmas'    => Auth::user()->id_puskesmas,
+            'id_puskesmas1'    => Auth::user()->id_puskesmas1,
             'bulan'           => $request->bulan,
             'tahun'           => $request->tahun,
             'jumlah_kk_l'     => $request->jumlah_kk_l,
@@ -129,9 +129,9 @@ for ($i = 1; $i <= 13; $i++) {
 ]);
 
     if (Auth::user()->id_role1 == 2) { // role puskesmas
-        $query->where('id_puskesmas', Auth::user()->id_puskesmas);
+        $query->where('id_puskesmas1', Auth::user()->id_puskesmas1);
     } elseif ($request->puskesmas) {
-        $query->where('id_puskesmas', $request->puskesmas);
+        $query->where('id_puskesmas1', $request->puskesmas);
     }
 
     if ($request->bulan) {
@@ -159,7 +159,7 @@ for ($i = 1; $i <= 13; $i++) {
     // =====================
     public function edit($id_phbs)
     {
-        $id_puskesmas = Auth::user()->id_puskesmas;
+        $id_puskesmas1 = Auth::user()->id_puskesmas1;
         
         $phbs = data_phbs::findOrFail($id_phbs);
 
@@ -184,7 +184,7 @@ for ($i = 1; $i <= 13; $i++) {
         $phbs = data_phbs::findOrFail($id_phbs);
 
         $phbs->update([
-            'id_puskesmas' => $request->id_puskesmas,
+            'id_puskesmas1' => $request->id_puskesmas1,
             'bulan' => $request->bulan,
             'tahun' => $request->tahun,
             'jumlah_kk_total' => $request->jumlah_kk_total,

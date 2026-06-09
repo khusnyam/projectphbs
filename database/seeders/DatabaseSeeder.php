@@ -23,16 +23,19 @@ class DatabaseSeeder extends Seeder
         //]);
     
     $this->call([
-        UserSeeder::class,
-        RoleSeeder::class,
-        PuskesmasSeeder::class,
-        CapaianBulananSeeder::class,
-        IndikatorSeeder::class,
-        KategoriSeeder::class,
+        // UserSeeder::class,
+        // RoleSeeder::class,
+        // PuskesmasSeeder::class,
+        // CapaianBulananSeeder::class,
+        // IndikatorSeeder::class,
+        // KategoriSeeder::class,
         NewRoleSeeder::class,
+        NewIndikatorSeeder::class,
+        NewKecamatanSeeder::class,
+        NewUserSeeder::class,
         NewPuskesmasSeeder::class,
         NewDataPHBSDetailSeeder::class,
-        NewKecamatanSeeder::class,
+        
         // Kamu bisa tambah seeder lain di sini nanti, misal: PuskesmasSeeder::class
     ]);
     }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('1data_phbs_details', function (Blueprint $table) {
             $table->id('id_detail_phbs1');
             $table->unsignedBigInteger('id_indikator1');
+            $table->unsignedBigInteger('id_puskesmas1');
             $table->string('bulan');
             $table->string('tahun');
             $table->integer('jumlah_kk_lk');

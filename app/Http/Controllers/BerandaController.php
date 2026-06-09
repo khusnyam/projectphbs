@@ -15,37 +15,37 @@ class DashboardController extends Controller
         // ── Filter ────────────────────────────────────────────────────────
         $tahun        = (int) $request->get('tahun', date('Y'));
         $bulan        = $request->filled('bulan')        ? (int) $request->get('bulan')        : null;
-        $id_puskesmas = $request->filled('id_puskesmas') ? (int) $request->get('id_puskesmas') : null;
+        $id_puskesmas1 = $request->filled('id_puskesmas1') ? (int) $request->get('id_puskesmas1') : null;
 
         // ── Dropdown Puskesmas ─────────────────────────────────────────────
         $puskesmasList = Puskesmas::aktif()
             ->orderBy('nama_puskesmas')
-            ->get(['id_puskesmas', 'nama_puskesmas']);
+            ->get(['id_puskesmas1', 'nama_puskesmas']);
 
         // ── Status Laporan Count ───────────────────────────────────────────
         $baseQuery = data_phbs::where('tahun', $tahun)
             ->when($bulan,        fn($q) => $q->where('bulan',        $bulan))
-            ->when($id_puskesmas, fn($q) => $q->where('id_puskesmas', $id_puskesmas));
+            ->when($id_puskesmas1, fn($q) => $q->where('id_puskesmas1', $id_puskesmas1));
 
         $statusTerkirim = (clone $baseQuery)->where('status_laporan', 'terkirim')->count();
         $statusDraft    = (clone $baseQuery)->where('status_laporan', 'draft')->count();
 
         // ── Rekapitulasi per Puskesmas (untuk stat cards + info cards) ────
         $rekapData = DB::table('data_phbs as dp')
-            ->join('puskesmas as p', 'dp.id_puskesmas', '=', 'p.id_puskesmas')
+            ->join('puskesmas as p', 'dp.id_puskesmas1', '=', 'p.id_puskesmas1')
             ->where('dp.tahun', $tahun)
             ->where('dp.status_laporan', 'terkirim')
             ->where('p.status_aktif', true)
             ->when($bulan,        fn($q) => $q->where('dp.bulan',        $bulan))
-            ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
+            ->when($id_puskesmas1, fn($q) => $q->where('dp.id_puskesmas1', $id_puskesmas1))
             ->select(
-                'p.id_puskesmas', 'p.nama_puskesmas', 'p.kecamatan', 'p.kepala_puskesmas',
+                'p.id_puskesmas1', 'p.nama_puskesmas', 'p.kecamatan', 'p.kepala_puskesmas',
                 DB::raw('COUNT(dp.id_phbs)         AS jumlah_laporan'),
                 DB::raw('SUM(dp.jumlah_kk_total)   AS total_kk'),
                 DB::raw('SUM(dp.ber_phbs)           AS total_ber_phbs'),
                 DB::raw('ROUND(SUM(dp.ber_phbs)/NULLIF(SUM(dp.jumlah_kk_total),0)*100,2) AS persentase_phbs'),
             )
-            ->groupBy('p.id_puskesmas','p.nama_puskesmas','p.kecamatan','p.kepala_puskesmas')
+            ->groupBy('p.id_puskesmas1','p.nama_puskesmas','p.kecamatan','p.kepala_puskesmas')
             ->orderBy('persentase_phbs', 'desc')
             ->get();
 
@@ -62,13 +62,13 @@ class DashboardController extends Controller
 
         // ── Matriks 13 Indikator per Puskesmas ────────────────────────────
         $matriksData = DB::table('data_phbs as dp')
-            ->join('puskesmas as p', 'dp.id_puskesmas', '=', 'p.id_puskesmas')
+            ->join('puskesmas as p', 'dp.id_puskesmas1', '=', 'p.id_puskesmas1')
             ->where('dp.tahun', $tahun)
             ->where('p.status_aktif', true)
             ->when($bulan,        fn($q) => $q->where('dp.bulan',        $bulan))
-            ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
+            ->when($id_puskesmas1, fn($q) => $q->where('dp.id_puskesmas1', $id_puskesmas1))
             ->selectRaw("
-                p.id_puskesmas, p.nama_puskesmas,
+                p.id_puskesmas1, p.nama_puskesmas,
                 COUNT(dp.id_phbs) AS jumlah_laporan,
                 ROUND(SUM(dp.ber_phbs)/NULLIF(SUM(dp.jumlah_kk_total),0)*100,1) AS rata_rata,
                 ROUND(SUM(dp.ind1_jumlah) /NULLIF(SUM(dp.ind1_sasaran) ,0)*100,1) AS ind1_pct,
@@ -85,7 +85,7 @@ class DashboardController extends Controller
                 ROUND(SUM(dp.ind12_jumlah)/NULLIF(SUM(dp.ind12_sasaran),0)*100,1) AS ind12_pct,
                 ROUND(SUM(dp.ind13_jumlah)/NULLIF(SUM(dp.ind13_sasaran),0)*100,1) AS ind13_pct
             ")
-            ->groupBy('p.id_puskesmas','p.nama_puskesmas')
+            ->groupBy('p.id_puskesmas1','p.nama_puskesmas')
             ->orderBy('rata_rata', 'desc')
             ->get();
 
@@ -115,7 +115,7 @@ class DashboardController extends Controller
                 ->where('tahun', $tahun)
                 ->where('status_laporan', 'terkirim')
                 ->when($bulan,        fn($q) => $q->where('bulan',        $bulan))
-                ->when($id_puskesmas, fn($q) => $q->where('id_puskesmas', $id_puskesmas))
+                ->when($id_puskesmas1, fn($q) => $q->where('id_puskesmas1', $id_puskesmas1))
                 ->selectRaw("SUM(ind{$i}_sasaran) AS ts, SUM(ind{$i}_jumlah) AS tj,
                     ROUND(SUM(ind{$i}_jumlah)/NULLIF(SUM(ind{$i}_sasaran),0)*100,2) AS pct")
                 ->first();
@@ -129,17 +129,17 @@ class DashboardController extends Controller
 
         // ── Tren Bulanan ───────────────────────────────────────────────────
         $trenBulan = DB::table('capaian_bulanan as cb')
-            ->join('puskesmas as p','cb.id_puskesmas','=','p.id_puskesmas')
+            ->join('puskesmas as p','cb.id_puskesmas1','=','p.id_puskesmas1')
             ->where('cb.tahun', $tahun)->where('p.status_aktif', true)
-            ->when($id_puskesmas, fn($q) => $q->where('cb.id_puskesmas', $id_puskesmas))
+            ->when($id_puskesmas1, fn($q) => $q->where('cb.id_puskesmas1', $id_puskesmas1))
             ->select('cb.bulan', DB::raw('ROUND(AVG(cb.persentase_capaian),2) AS rata_rata'))
             ->groupBy('cb.bulan')->orderBy('cb.bulan')->get();
 
         if ($trenBulan->isEmpty()) {
             $trenBulan = DB::table('data_phbs as dp')
-                ->join('puskesmas as p','dp.id_puskesmas','=','p.id_puskesmas')
+                ->join('puskesmas as p','dp.id_puskesmas1','=','p.id_puskesmas1')
                 ->where('dp.tahun',$tahun)->where('dp.status_laporan','terkirim')->where('p.status_aktif',true)
-                ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
+                ->when($id_puskesmas1, fn($q) => $q->where('dp.id_puskesmas1', $id_puskesmas1))
                 ->select('dp.bulan',DB::raw('ROUND(SUM(dp.ber_phbs)/NULLIF(SUM(dp.jumlah_kk_total),0)*100,2) AS rata_rata'))
                 ->groupBy('dp.bulan')->orderBy('dp.bulan')->get();
         }
@@ -164,7 +164,7 @@ class DashboardController extends Controller
             'rekapData','rekapIndikator','matriksData',
             'grafikLabels','grafikData','grafikColors',
             'trenLabels','trenData','targetNasional',
-            'tahun','bulan','id_puskesmas','availableTahun','puskesmasList',
+            'tahun','bulan','id_puskesmas1','availableTahun','puskesmasList',
         ));
     }
 

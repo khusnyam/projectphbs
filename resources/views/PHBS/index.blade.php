@@ -426,7 +426,7 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
           <select name="puskesmas_id">
             <option value="0">Semua Puskesmas</option>
             @foreach($puskesmasList as $pkm)
-              <option value="{{ $pkm->id_puskesmas }}" {{ $pkmId==$pkm->id_puskesmas?'selected':'' }}>
+              <option value="{{ $pkm->id_puskesmas1 }}" {{ $pkmId==$pkm->id_puskesmas1?'selected':'' }}>
                 {{ $pkm->nama_puskesmas }}
               </option>
             @endforeach

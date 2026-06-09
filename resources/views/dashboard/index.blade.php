@@ -457,8 +457,8 @@ a{text-decoration:none;color:inherit;}
                     <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/>
                     </svg>
-                    @if($id_puskesmas)
-                        {{ $puskesmasList->firstWhere('id_puskesmas', $id_puskesmas)?->nama_puskesmas ?? 'Puskesmas Terpilih' }}
+                    @if($id_puskesmas1)
+                        {{ $puskesmasList->firstWhere('id_puskesmas1', $id_puskesmas1)?->nama_puskesmas ?? 'Puskesmas Terpilih' }}
                     @else
                         Semua Puskesmas
                     @endif
@@ -520,10 +520,10 @@ a{text-decoration:none;color:inherit;}
 
                 <div class="fg fg-lg">
                     <label>Puskesmas</label>
-                    <select name="id_puskesmas">
+                    <select name="id_puskesmas1">
                         <option value="">Semua Puskesmas</option>
                         @foreach($puskesmasList as $pkm)
-                            <option value="{{ $pkm->id_puskesmas }}" @selected($pkm->id_puskesmas == $id_puskesmas)>
+                            <option value="{{ $pkm->id_puskesmas1 }}" @selected($pkm->id_puskesmas1 == $id_puskesmas1)>
                                 {{ $pkm->nama_puskesmas }}
                             </option>
                         @endforeach
@@ -621,7 +621,7 @@ a{text-decoration:none;color:inherit;}
 
             $periodeBulan = $bulan ? ($namaBulan[$bulan] ?? '-') : 'Semua Bulan';
             $selectedPuskesmasName = $pkmId
-                ? optional($puskesmasList->firstWhere('id_puskesmas', $pkmId))->nama_puskesmas
+                ? optional($puskesmasList->firstWhere('id_puskesmas1', $pkmId))->nama_puskesmas
                 : 'Semua Puskesmas';
 
             // $userName = auth()->user()->nama_user ?? auth()->user()->name ?? 'Admin Dinkes';
