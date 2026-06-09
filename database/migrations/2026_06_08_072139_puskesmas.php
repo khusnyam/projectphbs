@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('1puskesmas', function (Blueprint $table) {
-            $table->id('id_puskesmas1');
-            $table->unsignedBigInteger('id_user1');
-            $table->unsignedBigInteger('id_kecamatan1');
+        Schema::create('puskesmas', function (Blueprint $table) {
+            $table->id('id_puskesmas');
+            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_kecamatan');
             $table->string('nama_puskesmas');
             $table->text('alamat');
             $table->string('email');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('1puskesmas');
+        Schema::dropIfExists('puskesmas');
     }
 };

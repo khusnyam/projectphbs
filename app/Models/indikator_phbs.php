@@ -39,6 +39,6 @@
  
 //     public function details(): HasMany
 //     {
-//         return $this->hasMany(data_phbs_detail::class, 'id_indikator', 'id_indikator');
+//         return $this->hasMany(NewDataPHBSDetail::class, 'id_indikator', 'id_indikator');
 //     }
 // }

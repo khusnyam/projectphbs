@@ -14,7 +14,7 @@ class CapaianBulanan extends Model
     protected $primaryKey = 'id_capaian';
 
     protected $fillable = [
-        'id_puskesmas1',
+        'id_puskesmas',
         'bulan',
         'tahun',
         'persentase_capaian',
@@ -48,8 +48,8 @@ class CapaianBulanan extends Model
     {
         return $this->belongsTo(
             Puskesmas::class,
-            'id_puskesmas1',
-            'id_puskesmas1'
+            'id_puskesmas',
+            'id_puskesmas'
         );
     }
 }

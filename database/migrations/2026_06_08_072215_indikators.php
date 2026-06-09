@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('1kecamatans', function (Blueprint $table) {
-            $table->id('id_kecamatan1');
-            $table->string('nama_kecamatan')->unique();   
-            $table->json('geojson_polygon');
-            $table->string('warna')->nullable();
+        Schema::create('indikator_phbs', function (Blueprint $table) {
+            $table->id('id_indikator');
+            $table->string('kode_indikator')->unique();
+            $table->string('nama_indikator');
+            $table->string('deskripsi');
+            $table->boolean('status_aktif');
             $table->timestamps();
         });
-
-        
     }
 
     /**
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('1kecamatans');
+        Schema::dropIfExists('indikator_phbs');
     }
 };

@@ -14,10 +14,10 @@ class User extends Authenticatable
 
     protected $table = 'users';
 
-    protected $primaryKey = 'id_user1';
+    protected $primaryKey = 'id_user';
 
     protected $fillable = [
-        'id_role1',
+        'id_role',
         'name',
         'email',
         'password',
@@ -40,8 +40,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(
             NewRole::class,
-            'id_role1',
-            'id_role1'
+            'id_role',
+            'id_role'
         );
     }
 
@@ -49,8 +49,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(
             NewPuskesmas::class,
-            'id_user1',
-            'id_user1'
+            'id_user',
+            'id_user'
         );
     }
 }

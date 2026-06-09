@@ -343,11 +343,11 @@ a{text-decoration:none;color:inherit;}
   $rataPhbs = $totalKk > 0 ? round(($totalBerPhbs / $totalKk) * 100, 1) : 0;
 
   $visiblePuskesmas = $pkmId
-    ? $puskesmasList->where('id_puskesmas1', $pkmId)->values()
+    ? $puskesmasList->where('id_puskesmas', $pkmId)->values()
     : $puskesmasList->values();
 
   $puskesmasSummary = $visiblePuskesmas->map(function($pkm) use ($laporan, $indicatorLabels, $cellClass, $kategoriName){
-    $items = $laporan->where('id_puskesmas1', $pkm->id_puskesmas1);
+    $items = $laporan->where('id_puskesmas', $pkm->id_puskesmas);
 
     $total = (int) $items->sum('jumlah_kk_total');
     $ber = (int) $items->sum('ber_phbs');
@@ -370,7 +370,7 @@ a{text-decoration:none;color:inherit;}
     })->values();
 
     return [
-      'id_puskesmas1'=>$pkm->id_puskesmas1,
+      'id_puskesmas'=>$pkm->id_puskesmas,
       'nama_puskesmas'=>$pkm->nama_puskesmas,
       'laporan_count'=>$items->count(),
       'total_kk'=>$total,
@@ -409,7 +409,7 @@ a{text-decoration:none;color:inherit;}
 
   $periodeBulan = $bulan ? ($namaBulan[$bulan] ?? '-') : 'Semua Bulan';
   $selectedPuskesmasName = $pkmId
-    ? optional($puskesmasList->firstWhere('id_puskesmas1', $pkmId))->nama_puskesmas
+    ? optional($puskesmasList->firstWhere('id_puskesmas', $pkmId))->nama_puskesmas
     : 'Semua Puskesmas';
 
   $userName = auth()->user()->nama_user ?? auth()->user()->name ?? 'Admin Dinkes';
@@ -571,7 +571,7 @@ a{text-decoration:none;color:inherit;}
                     <select name="puskesmas_id">
                         <option value="0">Semua Puskesmas</option>
                         @foreach($puskesmasList as $pkm)
-                            <option value="{{ $pkm->id_puskesmas1 }}" {{ $pkmId==$pkm->id_puskesmas1?'selected':'' }}>
+                            <option value="{{ $pkm->id_puskesmas }}" {{ $pkmId==$pkm->id_puskesmas?'selected':'' }}>
                                 {{ $pkm->nama_puskesmas }}
                             </option>
                         @endforeach

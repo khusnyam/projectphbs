@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('1roles', function (Blueprint $table) {
-            $table->id('id_role1');
-            $table->string('nama_role');
-            $table->enum('role',['dinkes','puskesmas']);
+        Schema::create('data_phbs_detail', function (Blueprint $table) {
+            $table->id('id_detail_phbs');
+            $table->unsignedBigInteger('id_phbs');
+            $table->unsignedBigInteger('id_indikator');
+            $table->integer('jumlah_sasaran')->nullable();
+            $table->integer('jumlah_capaian');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('1roles');
+        Schema::dropIfExists('data_phbs_detail');
     }
 };

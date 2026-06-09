@@ -836,8 +836,8 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
 @php
   $authUser = auth()->user() ?? (object) [];
 
-  // Ambil role dari database. Di UserSeeder: id_role1 = 1 untuk Dinkes, id_role1 = 2 untuk Puskesmas.
-  $roleId = (int) ($authUser->id_role1 ?? 0);
+  // Ambil role dari database. Di UserSeeder: id_role = 1 untuk Dinkes, id_role = 2 untuk Puskesmas.
+  $roleId = (int) ($authUser->id_role ?? 0);
   $rawRole = strtolower((string) ($authUser->role ?? $authUser->level ?? ''));
   $isDinkes = $roleId === 1 || stripos($rawRole, 'dinkes') !== false || stripos($rawRole, 'dinas') !== false;
 
@@ -993,9 +993,9 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
         <div class="stat-grid">
           <div class="stat-card green">
             <span class="stat-icon"><i class="fa-solid fa-house-user"></i></span>
-            <div class="stat-label">Total KK Diperiksa</div>
+            <div class="stat-label">SASARAN</div>
             <div class="stat-value" id="stat-kk">0</div>
-            <div class="stat-sub">seluruh puskesmas</div>
+            <div class="stat-sub">seluruh total KK diperiksa di bulan {{ $datadashboard['months']->first()->header->bulan ?? 'N/A' }}</div>
           </div>
           <div class="stat-card teal">
             <span class="stat-icon"><i class="fa-solid fa-circle-check"></i></span>
@@ -1007,7 +1007,7 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
             <span class="stat-icon"><i class="fa-solid fa-chart-simple"></i></span>
             <div class="stat-label">% Ber-PHBS</div>
             <div class="stat-value" id="stat-pct">0%</div>
-            <div class="stat-sub">rata-rata puskesmas</div>
+            <div class="stat-sub">dari seluruh KK diperiksa</div>
           </div>
           {{-- <div class="stat-card amber">
             <span class="stat-icon"><i class="fa-solid fa-hospital"></i></span>
@@ -1466,13 +1466,14 @@ function showPage(id, updateHash = true){
 
 
 // ─── STATS ───
+// console.log(datadashboard);
 function renderStats(){
   // let totKK=0, totPhbs=0;
   // Object.values(DATADASHBOARD).forEach(d => { totKK+=d.total_kk; totPhbs+=d.ber_phbs; });
   // const pct = totKK>0 ? (totPhbs/totKK*100).toFixed(1) : 0;
-  document.getElementById('stat-kk').textContent = datadashboard.total_kk.toLocaleString('id');
-  document.getElementById('stat-phbs').textContent = datadashboard.ber_phbs.toLocaleString('id');
-  document.getElementById('stat-pct').textContent = datadashboard.pct + '%';
+  document.getElementById('stat-kk').textContent = DATADASHBOARD.total_kk.toLocaleString('id');
+  document.getElementById('stat-phbs').textContent = DATADASHBOARD.ber_phbs.toLocaleString('id');
+  document.getElementById('stat-pct').textContent = DATADASHBOARD.pct + '%';
 }
 
 // ─── TREN CHART ───

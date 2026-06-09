@@ -29,7 +29,7 @@ class CapaianBulananSeeder extends Seeder
     //             $tercapai = (int) round($sasaran * $pct / 100);
 
     //             CapaianBulanan::create([
-    //                 'id_puskesmas1'       => $pkm->id_puskesmas1,  // id_puskesmas1
+    //                 'id_puskesmas'       => $pkm->id_puskesmas,  // id_puskesmas
     //                 'bulan'              => $bulan,
     //                 'tahun'              => $tahun,
     //                 'persentase_capaian' => $pct,

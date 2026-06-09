@@ -22,13 +22,13 @@ class LaporanController extends Controller
         $pkmId    = $req->get('puskesmas_id', 0);
         $kategori = $req->get('kategori', '');
 
-        $query = DB::table('data_phbs as d')
-            ->join('puskesmas as p', 'd.id_puskesmas1', '=', 'p.id_puskesmas1')
+        $query = DB::table('NewDataPHBS as d')
+            ->join('puskesmas as p', 'd.id_puskesmas', '=', 'p.id_puskesmas')
             ->select('d.*', 'p.nama_puskesmas')
             ->where('d.tahun', $tahun);
 
         if ($bulan)    $query->where('d.bulan', $bulan);
-        if ($pkmId)    $query->where('d.id_puskesmas1', $pkmId);
+        if ($pkmId)    $query->where('d.id_puskesmas', $pkmId);
         if ($kategori === 'baik')   $query->where('d.persen_phbs', '>=', 80);
         if ($kategori === 'cukup')  $query->whereBetween('d.persen_phbs', [60, 79.99]);
         if ($kategori === 'kurang') $query->where('d.persen_phbs', '<', 60);
@@ -60,7 +60,7 @@ class LaporanController extends Controller
     public function store(Request $req)
     {
         $req->validate([
-            'id_puskesmas1'    => 'required',
+            'id_puskesmas'    => 'required',
             'tahun'           => 'required|integer',
             'bulan'           => 'required|integer|min:1|max:12',
             'jumlah_kk_l'     => 'required|integer|min:0',
@@ -75,7 +75,7 @@ class LaporanController extends Controller
         $data = $req->except('_token');
         $data['persen_phbs'] = $persen;
 
-        DB::table('data_phbs')->insert($data);
+        DB::table('NewDataPHBS')->insert($data);
 
         return redirect()->route('phbs.index')
                          ->with('success', 'Laporan berhasil disimpan!');
@@ -83,7 +83,7 @@ class LaporanController extends Controller
 
     public function edit($id)
     {
-        $data          = DB::table('data_phbs')->where('id_phbs', $id)->first();
+        $data          = DB::table('NewDataPHBS')->where('id_phbs', $id)->first();
         $puskesmasList = DB::table('puskesmas')->orderBy('nama_puskesmas')->get();
         $namaBulan     = $this->namaBulan;
         return view('phbs.form', compact('data','puskesmasList','namaBulan'));
@@ -97,7 +97,7 @@ class LaporanController extends Controller
         $data = $req->except(['_token','_method']);
         $data['persen_phbs'] = $persen;
 
-        DB::table('data_phbs')->where('id_phbs', $id)->update($data);
+        DB::table('NewDataPHBS')->where('id_phbs', $id)->update($data);
 
         return redirect()->route('phbs.index')
                          ->with('success', 'Laporan berhasil diperbarui!');
@@ -105,7 +105,7 @@ class LaporanController extends Controller
 
     public function destroy($id)
     {
-        DB::table('data_phbs')->where('id_phbs', $id)->delete();
+        DB::table('NewDataPHBS')->where('id_phbs', $id)->delete();
         return redirect()->route('phbs.index')
                          ->with('success', 'Laporan berhasil dihapus!');
     }
@@ -117,13 +117,13 @@ class LaporanController extends Controller
         $pkmId    = $req->get('puskesmas_id', 0);
         $kategori = $req->get('kategori', '');
 
-        $query = DB::table('data_phbs as d')
-            ->join('puskesmas as p', 'd.id_puskesmas1', '=', 'p.id_puskesmas1')
+        $query = DB::table('NewDataPHBS as d')
+            ->join('puskesmas as p', 'd.id_puskesmas', '=', 'p.id_puskesmas')
             ->select('d.*', 'p.nama_puskesmas')
             ->where('d.tahun', $tahun);
 
         if ($bulan)    $query->where('d.bulan', $bulan);
-        if ($pkmId)    $query->where('d.id_puskesmas1', $pkmId);
+        if ($pkmId)    $query->where('d.id_puskesmas', $pkmId);
         if ($kategori === 'baik')   $query->where('d.persen_phbs', '>=', 80);
         if ($kategori === 'cukup')  $query->whereBetween('d.persen_phbs', [60, 79.99]);
         if ($kategori === 'kurang') $query->where('d.persen_phbs', '<', 60);

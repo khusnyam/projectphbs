@@ -12,7 +12,7 @@ class Puskesmas extends Model
     use HasFactory;
     protected $table = 'puskesmas';
 
-    protected $primaryKey = 'id_puskesmas1';
+    protected $primaryKey = 'id_puskesmas';
 
     public $incrementing = true;
     protected $keyType = 'int';
@@ -58,8 +58,8 @@ class Puskesmas extends Model
     {
         return $this->hasMany(
             data_phbs::class,
-            'id_puskesmas1',
-            'id_puskesmas1'
+            'id_puskesmas',
+            'id_puskesmas'
         );
     }
 
@@ -67,8 +67,8 @@ class Puskesmas extends Model
     {
         return $this->hasOne(
             data_phbs::class,
-            'id_puskesmas1',
-            'id_puskesmas1'
+            'id_puskesmas',
+            'id_puskesmas'
         )->latestOfMany('id_phbs');
     }
 
@@ -76,8 +76,8 @@ class Puskesmas extends Model
     {
         return $this->hasMany(
             CapaianBulanan::class,
-            'id_puskesmas1',
-            'id_puskesmas1'
+            'id_puskesmas',
+            'id_puskesmas'
         );
     }
 
@@ -117,7 +117,7 @@ class Puskesmas extends Model
             'type' => 'Feature',
             'geometry' => $this->geojson_polygon,
             'properties' => [
-                'id' => $this->id_puskesmas1,
+                'id' => $this->id_puskesmas,
                 'nama_puskesmas' => $this->nama_puskesmas,
                 'kecamatan' => $this->kecamatan,
                 'persentase_capaian' => $this->persentase_capaian,

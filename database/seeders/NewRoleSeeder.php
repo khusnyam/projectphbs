@@ -15,14 +15,14 @@ class NewRoleSeeder extends Seeder
     {
         //Dinkes
         NewRole::create([
-            'id_role1'       => '1',
+            'id_role'       => '1',
             'nama_role'     => 'Dinas Kesehatan',
             'role'          => 'dinkes',
         ]);
 
         //Puskesmas
         NewRole::create([
-            'id_role1'       => '2',
+            'id_role'       => '2',
             'nama_role'     => 'Puskesmas',
             'role'          => 'puskesmas',
         ]);

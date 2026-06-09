@@ -18,7 +18,7 @@
 
 //     // 3. Array $fillable untuk mass-assignment
 //     protected $fillable = [
-//         'id_puskesmas1',
+//         'id_puskesmas',
 //         'tahun',
 //         'bulan',
 //         'jumlah_kk_l',
@@ -60,15 +60,15 @@
 //     {
 //         return $this->belongsTo(
 //             puskesmas::class,
-//             'id_puskesmas1',
-//             'id_puskesmas1'
+//             'id_puskesmas',
+//             'id_puskesmas'
 //         );
 //     }
 
 //     public function details()
 //     {
 //         return $this->hasMany(
-//             data_phbs_detail::class,
+//             NewDataPHBSDetail::class,
 //             'id_phbs',
 //             'id_phbs'
 //         );

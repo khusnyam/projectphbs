@@ -1096,7 +1096,7 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
 <div class="layout">
 @php
   $authUser = auth()->user() ?? (object) [];
-  $roleId = (int) ($authUser->id_role1 ?? 0);
+  $roleId = (int) ($authUser->id_role ?? 0);
   $rawRole = strtolower((string) ($authUser->role ?? $authUser->level ?? ''));
   $isDinkes = $roleId === 1 || stripos($rawRole, 'dinkes') !== false || stripos($rawRole, 'dinas') !== false;
   $userName = trim((string) ($authUser->name ?? $authUser->nama_user ?? ''));
@@ -1261,10 +1261,10 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
                 <div class="form-grid">
                   <div class="fg">
                     <label>Puskesmas</label>
-                    <select name="id_puskesmas1">
+                    <select name="id_puskesmas">
                       <option value="">Pilih Puskesmas</option>
                       @foreach($puskesmas as $item)
-                        <option value="{{ $item->id_puskesmas1 }}">{{ $item->nama_puskesmas }}</option>
+                        <option value="{{ $item->id_puskesmas }}">{{ $item->nama_puskesmas }}</option>
                       @endforeach
                     </select>
                   </div>

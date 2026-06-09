@@ -13,17 +13,17 @@ class NewUser extends Authenticatable
 
     // protected $table = 'users';
 
-    // protected $primaryKey = 'id_user1';
+    // protected $primaryKey = 'id_user';
 
     // protected $fillable = [
-    //     'id_role1',
+    //     'id_role',
     //     'name',
     //     'email',
         use Notifiable;
     //     'status_aktif',
         protected $table = 'users';
 
-        protected $primaryKey = 'id_user1';
+        protected $primaryKey = 'id_user';
     //     'password',
     //     'remember_token',
     // ];
@@ -32,15 +32,15 @@ class NewUser extends Authenticatable
     //     'email_verified_at' => 'datetime',
     //     'status_aktif'      => 'boolean',
         protected $fillable = [
-            'id_role1',
+            'id_role',
             'name',
             'email',
             'password',
             'status_aktif',
         ];
     //         NewRole::class,
-    //         'id_role1',
-    //         'id_role1'
+    //         'id_role',
+    //         'id_role'
     //     );
         protected $hidden = [
             'password',
@@ -48,8 +48,8 @@ class NewUser extends Authenticatable
         ];
     //     return $this->hasOne(
     //         NewPuskesmas::class,
-    //         'id_user1',
-    //         'id_user1'
+    //         'id_user',
+    //         'id_user'
     //     );
         protected $casts = [
             'email_verified_at' => 'datetime',

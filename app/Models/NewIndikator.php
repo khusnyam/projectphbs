@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class NewIndikator extends Model
 {
     //
-    protected $table = '1indikator_phbs';
+    protected $table = 'indikator_phbs';
 
-    protected $primaryKey = 'id_indikator1';
+    protected $primaryKey = 'id_indikator';
 
     protected $fillable = [
         'kode_indikator',
@@ -29,8 +29,8 @@ class NewIndikator extends Model
     {
         return $this->hasMany(
             NewDataPHBSDetail::class,
-            'id_indikator1',
-            'id_indikator1'
+            'id_indikator',
+            'id_indikator'
         );
     }
 }

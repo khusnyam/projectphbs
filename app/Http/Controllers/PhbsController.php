@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
-use app\Models\puskesmas;
 use App\Models\NewDataPHBSDetail;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,51 +13,52 @@ class PhbsController extends Controller
     public function index(Request $request)
     {
         $tahun = $request->tahun ?? date('Y');
-        
-        // dd(Auth::user()->toArray());
+      
 
-        dd(
-    Auth::user()->id_user1,
-    \App\Models\NewPuskesmas::where('id_user1', Auth::user()->id_user1)->first()
-);
-
-
-        // $idPuskesmas = Auth::user()->id_puskesmas1;
-        // $idPuskesmas = Auth::user()->puskesmas->id_puskesmas1;
+        // $idPuskesmas = Auth::user()->id_puskesmas;
+        // $idPuskesmas = Auth::user()->puskesmas->id_puskesmas;
         $user = Auth::user();
         $puskesmas = $user->puskesmas;
 
-        if (!$puskesmas) {
-            abort(403, 'Akun ini belum terhubung dengan puskesmas.');
-        }
-
-        $idPuskesmas = $puskesmas->id_puskesmas1;
+        $idPuskesmas = $puskesmas->id_puskesmas;
 
         if (!$idPuskesmas) {
         abort(403, 'Akun ini belum terhubung dengan puskesmas.');
     }
 
-        $data = NewDataPHBSDetail::with(['puskesmas','indikator'])
-            ->where('id_puskesmas1', $idPuskesmas->id_puskesmas1)
-            ->where('tahun', $tahun)
-            ->orderByRaw("FIELD(bulan,
-                'Januari','Februari','Maret','April','Mei','Juni',
-                'Juli','Agustus','September','Oktober','November','Desember')")
-            ->get();
+    // dd($user, $puskesmas, $idPuskesmas);
 
-       
+        $data = NewDataPHBSDetail::with(['header','indikator'])
+            // ->where('id_puskesmas', $idPuskesmas)
+            // ->where('tahun', $tahun)
+            ->whereHas('header', function ($query) use ($idPuskesmas, $tahun) {
+            $query->where('id_puskesmas', $idPuskesmas)
+                  ->where('tahun', $tahun);
+            })
+            ->get()
+            ->sortBy(function ($item) {
+            $months = [
+                'Januari' => 1, 'Februari' => 2, 'Maret' => 3, 'April' => 4, 
+                'Mei' => 5, 'Juni' => 6, 'Juli' => 7, 'Agustus' => 8, 
+                'September' => 9, 'Oktober' => 10, 'November' => 11, 'Desember' => 12
+            ];
+            return $months[$item->header->bulan] ?? 99;
+            })
+            ->values();
+            
 
-        $totalKK = $data->sum('jumlah_kk_total');
-        $totalCapaian = $data->sum('jumlah_capaian');
-
+        $latestDetail = $data->last();
+        $latestHeader = $latestDetail ? $latestDetail->header : null;
+        $totalKK = $latestHeader ? $latestHeader->jumlah_kk_total : 0;
+        $berPHBS = $latestHeader ? $latestHeader->ber_phbs : 0;
         $pct = $totalKK > 0
-            ? round(($totalCapaian / $totalKK) * 100, 1)
+            ? round(($berPHBS / $totalKK) * 100, 1)
             : 0;
 
         $datadashboard = [
-            'nama_puskesmas' => $idPuskesmas->nama_puskesmas,
+            'nama_puskesmas' => $puskesmas->nama_puskesmas,
             'total_kk'       => $totalKK,
-            'ber_phbs'       => $totalCapaian,
+            'ber_phbs'       => $berPHBS,
             'pct'            => $pct,
             'months'         => $data,
         ];
@@ -75,14 +75,14 @@ class PhbsController extends Controller
     //     // Gate::authorize('akses-puskesmas');
 
     //     // $data = 
-    //     $data = DB::table('data_phbs')
-    //         ->join('puskesmas', 'data_phbs.id_puskesmas1', '=', 'puskesmas.id_puskesmas1')
+    //     $data = DB::table('NewDataPHBS')
+    //         ->join('puskesmas', 'NewDataPHBS.id_puskesmas', '=', 'puskesmas.id_puskesmas')
     //         ->where('tahun', $tahun)
     //         ->orderBy('puskesmas.nama_puskesmas', 'asc')
     //         ->orderByRaw("FIELD(bulan,
     //             'Januari','Februari','Maret','April','Mei','Juni',
     //             'Juli','Agustus','September','Oktober','November','Desember')")
-    //         ->select('data_phbs.*', 'puskesmas.nama_puskesmas')
+    //         ->select('NewDataPHBS.*', 'puskesmas.nama_puskesmas')
     //         ->get();
 
     //     $data = NewDataPHBSDetail::all();
@@ -138,7 +138,7 @@ class PhbsController extends Controller
         Gate::authorize('akses-puskesmas');
 
         $request->validate([
-            'id_puskesmas1' => $request->id_puskesmas1 ?? 'required|exists:puskesmas,id_puskesmas1',
+            'id_puskesmas' => $request->id_puskesmas ?? 'required|exists:puskesmas,id_puskesmas',
             'bulan'     => $request->bulan ?? 'required|string|max:20',
             'tahun'     => $request->tahun ?? 'required|integer|min:2000|max:2100',
             'jumlah_kk_total' => $request->jumlah_kk_total ?? 'required|integer|min:0',
@@ -153,10 +153,10 @@ class PhbsController extends Controller
             ], 422);
         }
 
-        DB::table('data_phbs')->updateOrInsert(
+        DB::table('NewDataPHBS')->updateOrInsert(
             // Kunci unik: puskesmas + bulan + tahun
             [
-                'id_puskesmas1' => $request->puskesmas,
+                'id_puskesmas' => $request->puskesmas,
                 'bulan'     => $request->bulan,
                 'tahun'     => $request->tahun,
             ],

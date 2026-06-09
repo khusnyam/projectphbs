@@ -31,9 +31,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 Route::middleware('auth:web')->group(function () {
     // Route::get('/beranda', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/beranda', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/beranda', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/dashboard-phbs', [DashboardController::class, 'dinkes'])->name('phbs.dashboard');
-Route::get('/peta', [PetaController::class, 'index'])->name('peta.index');
+        Route::get('/peta', [PetaController::class, 'index'])->name('peta.index');
 
         // 3. Kelompok Rute API Puskesmas & Peta (Dibutuhkan oleh AJAX / JavaScript)
         Route::prefix('api')->group(function () {
@@ -85,8 +85,8 @@ Route::get('/peta', [PetaController::class, 'index'])->name('peta.index');
         // Route::get('/dashboard-phbs', [DashboardController::class, 'dinkes'])->name('phbs.dashboard');
 
         // Route::get('/dashboard-phbs', function() {
-        //     // Kita paksa Laravel menampilkan data id_role1 dari user yang sedang login saat ini
-        //     //dd(auth()->user()->id_role1); 
+        //     // Kita paksa Laravel menampilkan data id_role dari user yang sedang login saat ini
+        //     //dd(auth()->user()->id_role); 
         // });
 
 

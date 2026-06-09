@@ -5,7 +5,7 @@
 // use Illuminate\Database\Eloquent\Model;
 // use App\Models\data_phbs;
 
-// class data_phbs_detail extends Model
+// class NewDataPHBSDetail extends Model
 // {
 //     protected $table = 'data_phbs_details';
 

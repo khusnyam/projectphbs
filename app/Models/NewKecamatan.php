@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class NewKecamatan extends Model
 {
-    protected $table = '1kecamatans';
+    protected $table = 'kecamatans';
 
-    protected $primaryKey = 'id_kecamatan1';
+    protected $primaryKey = 'id_kecamatan';
 
     protected $fillable = [
         'nama_kecamatan',
@@ -25,8 +25,8 @@ class NewKecamatan extends Model
     {
         return $this->hasMany(
             NewPuskesmas::class,
-            'id_kecamatan1',
-            'id_kecamatan1'
+            'id_kecamatan',
+            'id_kecamatan'
         );
     }
 }

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\data_phbs;
-use App\Models\data_phbs_detail;
+use App\Models\NewDataPHBS;
+use App\Models\NewDataPHBSDetail;
 use App\Models\puskesmas;
 use Illuminate\Support\Facades\Auth;
-use App\Models\indikator_phbs;
+use App\Models\NewIndikator;
 
 class PhbsInputController extends Controller
 {
@@ -15,8 +15,8 @@ class PhbsInputController extends Controller
     public function create()
     {
         $puskesmas = puskesmas::all();
-        $allIndikator = indikator_phbs::pluck('nama_indikator')->toArray();
-        $targetIndikator = indikator_phbs::pluck('target_nasional')->toArray();
+        $allIndikator = NewIndikator::pluck('nama_indikator')->toArray();
+        $targetIndikator = NewIndikator::pluck('target_nasional')->toArray();
 
         return view('phbs.create', compact('puskesmas', 'allIndikator', 'targetIndikator'));
     }
@@ -31,7 +31,7 @@ class PhbsInputController extends Controller
             'jumlah_kk_total' => 'integer|min:0|default:20',
         ]);
 
-        $id_puskesmas1 = Auth::user()->id_puskesmas1;
+        $id_puskesmas = Auth::user()->id_puskesmas;
 
         $jumlah = $request->input('jumlah_input', []);
 
@@ -49,13 +49,13 @@ class PhbsInputController extends Controller
             $kategori = 'Kurang';
         }
 
-        $phbs = data_phbs::create([
-            // 'id_puskesmas1' => Auth::user()->id_puskesmas1,
+        $phbs = NewDataPHBS::create([
+            // 'id_puskesmas' => Auth::user()->id_puskesmas,
             // 'bulan' => $request->bulan,
             // 'tahun' => $request->tahun,
             // 'jumlah_kk_total' => $request->jumlah_kk_total,
 
-            'id_puskesmas1'    => Auth::user()->id_puskesmas1,
+            'id_puskesmas'    => Auth::user()->id_puskesmas,
             'bulan'           => $request->bulan,
             'tahun'           => $request->tahun,
             'jumlah_kk_l'     => $request->jumlah_kk_l,
@@ -103,7 +103,7 @@ for ($i = 1; $i <= 13; $i++) {
         $kategoriCapaian = 'Rendah';
     }
 
-    data_phbs_detail::create([
+    NewDataPHBSDetail::create([
         'id_phbs' => $phbs->id_phbs,
         'id_indikator' => $i,
         'jumlah_sasaran' => $jumlahSasaran,
@@ -123,15 +123,15 @@ for ($i = 1; $i <= 13; $i++) {
     // HISTORY
     public function history(Request $request)
 {
-    $query = data_phbs::with([
+    $query = NewDataPHBS::with([
     'puskesmas',
     'details'
 ]);
 
-    if (Auth::user()->id_role1 == 2) { // role puskesmas
-        $query->where('id_puskesmas1', Auth::user()->id_puskesmas1);
+    if (Auth::user()->id_role == 2) { // role puskesmas
+        $query->where('id_puskesmas', Auth::user()->id_puskesmas);
     } elseif ($request->puskesmas) {
-        $query->where('id_puskesmas1', $request->puskesmas);
+        $query->where('id_puskesmas', $request->puskesmas);
     }
 
     if ($request->bulan) {
@@ -159,9 +159,9 @@ for ($i = 1; $i <= 13; $i++) {
     // =====================
     public function edit($id_phbs)
     {
-        $id_puskesmas1 = Auth::user()->id_puskesmas1;
+        $id_puskesmas = Auth::user()->id_puskesmas;
         
-        $phbs = data_phbs::findOrFail($id_phbs);
+        $phbs = NewDataPHBS::findOrFail($id_phbs);
 
         $puskesmas = puskesmas::all();
 
@@ -181,10 +181,10 @@ for ($i = 1; $i <= 13; $i++) {
     {
         $puskesmas = puskesmas::all();
         
-        $phbs = data_phbs::findOrFail($id_phbs);
+        $phbs = NewDataPHBS::findOrFail($id_phbs);
 
         $phbs->update([
-            'id_puskesmas1' => $request->id_puskesmas1,
+            'id_puskesmas' => $request->id_puskesmas,
             'bulan' => $request->bulan,
             'tahun' => $request->tahun,
             'jumlah_kk_total' => $request->jumlah_kk_total,
@@ -202,7 +202,7 @@ for ($i = 1; $i <= 13; $i++) {
     {
         $puskesmas = puskesmas::all();
         
-        $phbs = data_phbs::findOrFail($id_phbs);
+        $phbs = NewDataPHBS::findOrFail($id_phbs);
 
         $phbs->delete();
 

@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class NewRole extends Model
 {
     //
-    protected $table = '1roles';
-    protected $primaryKey = 'id_role1';
+    protected $table = 'roles';
+    protected $primaryKey = 'id_role';
     protected $fillable = [
         'nama_role',
         'role'
@@ -17,7 +17,7 @@ class NewRole extends Model
 
     public function users(): HasMany
     {
-        return $this->hasMany(User::class, 'id_role1', 'id_role1');
+        return $this->hasMany(User::class, 'id_role', 'id_role');
     }
 }
 

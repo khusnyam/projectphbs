@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class NewPuskesmas extends Model
 {
-    protected $table = '1puskesmas';
+    protected $table = 'puskesmas';
 
-    protected $primaryKey = 'id_puskesmas1';
+    protected $primaryKey = 'id_puskesmas';
 
     protected $fillable = [
-        'id_user1',
-        'id_kecamatan1',
+        'id_user',
+        'id_kecamatan',
         'nama_puskesmas',
         'alamat',
         'email',
@@ -28,8 +28,8 @@ class NewPuskesmas extends Model
     {
         return $this->belongsTo(
             User::class,
-            'id_user1',
-            'id_user1'
+            'id_user',
+            'id_user'
         );
     }
 
@@ -37,8 +37,8 @@ class NewPuskesmas extends Model
     {
         return $this->belongsTo(
             NewKecamatan::class,
-            'id_kecamatan1',
-            'id_kecamatan1'
+            'id_kecamatan',
+            'id_kecamatan'
         );
     }
 
@@ -46,8 +46,8 @@ class NewPuskesmas extends Model
     {
         return $this->hasMany(
             NewDataPHBSDetail::class,
-            'id_puskesmas1',
-            'id_puskesmas1'
+            'id_puskesmas',
+            'id_puskesmas'
         );
     }
 }

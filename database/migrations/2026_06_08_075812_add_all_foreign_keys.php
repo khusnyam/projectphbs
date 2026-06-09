@@ -12,26 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         
-        schema::table('1puskesmas', function (Blueprint $table) {
-            $table->foreign('id_user1')->references('id_user1')->on('users')->onDelete('cascade');
-            $table->foreign('id_kecamatan1')->references('id_kecamatan1')->on('1kecamatans')->onDelete('cascade');
+        schema::table('puskesmas', function (Blueprint $table) {
+            $table->foreign('id_user')->references('id_user')->on('users')->onDelete('cascade');
+            $table->foreign('id_kecamatan')->references('id_kecamatan')->on('kecamatans')->onDelete('cascade');
         });
 
-        schema::table('1data_phbs_result', function (Blueprint $table) {
-            $table->foreign('id_puskesmas1')->references('id_puskesmas1')->on('1puskesmas')->onDelete('cascade');
-            $table->foreign('id_data_phbs_detail1')->references('id_detail_phbs1')->on('1data_phbs_details')->onDelete('cascade');
+        schema::table('data_phbs', function (Blueprint $table) {
+            $table->foreign('id_puskesmas')->references('id_puskesmas')->on('puskesmas')->onDelete('cascade');
+            // $table->foreign('id_data_phbs_detail1')->references('id_detail_phbs')->on('data_phbs_detail')->onDelete('cascade');
         });
 
         schema::table('users', function (Blueprint $table) {
-            $table->foreign('id_role1')->references('id_role1')->on('1roles')->onDelete('cascade');
+            $table->foreign('id_role')->references('id_role')->on('roles')->onDelete('cascade');
         });
 
-        schema::table('1indikator_phbs', function (Blueprint $table) {
+        schema::table('indikator_phbs', function (Blueprint $table) {
             $table->boolean('status_aktif')->default(true)->change();
         });
 
-        schema::table('1data_phbs_details', function (Blueprint $table) {
-            $table->foreign('id_indikator1')->references('id_indikator1')->on('1indikator_phbs')->onDelete('cascade');
+        schema::table('data_phbs_detail', function (Blueprint $table) {
+            $table->foreign('id_indikator')->references('id_indikator')->on('indikator_phbs')->onDelete('cascade');
+            $table->foreign('id_phbs')->references('id_phbs')->on('data_phbs')->onDelete('cascade');
         });
     }
 

@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\data_phbs_detail;
+use App\Models\NewDataPHBSDetail;
 
 class DataPHBSSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class DataPHBSSeeder extends Seeder
     // public function run(): void
     // {
     //     //
-    //     data_phbs_detail::insert([
+    //     NewDataPHBSDetail::insert([
     //     ['id_phbs'=>1,'id_indikator'=>1,'jumlah_sasaran'=>100,'jumlah_capaian'=>97,'persentase'=>97,'kategori_capaian'=>'Tinggi','keterangan'=>'Target hampir tercapai.','created_at'=>now(),'updated_at'=>now()],
     //     ['id_phbs'=>1,'id_indikator'=>2,'jumlah_sasaran'=>120,'jumlah_capaian'=>110,'persentase'=>92,'kategori_capaian'=>'Tinggi','keterangan'=>'Capaian sangat baik.','created_at'=>now(),'updated_at'=>now()],
     //     ['id_phbs'=>1,'id_indikator'=>3,'jumlah_sasaran'=>150,'jumlah_capaian'=>125,'persentase'=>83,'kategori_capaian'=>'Sedang','keterangan'=>'Perlu peningkatan pemantauan balita.','created_at'=>now(),'updated_at'=>now()],
