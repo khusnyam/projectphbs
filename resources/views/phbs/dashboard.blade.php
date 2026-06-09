@@ -836,8 +836,8 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
 @php
   $authUser = auth()->user() ?? (object) [];
 
-  // Ambil role dari database. Di UserSeeder: id_role = 1 untuk Dinkes, id_role = 2 untuk Puskesmas.
-  $roleId = (int) ($authUser->id_role ?? 0);
+  // Ambil role dari database. Di UserSeeder: id_role1 = 1 untuk Dinkes, id_role1 = 2 untuk Puskesmas.
+  $roleId = (int) ($authUser->id_role1 ?? 0);
   $rawRole = strtolower((string) ($authUser->role ?? $authUser->level ?? ''));
   $isDinkes = $roleId === 1 || stripos($rawRole, 'dinkes') !== false || stripos($rawRole, 'dinas') !== false;
 
@@ -985,8 +985,8 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
 <!-- ── PAGE: DASHBOARD ── -->
       <div id="page-dashboard" class="page active">
         <div class="page-header">
-          <h2><i class="fa-solid fa-chart-line"></i> Dashboard Kabupaten</h2>
-          <p>Rekapitulasi PHBS Tatanan Rumah Tangga — Sleman 2025</p>
+          <h2><i class="fa-solid fa-chart-line"></i> Dashboard Seluruh Puskesmas Kabupaten Sleman</h2>
+          <p>Rekapitulasi PHBS Tatanan Rumah Tangga</p>
         </div>
 
         <!-- Stats -->
@@ -1007,20 +1007,20 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
             <span class="stat-icon"><i class="fa-solid fa-chart-simple"></i></span>
             <div class="stat-label">% Ber-PHBS</div>
             <div class="stat-value" id="stat-pct">0%</div>
-            <div class="stat-sub">rata-rata kabupaten</div>
+            <div class="stat-sub">rata-rata puskesmas</div>
           </div>
-          <div class="stat-card amber">
+          {{-- <div class="stat-card amber">
             <span class="stat-icon"><i class="fa-solid fa-hospital"></i></span>
             <div class="stat-label">Puskesmas</div>
             <div class="stat-value">25</div>
             <div class="stat-sub">unit pelayanan aktif</div>
-          </div>
+          </div> --}}
         </div>
 
         <!-- Charts row 1 -->
         <div class="chart-grid">
           <div class="chart-card wide">
-            <div class="chart-title">Tren Ber-PHBS per Bulan (Kumulatif Kabupaten)</div>
+            <div class="chart-title">Tren Ber-PHBS per Bulan</div>
             <div class="chart-sub">Jumlah KK yang memenuhi syarat PHBS sepanjang tahun 2025</div>
             <div class="chart-wrap" style="height:220px;">
               <canvas id="chart-tren"></canvas>
@@ -1324,7 +1324,7 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
 // ═══════════════════════════════════════════════════════
 //  DATA — dari Controller Laravel (PhbsController@index)
 // ═══════════════════════════════════════════════════════
-const RAW = {!! json_encode($raw) !!};
+const DATADASHBOARD = {!! json_encode($datadashboard) !!};
 
 
 // ═══════════════════════════════════════════════════════
@@ -1332,13 +1332,13 @@ const RAW = {!! json_encode($raw) !!};
 // ═══════════════════════════════════════════════════════
 
 
-const INDIKATORS = [
-  "Persalinan ditolong nakes","Memberi bayi ASI eksklusif","Menimbang balita setiap bulan",
-  "Menggunakan air bersih","Mencuci tangan dg air bersih & sabun","Pengelolaan air minum & makan RT",
-  "Menggunakan jamban sehat","Pengelolaan limbah cair RT","Membuang sampah di tempat sampah",
-  "Memberantas jentik di rumah","Makan sayur & buah setiap hari","Melakukan aktivitas fisik setiap hari",
-  "Tidak merokok di dalam rumah"
-];
+// const INDIKATORS = [
+//   "Persalinan ditolong nakes","Memberi bayi ASI eksklusif","Menimbang balita setiap bulan",
+//   "Menggunakan air bersih","Mencuci tangan dg air bersih & sabun","Pengelolaan air minum & makan RT",
+//   "Menggunakan jamban sehat","Pengelolaan limbah cair RT","Membuang sampah di tempat sampah",
+//   "Memberantas jentik di rumah","Makan sayur & buah setiap hari","Melakukan aktivitas fisik setiap hari",
+//   "Tidak merokok di dalam rumah"
+// ];
 // Estimated capaian per indikator (avg dari proyeksi semua puskesmas)
 const IND_PCT = [100, 93.9, 97.0, 99.7, 99.1, 99.5, 98.1, 94.8, 96.7, 97.8, 97.4, 98.1, 73.0];
 
@@ -1419,7 +1419,7 @@ function populateSelects(){
   const ids = ['hist-pusk'];
   ids.forEach(id => {
     const sel = document.getElementById(id);
-    Object.keys(RAW).forEach(pk => {
+    Object.keys(DATADASHBOARD).forEach(pk => {
       const o = document.createElement('option');
       o.value = pk; o.textContent = pk;
       sel.appendChild(o);
@@ -1428,7 +1428,7 @@ function populateSelects(){
 }
 function populateFormPusk(){
   const sel = document.getElementById('f-pusk');
-  Object.keys(RAW).forEach(pk => {
+  Object.keys(DATADASHBOARD).forEach(pk => {
     const o = document.createElement('option'); o.value=pk; o.textContent=pk; sel.appendChild(o);
   });
 }
@@ -1467,19 +1467,19 @@ function showPage(id, updateHash = true){
 
 // ─── STATS ───
 function renderStats(){
-  let totKK=0, totPhbs=0;
-  Object.values(RAW).forEach(d => { totKK+=d.total_kk; totPhbs+=d.ber_phbs; });
-  const pct = totKK>0 ? (totPhbs/totKK*100).toFixed(1) : 0;
-  document.getElementById('stat-kk').textContent = totKK.toLocaleString('id');
-  document.getElementById('stat-phbs').textContent = totPhbs.toLocaleString('id');
-  document.getElementById('stat-pct').textContent = 61+'%';
+  // let totKK=0, totPhbs=0;
+  // Object.values(DATADASHBOARD).forEach(d => { totKK+=d.total_kk; totPhbs+=d.ber_phbs; });
+  // const pct = totKK>0 ? (totPhbs/totKK*100).toFixed(1) : 0;
+  document.getElementById('stat-kk').textContent = datadashboard.total_kk.toLocaleString('id');
+  document.getElementById('stat-phbs').textContent = datadashboard.ber_phbs.toLocaleString('id');
+  document.getElementById('stat-pct').textContent = datadashboard.pct + '%';
 }
 
 // ─── TREN CHART ───
 function renderTrenChart(){
   const monthly = {};
   BULAN_ORDER.forEach(b => monthly[b] = {kk:0, phbs:0});
-  Object.values(RAW).forEach(d => {
+  Object.values(DATADASHBOARD).forEach(d => {
     d.months.forEach(m => {
       const b = m.bulan==='Nopember'?'November':m.bulan;
       if(monthly[b]){ monthly[b].kk+=m.kk; monthly[b].phbs+=m.ber_phbs; }
@@ -1503,7 +1503,7 @@ function renderTrenChart(){
 
 // ─── BAR CHART ───
 function renderBarChart(){
-  const sorted = Object.entries(RAW).sort((a,b)=>b[1].pct-a[1].pct);
+  const sorted = Object.entries(DATADASHBOARD).sort((a,b)=>b[1].pct-a[1].pct);
   const labels = sorted.map(e=>e[0]);
   const data   = sorted.map(e=>e[1].pct);
   const colors = data.map(v => v>=80?'#22c55e':v>=65?'#f59e0b':'#ef4444');
@@ -1520,7 +1520,7 @@ function renderBarChart(){
 // ─── DONUT CHART ───
 function renderDonut(){
   const counts = {baik:0,sedang:0,kurang:0};
-  Object.values(RAW).forEach(d => {
+  Object.values(DATADASHBOARD).forEach(d => {
     if(d.pct>=80) counts.baik++;
     else if(d.pct>=65) counts.sedang++;
     else counts.kurang++;
@@ -1551,7 +1551,7 @@ function renderDonut(){
 // ─── MAIN TABLE ───
 let tableData = [];
 function renderMainTable(){
-  tableData = Object.entries(RAW).map(([name,d],i) => ({name, kk:d.total_kk, phbs:d.ber_phbs, pct:d.pct}));
+  tableData = Object.entries(DATADASHBOARD).map(([name,d],i) => ({name, kk:d.total_kk, phbs:d.ber_phbs, pct:d.pct}));
   tableData.sort((a,b)=>b.pct-a.pct);
   drawTable(tableData);
 }
@@ -1596,7 +1596,7 @@ function sortTable(col){
 // ─── PUSK TABLE ───
 function renderPuskTable(){
   const status = document.getElementById('pusk-filter-status').value;
-  let data = Object.entries(RAW).map(([name,d])=>({name,...d}));
+  let data = Object.entries(DATADASHBOARD).map(([name,d])=>({name,...d}));
   if(status==='baik') data=data.filter(d=>d.pct>=80);
   if(status==='sedang') data=data.filter(d=>d.pct>=65&&d.pct<80);
   if(status==='kurang') data=data.filter(d=>d.pct<65);
@@ -1625,7 +1625,7 @@ function filterPuskTable(q){
   });
 }
 function showPuskDetail(name){
-  const d = RAW[name];
+  const d = DATADASHBOARD[name];
   if(!d) return;
   document.getElementById('pusk-detail').style.display='block';
   document.getElementById('detail-name').innerHTML = '<i class="fa-solid fa-hospital"></i> ' + name;
@@ -1667,7 +1667,7 @@ function renderHistory(){
   const pusk = document.getElementById('hist-pusk').value;
   const bulan = document.getElementById('hist-bulan').value;
   const rows = [];
-  Object.entries(RAW).forEach(([name,d])=>{
+  Object.entries(DATADASHBOARD).forEach(([name,d])=>{
     if(pusk!=='all' && name!==pusk) return;
     d.months.forEach(m=>{
       const b = m.bulan==='Nopember'?'November':m.bulan;
@@ -1730,9 +1730,11 @@ function renderIndikator(){
   }).join('');
 }
 
+
+
 // ─── COMPARE ───
 function initCompare(){
-  const names = Object.keys(RAW);
+  const names = Object.keys(DATADASHBOARD);
   ['cmp1','cmp2','cmp3','cmp4'].forEach(id=>{
     const sel = document.getElementById(id);
     names.forEach(pk=>{
@@ -1749,7 +1751,7 @@ function renderCompare(){
   if(sel.length<2){ alert('Pilih minimal 2 puskesmas!'); return; }
   const labels = BULAN_ORDER.map(b=>b.slice(0,3));
   const datasets = sel.map((pk,i)=>{
-    const d = RAW[pk];
+    const d = DATADASHBOARD[pk];
     const byBulan = {};
     BULAN_ORDER.forEach(b=>byBulan[b]=null);
     d.months.forEach(m=>{

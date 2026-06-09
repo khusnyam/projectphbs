@@ -7,6 +7,7 @@ use App\Models\data_phbs;
 use App\Models\data_phbs_detail;
 use App\Models\puskesmas;
 use Illuminate\Support\Facades\Auth;
+use App\Models\indikator_phbs;
 
 class PhbsInputController extends Controller
 {
@@ -14,8 +15,10 @@ class PhbsInputController extends Controller
     public function create()
     {
         $puskesmas = puskesmas::all();
+        $allIndikator = indikator_phbs::pluck('nama_indikator')->toArray();
+        $targetIndikator = indikator_phbs::pluck('target_nasional')->toArray();
 
-        return view('phbs.create', compact('puskesmas'));
+        return view('phbs.create', compact('puskesmas', 'allIndikator', 'targetIndikator'));
     }
 
     // SIMPAN DATA
@@ -125,7 +128,7 @@ for ($i = 1; $i <= 13; $i++) {
     'details'
 ]);
 
-    if (Auth::user()->id_role == 2) { // role puskesmas
+    if (Auth::user()->id_role1 == 2) { // role puskesmas
         $query->where('id_puskesmas', Auth::user()->id_puskesmas);
     } elseif ($request->puskesmas) {
         $query->where('id_puskesmas', $request->puskesmas);

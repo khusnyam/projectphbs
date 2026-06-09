@@ -82,7 +82,7 @@ a{text-decoration:none;color:inherit;}
 .tb-left h2 i{color:#fff!important;opacity:.9;margin-right:0!important;}
 .tb-left p{font-size:13px;color:rgba(255,255,255,.75);margin-top:0;line-height:1.5;}
 .tb-right{flex-shrink:0;display:flex;align-items:center;gap:10px;}
-.tb-right::before{content:'RATA-RATA PHBS PERIODE INI';display:block;font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:8px;}
+.tb-right::before{display:block;font-size:10px;font-weight:700;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:8px;}
 .tb-right{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:18px 22px;min-width:220px;backdrop-filter:blur(6px);flex-direction:column;align-items:flex-start;}
 .tb-right .btn-export{height:auto;padding:8px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.18);}
 .tb-right .btn-export:hover{background:rgba(255,255,255,.2);}
@@ -329,19 +329,19 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
 
 {{-- MAIN --}}
 <div class="main">
-  <div class="topbar">
+  <div class="topbar">  
     <div class="tb-left">
       <h2><i class="fa-solid fa-chart-bar" style="color:var(--blue);margin-right:7px"></i>Laporan Rekapitulasi PHBS</h2>
       <p>Tatanan Rumah Tangga • Tahun {{ $tahun }}</p>
     </div>
-    <div class="tb-right">
+    {{-- <div class="tb-right"> --}}
       <a href="{{ route('phbs.export', request()->query()) }}" class="btn btn-export">
         <i class="fa-solid fa-file-excel"></i> Export Excel
       </a>
       {{-- <a href="{{ route('phbs.form') }}" class="btn btn-primary">
         <i class="fa-solid fa-plus"></i> Input Laporan
       </a> --}}
-    </div>
+    {{-- </div> --}}
   </div>
 
   <div class="content">
@@ -485,7 +485,7 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
             <tr>
               <td style="color:var(--s5);font-size:.7rem">{{ $i+1 }}</td>
               <td class="td-pkm">{{ $row->nama_puskesmas }}</td>
-              <td style="font-size:.73rem;color:var(--s5)">{{ $namaBulan[$row->bulan]??'-' }}</td>
+              <td style="font-size:.73rem;color:var(--s5)">{{ $namaBulan[$row->bulan]??'Januari' }}</td>
               <td style="font-size:.73rem;color:var(--s5)">{{ $row->tahun }}</td>
               <td class="td-num">{{ number_format($row->jumlah_kk_l) }}</td>
               <td class="td-num">{{ number_format($row->jumlah_kk_p) }}</td>

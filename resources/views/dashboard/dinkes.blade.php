@@ -626,7 +626,7 @@ a{text-decoration:none;color:inherit;}
                 </div>
                 <div class="info-body">
                     <div class="info-label">Perlu Perhatian</div>
-                    <div class="info-value">Puskesmas Gamping 1</div>
+                    <div class="info-value">Puskesmas Minggir</div>
                     <div class="info-sub">
                         @if($lowPuskesmas)
                             0.0% – capaian terendah

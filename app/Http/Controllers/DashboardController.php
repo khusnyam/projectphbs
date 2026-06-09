@@ -26,7 +26,7 @@ class DashboardController extends Controller
 
     public function dinkes(Request $req)
     {
-        // if (request()->user()?->id_role !== 1) {
+        // if (request()->user()?->id_role1 !== 1) {
         //     abort(403, 'Halaman ini khusus untuk Dinkes.');
         // }
 

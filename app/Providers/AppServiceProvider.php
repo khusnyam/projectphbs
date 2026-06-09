@@ -33,11 +33,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('akses-dinkes', function ($user) {
-            return $user->id_role == 1;
+            return $user->id_role1 == 1;
         });
 
         Gate::define('akses-puskesmas', function ($user) {
-            return $user->id_role == 2;
+            return $user->id_role1 == 2;
         });
     }
 
@@ -47,11 +47,11 @@ class AppServiceProvider extends ServiceProvider
     // public function boot(): void
     // {
     //     Gate::define('akses-dinkes', function ($user) {
-    //         return $user->id_role == 1; 
+    //         return $user->id_role1 == 1; 
     //     });
 
     //     Gate::define('akses-puskesmas', function ($user) {
-    //         return $user->id_role == 2; 
+    //         return $user->id_role1 == 2; 
     //     });
     // }
 }

@@ -192,7 +192,7 @@ body{font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex}
       <div class="role-row">
         <div class="role-badge"><i class="fa-solid fa-hospital"></i>Puskesmas</div>
         <div class="role-badge"><i class="fa-solid fa-building-columns"></i>Dinkes</div>
-        <div class="role-badge"><i class="fa-solid fa-user-shield"></i>Admin</div>
+        {{-- <div class="role-badge"><i class="fa-solid fa-user-shield"></i>Admin</div> --}}
       </div>
       <div class="foot">SIP-PHBS &copy; {{ date('Y') }}</div>
     </div>

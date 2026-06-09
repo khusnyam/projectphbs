@@ -1096,7 +1096,7 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
 <div class="layout">
 @php
   $authUser = auth()->user() ?? (object) [];
-  $roleId = (int) ($authUser->id_role ?? 0);
+  $roleId = (int) ($authUser->id_role1 ?? 0);
   $rawRole = strtolower((string) ($authUser->role ?? $authUser->level ?? ''));
   $isDinkes = $roleId === 1 || stripos($rawRole, 'dinkes') !== false || stripos($rawRole, 'dinas') !== false;
   $userName = trim((string) ($authUser->name ?? $authUser->nama_user ?? ''));
@@ -1329,12 +1329,17 @@ body{font-family:'Inter',sans-serif!important;background:var(--bg)!important;col
                         ];
                       @endphp
 
-                      @foreach($indikator as $key => $item)
+                      @foreach($allIndikator as $key => $item)
                         <tr>
                           <td><span class="num">{{ $key + 1 }}</span></td>
                           <td style="font-weight:600;color:#1e3a5f">{{ $item }}</td>
                           <td style="text-align:center">
-                            <input type="number" name="sasaran_input[{{ $key+1 }}]" value="0" class="input-sm sasaran">
+                            {{-- <p>{{$item}}</p> --}}
+                            @if ($targetIndikator[$key] == 0)
+                            <input type="number" name="sasaran_input[{{ $key+1 }}]" value="1" class="input-sm sasaran">
+                            @else
+                            <input type="number" name="sasaran_input[{{ $key+1 }}]" value="{{ $targetIndikator[$key] }}" class="input-sm sasaran" readonly>
+                            @endif
                           </td>
                           <td style="text-align:center">
                             <input type="number" name="jumlah_input[{{ $key+1 }}]" value="0" class="input-sm jumlah">

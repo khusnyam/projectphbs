@@ -39,10 +39,10 @@ class LoginController extends Controller
             return back()->withErrors(['email' => 'Akun Anda tidak aktif. Hubungi Admin.'])->withInput($request->only('email'));
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role'=>1], $request->has('remember'))) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role1'=>1], $request->has('remember'))) {
             $request->session()->regenerate();
             return redirect()->intended('/beranda');
-        }elseif (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role'=>2], $request->has('remember'))) {
+        }elseif (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role1'=>2], $request->has('remember'))) {
             $request->session()->regenerate();    
             return redirect()->intended('/dashboard-puskesmas');
         }

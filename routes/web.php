@@ -64,7 +64,7 @@ Route::get('/peta', [PetaController::class, 'index'])->name('peta.index');
 
 
 
-
+//AKSES PUSKESMAS
         Route::get('/dashboard-puskesmas', [PhbsController::class, 'index'])->name('puskesmas.dashboard');
         // Route::get('/api/phbs/data', [PhbsController::class, 'getData'])->name('phbs.data');
         Route::post('/api/phbs/simpan', [PhbsController::class, 'simpan'])->name('phbs.simpan');
@@ -85,8 +85,8 @@ Route::get('/peta', [PetaController::class, 'index'])->name('peta.index');
         // Route::get('/dashboard-phbs', [DashboardController::class, 'dinkes'])->name('phbs.dashboard');
 
         // Route::get('/dashboard-phbs', function() {
-        //     // Kita paksa Laravel menampilkan data id_role dari user yang sedang login saat ini
-        //     //dd(auth()->user()->id_role); 
+        //     // Kita paksa Laravel menampilkan data id_role1 dari user yang sedang login saat ini
+        //     //dd(auth()->user()->id_role1); 
         // });
 
 

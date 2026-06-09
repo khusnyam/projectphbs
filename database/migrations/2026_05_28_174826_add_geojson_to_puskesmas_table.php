@@ -1,48 +1,48 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+// use Illuminate\Database\Migrations\Migration;
+// use Illuminate\Database\Schema\Blueprint;
+// use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    public function up(): void
-    {
-        Schema::table('puskesmas', function (Blueprint $table) {
+// return new class extends Migration
+// {
+//     public function up(): void
+//     {
+//         Schema::table('puskesmas', function (Blueprint $table) {
 
-            $table->float('persentase_capaian')
-                  ->default(0)
-                  ->after('longitude');
+//             $table->float('persentase_capaian')
+//                   ->default(0)
+//                   ->after('longitude');
 
-            $table->integer('jumlah_kk_total')
-                  ->nullable()
-                  ->after('persentase_capaian');
+//             $table->integer('jumlah_kk_total')
+//                   ->nullable()
+//                   ->after('persentase_capaian');
 
-            $table->string('status_kategori')
-                  ->nullable()
-                  ->after('jumlah_kk_total');
+//             $table->string('status_kategori')
+//                   ->nullable()
+//                   ->after('jumlah_kk_total');
 
-            $table->json('geojson_polygon')
-                  ->nullable()
-                  ->after('status_kategori');
+//             $table->json('geojson_polygon')
+//                   ->nullable()
+//                   ->after('status_kategori');
 
-            $table->string('warna')
-                  ->nullable()
-                  ->after('geojson_polygon');
-        });
-    }
+//             $table->string('warna')
+//                   ->nullable()
+//                   ->after('geojson_polygon');
+//         });
+//     }
 
-    public function down(): void
-    {
-        Schema::table('puskesmas', function (Blueprint $table) {
+//     public function down(): void
+//     {
+//         Schema::table('puskesmas', function (Blueprint $table) {
 
-            $table->dropColumn([
-                'persentase_capaian',
-                'jumlah_kk_total',
-                'status_kategori',
-                'geojson_polygon',
-                'warna'
-            ]);
-        });
-    }
-};
+//             $table->dropColumn([
+//                 'persentase_capaian',
+//                 'jumlah_kk_total',
+//                 'status_kategori',
+//                 'geojson_polygon',
+//                 'warna'
+//             ]);
+//         });
+//     }
+// };

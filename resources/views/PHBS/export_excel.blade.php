@@ -56,10 +56,10 @@ $avg = $tT>0 ? round(($tBer/$tT)*100,2) : 0;
     <td class="tr">{{ number_format($row->jumlah_kk_l) }}</td>
     <td class="tr">{{ number_format($row->jumlah_kk_p) }}</td>
     <td class="tr tb">{{ number_format($row->jumlah_kk_total) }}</td>
-    @for($n=1;$n<=13;$n++)
+    {{-- @for($n=1;$n<=13;$n++)
       <td class="tr">{{ number_format($row->{'ind'.$n.'_sasaran'}) }}</td>
       <td class="tr">{{ number_format($row->{'ind'.$n.'_jumlah'}) }}</td>
-    @endfor
+    @endfor --}}
     <td class="tr tb">{{ number_format($row->ber_phbs) }}</td>
     <td class="tr tb">{{ number_format($row->persen_phbs,2) }}%</td>
   </tr>
@@ -69,10 +69,10 @@ $avg = $tT>0 ? round(($tBer/$tT)*100,2) : 0;
     <td class="tr">{{ number_format($tL) }}</td>
     <td class="tr">{{ number_format($tP) }}</td>
     <td class="tr">{{ number_format($tT) }}</td>
-    @for($n=1;$n<=13;$n++)
+    {{-- @for($n=1;$n<=13;$n++)
       <td class="tr">{{ number_format($laporan->sum('ind'.$n.'_sasaran')) }}</td>
       <td class="tr">{{ number_format($laporan->sum('ind'.$n.'_jumlah')) }}</td>
-    @endfor
+    @endfor --}}
     <td class="tr">{{ number_format($tBer) }}</td>
     <td class="tr">{{ number_format($avg,2) }}%</td>
   </tr>

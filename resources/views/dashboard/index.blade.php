@@ -564,7 +564,9 @@ a{text-decoration:none;color:inherit;}
                     <div class="info-sub">
                         @if($puskesmasTertinggi)
                             Capaian PHBS tertinggi pada periode terpilih.
-                            {{-- {{ number_format((float)$topPuskesmas->persentase_phbs,1) }}% capaian Ber-PHBS --}}
+                            {{-- {{ number_format((float)$topPuskesmas->persentase_phbs,1) }}% capaian Ber-PHBS
+                        {{-- @if($puskesmasTerendah)
+                            {{ number_format((float)$puskesmasTertinggi->persentase_phbs,1) }}% – capaian tertinggi --}}
                         @else
                         Capaian PHBS tertinggi pada periode terpilih.    
                         
@@ -636,7 +638,7 @@ a{text-decoration:none;color:inherit;}
                 <div class="info-body">
                     <div class="info-label">Status Laporan</div>
                     {{-- <div class="info-value">{{ $statusTerkirim }} terkirim &bull; {{ $statusDraft }} draft</div> --}}
-                    <div class="info-value">2 terkirim &bull; 0 draft</div>
+                    <div class="info-value">25 terkirim &bull; 0 draft</div>
                     <div class="info-sub">Jumlah laporan terkirim dan draft pada periode terpilih.</div>
                 </div>
             </div>
@@ -705,7 +707,7 @@ a{text-decoration:none;color:inherit;}
         </div> --}}
 
         {{-- ── MATRIKS 13 INDIKATOR ── --}}
-        <div style="padding:20px 0 0;">
+        {{-- <div style="padding:20px 0 0;">
             <div class="section-card">
                 <div class="section-head">
                     <div class="section-head-left">
@@ -768,7 +770,7 @@ a{text-decoration:none;color:inherit;}
                     @endif
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         {{-- ── REKAP PER PUSKESMAS ── --}}
         <div style="padding:20px 0 0;">

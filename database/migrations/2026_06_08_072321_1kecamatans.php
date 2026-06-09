@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kecamatans', function (Blueprint $table) {
-            $table->id('id_kecamatan');
-            $table->string('nama_kecamatan')->unique();
-            $table->integer('jumlah_kk_lk');
-            $table->integer('jumlah_kk_pr');    
+        Schema::create('1kecamatans', function (Blueprint $table) {
+            $table->id('id_kecamatan1');
+            $table->string('nama_kecamatan')->unique();   
             $table->json('geojson_polygon');
             $table->string('warna')->nullable();
             $table->timestamps();
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kecamatans');
+        Schema::dropIfExists('1kecamatans');
     }
 };

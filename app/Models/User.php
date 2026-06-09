@@ -18,7 +18,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'id_role',
+        'id_role1',
         'id_puskesmas',
         'status_aktif',
     ];
