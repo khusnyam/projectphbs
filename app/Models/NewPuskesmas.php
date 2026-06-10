@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class NewPuskesmas extends Model
 {
@@ -42,12 +43,25 @@ class NewPuskesmas extends Model
         );
     }
 
-    public function dataPhbsDetails()
+    // public function dataPhbsDetails()
+    // {
+    //     return $this->hasManyThrough(
+    //         NewDataPHBSDetail::class,
+    //         NewDataPHBS::class,
+    //         'id_puskesmas',
+    //         'id_phbs',
+    //         'id_puskesmas',
+    //         'id_phbs'
+    //     );
+    // }
+
+    public function dataPhbs(): HasMany
     {
-        return $this->hasMany(
-            NewDataPHBSDetail::class,
-            'id_puskesmas',
-            'id_puskesmas'
-        );
+        return $this->hasMany(NewDataPHBS::class, 'id_puskesmas', 'id_puskesmas');
+    }
+ 
+    public function dataPhbsDetails(): HasMany
+    {
+        return $this->hasMany(NewDataPHBSDetail::class, 'id_puskesmas', 'id_puskesmas');
     }
 }
