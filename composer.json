@@ -7,13 +7,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
-<<<<<<< Updated upstream
         "ext-intl": "*",
         "ext-zip": "*",
         "filament/filament": "^5.6",
-=======
-        "/": "^5.6",
->>>>>>> Stashed changes
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0"
     },
