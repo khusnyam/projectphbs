@@ -1,8 +1,8 @@
 <?php
 
-//namespace App\Filament\Widgets;
+//namespace App\\Widgets;
 
-//use Filament\Widgets\Widget;
+//use \Widgets\Widget;
 
 //class MyWidget extends Widget
 //{

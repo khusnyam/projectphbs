@@ -13,7 +13,7 @@
             <div class="kategori-card oranye-card" onclick="filterByCategory('merah')">
                 <span class="dot"></span><span class="num" id="k-oranye">{{ $statistik['rendah'] }}</span>
                 <div class="label">Belum Tercapai</div>
-                <div style="font-size:.58rem;color:var(--text-muted);margin-top:2px;"><60%</div>
+                <div style="font-size:.58rem;color:var(--text-muted);margin-top:2px;">&lt;60%</div>
             </div>
             <div class="kategori-card kuning-card" onclick="filterByCategory('kuning')">
                 <span class="dot"></span><span class="num" id="k-kuning">{{ $statistik['sedang'] }}</span>
@@ -58,16 +58,29 @@
         <div class="loading-text" id="loadingText">Memuat peta wilayah...</div>
     </div>
 
-    <div id="map"></div>
+    <div id="map" role="application" aria-label="Peta interaktif Puskesmas Sleman" tabindex="0" aria-describedby="mapDescription"></div>
+
+    <div id="mapDescription" class="sr-only">Peta menunjukkan wilayah puskesmas di Kabupaten Sleman. Gunakan tombol pada toolbar untuk memperbesar, memperkecil, dan menggeser peta. Pilih puskesmas dari daftar untuk melihat detail.</div>
+
+    <div class="map-controls" role="toolbar" aria-label="Kontrol peta">
+        <button type="button" class="map-btn" id="btnZoomIn" aria-label="Perbesar peta">+</button>
+        <button type="button" class="map-btn" id="btnZoomOut" aria-label="Perkecil peta">−</button>
+        <button type="button" class="map-btn" id="btnPanUp" aria-label="Geser ke atas">↑</button>
+        <button type="button" class="map-btn" id="btnPanDown" aria-label="Geser ke bawah">↓</button>
+        <button type="button" class="map-btn" id="btnPanLeft" aria-label="Geser ke kiri">←</button>
+        <button type="button" class="map-btn" id="btnPanRight" aria-label="Geser ke kanan">→</button>
+    </div>
+
+    <div id="mapStatus" aria-live="polite" class="sr-only">Peta siap.</div>
 
     <div class="map-legend">
         <div class="legend-title"><i class="fa-solid fa-palette"></i> Capaian (%)</div>
-        <div class="legend-item"><div class="legend-color" style="background:#e74c3c"></div><span><60% <span style="color:var(--text-muted);font-size:.62rem;">(Belum Tercapai)</span></span></div>
+        <div class="legend-item"><div class="legend-color" style="background:#e74c3c"></div><span>&lt;60% <span style="color:var(--text-muted);font-size:.62rem;">(Belum Tercapai)</span></span></div>
         <div class="legend-item"><div class="legend-color" style="background:#f1c40f"></div><span>60-80% <span style="color:var(--text-muted);font-size:.62rem;">(Cukup Tercapai)</span></span></div>
         <div class="legend-item" style="margin-bottom:0"><div class="legend-color" style="background:#27ae60"></div><span>>80% <span style="color:var(--text-muted);font-size:.62rem;">(Tercapai)</span></span></div>
     </div>
 
-    <div class="map-info-panel" id="infoPanel">
+    <div class="map-info-panel" id="infoPanel" role="region" aria-label="Detail puskesmas" tabindex="-1">
         <div class="info-panel-header">
             <div class="info-panel-name" id="infoPanelName">—</div>
             <button class="info-close" onclick="closeInfoPanel()"><i class="fa-solid fa-xmark"></i></button>
@@ -133,11 +146,27 @@ function getStatusColors(status) {
 
 function styleFeature(feature) {
     const col = getColor(feature.properties.persentase_capaian);
-    return { fillColor: col, fillOpacity: .42, color: col, weight: 1.5, opacity: .9 };
+    // tampilkan batas wilayah dengan warna kontras dan ketebalan sedang
+    return {
+        fillColor: col,
+        fillOpacity: 0.28,
+        color: '#2c3e50', // warna garis batas
+        weight: 1.6,
+        opacity: 0.95,
+        lineJoin: 'round'
+    };
 }
 function styleHighlight(feature) {
     const col = getColor(feature.properties.persentase_capaian);
-    return { fillColor: col, fillOpacity: .68, color: '#fff', weight: 2.5, opacity: 1 };
+    // ketika disorot, pertegas border agar terlihat jelas
+    return {
+        fillColor: col,
+        fillOpacity: 0.68,
+        color: '#000',
+        weight: 3.0,
+        opacity: 1,
+        dashArray: ''
+    };
 }
 
 // ─── Popup HTML ───────────────────────────────────────────────────────────────
@@ -182,11 +211,17 @@ function openInfoPanel(props) {
     document.getElementById('infoPanelCapaian').textContent  = pct + '%';
     document.getElementById('infoPanelCapaian').style.color  = col;
     document.getElementById('infoPanel').classList.add('visible');
+    document.getElementById('mapStatus').textContent = props.nama_puskesmas + ', capaian ' + pct + ' persen.';
+    // focus info panel so screen reader reads it
+    const ip = document.getElementById('infoPanel'); if (ip) ip.focus();
 }
 function closeInfoPanel() {
     document.getElementById('infoPanel').classList.remove('visible');
     if (geojsonLayer) geojsonLayer.resetStyle();
     document.querySelectorAll('.pkm-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('mapStatus').textContent = 'Peta siap.';
+    // return focus to map container
+    const m = document.getElementById('map'); if (m) m.focus();
 }
 
 // ─── Load GeoJSON ─────────────────────────────────────────────────────────────
@@ -249,7 +284,7 @@ function renderList(data) {
         return;
     }
     container.innerHTML = data.map(p => `
-        <div class="pkm-item" id="pkm-item-${p.id}" onclick="selectPuskesmas(${p.id})">
+        <div class="pkm-item" id="pkm-item-${p.id}" role="button" tabindex="0" aria-label="${p.nama_puskesmas}, ${parseFloat(p.persentase_capaian).toFixed(1)} persen" onclick="selectPuskesmas(${p.id})" onkeydown="if(event.key==='Enter'||event.key===' '||event.key==='Spacebar'){ event.preventDefault(); selectPuskesmas(${p.id}); }">
             <div class="pkm-color-bar" style="background:${p.warna}"></div>
             <div class="pkm-info">
                 <div class="pkm-name">${p.nama_puskesmas}</div>
@@ -264,6 +299,34 @@ function renderList(data) {
             <div class="pkm-pct" style="color:${p.warna}">${parseFloat(p.persentase_capaian).toFixed(1)}%</div>
         </div>`).join('');
 }
+
+// Map control helpers: zoom and pan via accessible buttons and keyboard
+function zoomIn() { map.zoomIn(); document.getElementById('mapStatus').textContent = 'Memperbesar peta'; }
+function zoomOut(){ map.zoomOut(); document.getElementById('mapStatus').textContent = 'Memperkecil peta'; }
+function panMap(dx, dy){ map.panBy([dx, dy]); document.getElementById('mapStatus').textContent = 'Menggeser peta'; }
+
+// wire up toolbar buttons
+document.addEventListener('click', (e)=>{
+    if(e.target && e.target.id === 'btnZoomIn') zoomIn();
+    if(e.target && e.target.id === 'btnZoomOut') zoomOut();
+    if(e.target && e.target.id === 'btnPanUp') panMap(0, -200);
+    if(e.target && e.target.id === 'btnPanDown') panMap(0, 200);
+    if(e.target && e.target.id === 'btnPanLeft') panMap(-200, 0);
+    if(e.target && e.target.id === 'btnPanRight') panMap(200, 0);
+});
+
+// keyboard support for map element
+const mapContainer = document.getElementById('map');
+mapContainer && mapContainer.addEventListener('keydown', (ev)=>{
+    switch(ev.key){
+        case 'ArrowUp': ev.preventDefault(); panMap(0,-200); break;
+        case 'ArrowDown': ev.preventDefault(); panMap(0,200); break;
+        case 'ArrowLeft': ev.preventDefault(); panMap(-200,0); break;
+        case 'ArrowRight': ev.preventDefault(); panMap(200,0); break;
+        case '+': case '=': ev.preventDefault(); zoomIn(); break;
+        case '-': case '_': ev.preventDefault(); zoomOut(); break;
+    }
+});
 
 function highlightListItem(id) {
     document.querySelectorAll('.pkm-item').forEach(el => el.classList.remove('active'));

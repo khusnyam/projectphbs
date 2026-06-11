@@ -7,7 +7,7 @@ return [
     | Broadcasting
     |--------------------------------------------------------------------------
     |
-    | By uncommenting the Laravel Echo configuration, you may connect Filament
+    | By uncommenting the Laravel Echo configuration, you may connect 
     | to any Pusher-compatible websockets server.
     |
     | This will allow your users to receive real-time notifications.
@@ -36,7 +36,7 @@ return [
     | Default Filesystem Disk
     |--------------------------------------------------------------------------
     |
-    | This is the storage disk Filament will use to store files. You may use
+    | This is the storage disk  will use to store files. You may use
     | any of the disks defined in the `config/filesystems.php`.
     |
     */
@@ -48,7 +48,7 @@ return [
     | Temporary File URL Expiry
     |--------------------------------------------------------------------------
     |
-    | When Filament generates temporary URLs for previewing private files
+    | When  generates temporary URLs for previewing private files
     | (file uploads, image columns, image entries, rich editor attachments,
     | etc.), this value controls how many minutes those URLs remain valid.
     |
@@ -65,10 +65,10 @@ return [
     | Assets Path
     |--------------------------------------------------------------------------
     |
-    | This is the directory where Filament's assets will be published to. It
+    | This is the directory where 's assets will be published to. It
     | is relative to the `public` directory of your Laravel application.
     |
-    | After changing the path, you should run `php artisan filament:assets`.
+    | After changing the path, you should run `php artisan :assets`.
     |
     */
 
@@ -79,14 +79,14 @@ return [
     | Cache Path
     |--------------------------------------------------------------------------
     |
-    | This is the directory that Filament will use to store cache files that
+    | This is the directory that  will use to store cache files that
     | are used to optimize the registration of components.
     |
-    | After changing the path, you should run `php artisan filament:cache-components`.
+    | After changing the path, you should run `php artisan :cache-components`.
     |
     */
 
-    'cache_path' => base_path('bootstrap/cache/filament'),
+    'cache_path' => base_path('bootstrap/cache/'),
 
     /*
     |--------------------------------------------------------------------------
@@ -112,9 +112,9 @@ return [
     | configuration flags that will impact their location or content.
     |
     | Often, this is useful to preserve file generation behavior from a
-    | previous version of Filament, to ensure consistency between older and
+    | previous version of , to ensure consistency between older and
     | newer generated files. These flags are often documented in the upgrade
-    | guide for the version of Filament you are upgrading to.
+    | guide for the version of  you are upgrading to.
     |
     */
 
@@ -127,11 +127,11 @@ return [
     | System Route Prefix
     |--------------------------------------------------------------------------
     |
-    | This is the prefix used for the system routes that Filament registers,
+    | This is the prefix used for the system routes that  registers,
     | such as the routes for downloading exports and failed import rows.
     |
     */
 
-    'system_route_prefix' => 'filament',
+    'system_route_prefix' => '',
 
 ];

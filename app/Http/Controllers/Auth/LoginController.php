@@ -39,12 +39,13 @@ class LoginController extends Controller
             return back()->withErrors(['email' => 'Akun Anda tidak aktif. Hubungi Admin.'])->withInput($request->only('email'));
         }
 
+        // Authenticate role 1 or 2 as before, but redirect everyone to `/peta`
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role'=>1], $request->has('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/beranda');
-        }elseif (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role'=>2], $request->has('remember'))) {
-            $request->session()->regenerate();    
-            return redirect()->intended('/dashboard-puskesmas');
+            return redirect()->intended('/peta');
+        } elseif (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role'=>2], $request->has('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended('/peta');
         }
 
         return back()->withErrors(['password' => 'Password yang Anda masukkan salah.'])->withInput($request->only('email'));

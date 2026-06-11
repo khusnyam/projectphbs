@@ -926,24 +926,24 @@
             "time": "2025-03-06T22:45:56+00:00"
         },
         {
-            "name": "filament/actions",
+            "name": "/actions",
             "version": "v5.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/filamentphp/actions.git",
+                "url": "https://github.com/php/actions.git",
                 "reference": "582e6cfea51dd50d5c230a9b03e52c0a12e2a0d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/actions/zipball/582e6cfea51dd50d5c230a9b03e52c0a12e2a0d4",
+                "url": "https://api.github.com/repos/php/actions/zipball/582e6cfea51dd50d5c230a9b03e52c0a12e2a0d4",
                 "reference": "582e6cfea51dd50d5c230a9b03e52c0a12e2a0d4",
                 "shasum": ""
             },
             "require": {
-                "filament/forms": "self.version",
-                "filament/infolists": "self.version",
-                "filament/notifications": "self.version",
-                "filament/support": "self.version",
+                "/forms": "self.version",
+                "/infolists": "self.version",
+                "/notifications": "self.version",
+                "/support": "self.version",
                 "league/csv": "^9.27",
                 "openspout/openspout": "^4.23",
                 "php": "^8.2"
@@ -952,13 +952,13 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Filament\\Actions\\ActionsServiceProvider"
+                        "\\Actions\\ActionsServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Filament\\Actions\\": "src"
+                    "\\Actions\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -966,37 +966,37 @@
                 "MIT"
             ],
             "description": "Easily add beautiful action modals to any Livewire component.",
-            "homepage": "https://github.com/filamentphp/filament",
+            "homepage": "https://github.com/php/",
             "support": {
-                "issues": "https://github.com/filamentphp/filament/issues",
-                "source": "https://github.com/filamentphp/filament"
+                "issues": "https://github.com/php//issues",
+                "source": "https://github.com/php/"
             },
             "time": "2026-05-22T07:43:00+00:00"
         },
         {
-            "name": "filament/filament",
+            "name": "/",
             "version": "v5.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/filamentphp/panels.git",
+                "url": "https://github.com/php/panels.git",
                 "reference": "9de32349797fa08893b2a228a37426bf86a0fa97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/panels/zipball/9de32349797fa08893b2a228a37426bf86a0fa97",
+                "url": "https://api.github.com/repos/php/panels/zipball/9de32349797fa08893b2a228a37426bf86a0fa97",
                 "reference": "9de32349797fa08893b2a228a37426bf86a0fa97",
                 "shasum": ""
             },
             "require": {
                 "chillerlan/php-qrcode": "^5.0",
-                "filament/actions": "self.version",
-                "filament/forms": "self.version",
-                "filament/infolists": "self.version",
-                "filament/notifications": "self.version",
-                "filament/schemas": "self.version",
-                "filament/support": "self.version",
-                "filament/tables": "self.version",
-                "filament/widgets": "self.version",
+                "/actions": "self.version",
+                "/forms": "self.version",
+                "/infolists": "self.version",
+                "/notifications": "self.version",
+                "/schemas": "self.version",
+                "/support": "self.version",
+                "/tables": "self.version",
+                "/widgets": "self.version",
                 "php": "^8.2",
                 "pragmarx/google2fa": "^8.0|^9.0",
                 "pragmarx/google2fa-qrcode": "^3.0"
@@ -1005,7 +1005,7 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Filament\\FilamentServiceProvider"
+                        "\\ServiceProvider"
                     ]
                 }
             },
@@ -1015,7 +1015,7 @@
                     "src/helpers.php"
                 ],
                 "psr-4": {
-                    "Filament\\": "src"
+                    "\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1023,32 +1023,32 @@
                 "MIT"
             ],
             "description": "A collection of full-stack components for accelerated Laravel app development.",
-            "homepage": "https://github.com/filamentphp/filament",
+            "homepage": "https://github.com/php/",
             "support": {
-                "issues": "https://github.com/filamentphp/filament/issues",
-                "source": "https://github.com/filamentphp/filament"
+                "issues": "https://github.com/php//issues",
+                "source": "https://github.com/php/"
             },
             "time": "2026-05-22T07:43:11+00:00"
         },
         {
-            "name": "filament/forms",
+            "name": "/forms",
             "version": "v5.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/filamentphp/forms.git",
+                "url": "https://github.com/php/forms.git",
                 "reference": "61935672ea9ada6a3ae148135a3837e6ed96ddd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/forms/zipball/61935672ea9ada6a3ae148135a3837e6ed96ddd3",
+                "url": "https://api.github.com/repos/php/forms/zipball/61935672ea9ada6a3ae148135a3837e6ed96ddd3",
                 "reference": "61935672ea9ada6a3ae148135a3837e6ed96ddd3",
                 "shasum": ""
             },
             "require": {
                 "danharrin/date-format-converter": "^0.3",
-                "filament/actions": "self.version",
-                "filament/schemas": "self.version",
-                "filament/support": "self.version",
+                "/actions": "self.version",
+                "/schemas": "self.version",
+                "/support": "self.version",
                 "php": "^8.2",
                 "ueberdosis/tiptap-php": "^2.0"
             },
@@ -1056,7 +1056,7 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Filament\\Forms\\FormsServiceProvider"
+                        "\\Forms\\FormsServiceProvider"
                     ]
                 }
             },
@@ -1065,7 +1065,7 @@
                     "src/helpers.php"
                 ],
                 "psr-4": {
-                    "Filament\\Forms\\": "src"
+                    "\\Forms\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1073,44 +1073,44 @@
                 "MIT"
             ],
             "description": "Easily add beautiful forms to any Livewire component.",
-            "homepage": "https://github.com/filamentphp/filament",
+            "homepage": "https://github.com/php/",
             "support": {
-                "issues": "https://github.com/filamentphp/filament/issues",
-                "source": "https://github.com/filamentphp/filament"
+                "issues": "https://github.com/php//issues",
+                "source": "https://github.com/php/"
             },
             "time": "2026-05-22T07:40:43+00:00"
         },
         {
-            "name": "filament/infolists",
+            "name": "/infolists",
             "version": "v5.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/filamentphp/infolists.git",
+                "url": "https://github.com/php/infolists.git",
                 "reference": "37a2484d6c65b5908e6549302001161530a88c2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/infolists/zipball/37a2484d6c65b5908e6549302001161530a88c2c",
+                "url": "https://api.github.com/repos/php/infolists/zipball/37a2484d6c65b5908e6549302001161530a88c2c",
                 "reference": "37a2484d6c65b5908e6549302001161530a88c2c",
                 "shasum": ""
             },
             "require": {
-                "filament/actions": "self.version",
-                "filament/schemas": "self.version",
-                "filament/support": "self.version",
+                "/actions": "self.version",
+                "/schemas": "self.version",
+                "/support": "self.version",
                 "php": "^8.2"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Filament\\Infolists\\InfolistsServiceProvider"
+                        "\\Infolists\\InfolistsServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Filament\\Infolists\\": "src"
+                    "\\Infolists\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1118,37 +1118,37 @@
                 "MIT"
             ],
             "description": "Easily add beautiful read-only infolists to any Livewire component.",
-            "homepage": "https://github.com/filamentphp/filament",
+            "homepage": "https://github.com/php/",
             "support": {
-                "issues": "https://github.com/filamentphp/filament/issues",
-                "source": "https://github.com/filamentphp/filament"
+                "issues": "https://github.com/php//issues",
+                "source": "https://github.com/php/"
             },
             "time": "2026-05-22T07:42:24+00:00"
         },
         {
-            "name": "filament/notifications",
+            "name": "/notifications",
             "version": "v5.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/filamentphp/notifications.git",
+                "url": "https://github.com/php/notifications.git",
                 "reference": "d4d1bef688dd85086229fcad6f1a157d47f6c336"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/notifications/zipball/d4d1bef688dd85086229fcad6f1a157d47f6c336",
+                "url": "https://api.github.com/repos/php/notifications/zipball/d4d1bef688dd85086229fcad6f1a157d47f6c336",
                 "reference": "d4d1bef688dd85086229fcad6f1a157d47f6c336",
                 "shasum": ""
             },
             "require": {
-                "filament/actions": "self.version",
-                "filament/support": "self.version",
+                "/actions": "self.version",
+                "/support": "self.version",
                 "php": "^8.2"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Filament\\Notifications\\NotificationsServiceProvider"
+                        "\\Notifications\\NotificationsServiceProvider"
                     ]
                 }
             },
@@ -1157,7 +1157,7 @@
                     "src/Testing/helpers.php"
                 ],
                 "psr-4": {
-                    "Filament\\Notifications\\": "src"
+                    "\\Notifications\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1165,90 +1165,90 @@
                 "MIT"
             ],
             "description": "Easily add beautiful notifications to any Livewire app.",
-            "homepage": "https://github.com/filamentphp/filament",
+            "homepage": "https://github.com/php/",
             "support": {
-                "issues": "https://github.com/filamentphp/filament/issues",
-                "source": "https://github.com/filamentphp/filament"
+                "issues": "https://github.com/php//issues",
+                "source": "https://github.com/php/"
             },
             "time": "2026-05-20T17:23:54+00:00"
         },
         {
-            "name": "filament/query-builder",
+            "name": "/query-builder",
             "version": "v5.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/filamentphp/query-builder.git",
+                "url": "https://github.com/php/query-builder.git",
                 "reference": "7a0ddf46b9c1156c2458b92daa70ffba810bab64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/query-builder/zipball/7a0ddf46b9c1156c2458b92daa70ffba810bab64",
+                "url": "https://api.github.com/repos/php/query-builder/zipball/7a0ddf46b9c1156c2458b92daa70ffba810bab64",
                 "reference": "7a0ddf46b9c1156c2458b92daa70ffba810bab64",
                 "shasum": ""
             },
             "require": {
-                "filament/actions": "self.version",
-                "filament/forms": "self.version",
-                "filament/schemas": "self.version",
-                "filament/support": "self.version",
+                "/actions": "self.version",
+                "/forms": "self.version",
+                "/schemas": "self.version",
+                "/support": "self.version",
                 "php": "^8.2"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Filament\\QueryBuilder\\QueryBuilderServiceProvider"
+                        "\\QueryBuilder\\QueryBuilderServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Filament\\QueryBuilder\\": "src"
+                    "\\QueryBuilder\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "description": "A powerful query builder component for Filament.",
-            "homepage": "https://github.com/filamentphp/filament",
+            "description": "A powerful query builder component for .",
+            "homepage": "https://github.com/php/",
             "support": {
-                "issues": "https://github.com/filamentphp/filament/issues",
-                "source": "https://github.com/filamentphp/filament"
+                "issues": "https://github.com/php//issues",
+                "source": "https://github.com/php/"
             },
             "time": "2026-05-22T07:40:24+00:00"
         },
         {
-            "name": "filament/schemas",
+            "name": "/schemas",
             "version": "v5.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/filamentphp/schemas.git",
+                "url": "https://github.com/php/schemas.git",
                 "reference": "8fe27a6f9feabb2165380f3efc13774e343c21e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/schemas/zipball/8fe27a6f9feabb2165380f3efc13774e343c21e0",
+                "url": "https://api.github.com/repos/php/schemas/zipball/8fe27a6f9feabb2165380f3efc13774e343c21e0",
                 "reference": "8fe27a6f9feabb2165380f3efc13774e343c21e0",
                 "shasum": ""
             },
             "require": {
                 "danharrin/date-format-converter": "^0.3",
-                "filament/actions": "self.version",
-                "filament/support": "self.version",
+                "/actions": "self.version",
+                "/support": "self.version",
                 "php": "^8.2"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Filament\\Schemas\\SchemasServiceProvider"
+                        "\\Schemas\\SchemasServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Filament\\Schemas\\": "src"
+                    "\\Schemas\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1256,24 +1256,24 @@
                 "MIT"
             ],
             "description": "Easily add beautiful UI to any Livewire component.",
-            "homepage": "https://github.com/filamentphp/filament",
+            "homepage": "https://github.com/php/",
             "support": {
-                "issues": "https://github.com/filamentphp/filament/issues",
-                "source": "https://github.com/filamentphp/filament"
+                "issues": "https://github.com/php//issues",
+                "source": "https://github.com/php/"
             },
             "time": "2026-05-22T07:43:14+00:00"
         },
         {
-            "name": "filament/support",
+            "name": "/support",
             "version": "v5.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/filamentphp/support.git",
+                "url": "https://github.com/php/support.git",
                 "reference": "1c49de3f18c3946908e78a1b34c9c9c92718040d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/support/zipball/1c49de3f18c3946908e78a1b34c9c9c92718040d",
+                "url": "https://api.github.com/repos/php/support/zipball/1c49de3f18c3946908e78a1b34c9c9c92718040d",
                 "reference": "1c49de3f18c3946908e78a1b34c9c9c92718040d",
                 "shasum": ""
             },
@@ -1297,7 +1297,7 @@
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Filament\\Support\\SupportServiceProvider"
+                        "\\Support\\SupportServiceProvider"
                     ]
                 }
             },
@@ -1306,53 +1306,53 @@
                     "src/helpers.php"
                 ],
                 "psr-4": {
-                    "Filament\\Support\\": "src"
+                    "\\Support\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "description": "Core helper methods and foundation code for all Filament packages.",
-            "homepage": "https://github.com/filamentphp/filament",
+            "description": "Core helper methods and foundation code for all  packages.",
+            "homepage": "https://github.com/php/",
             "support": {
-                "issues": "https://github.com/filamentphp/filament/issues",
-                "source": "https://github.com/filamentphp/filament"
+                "issues": "https://github.com/php//issues",
+                "source": "https://github.com/php/"
             },
             "time": "2026-05-22T07:41:50+00:00"
         },
         {
-            "name": "filament/tables",
+            "name": "/tables",
             "version": "v5.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/filamentphp/tables.git",
+                "url": "https://github.com/php/tables.git",
                 "reference": "6a2ffb0d6e2d70d28ffaf1d8bd0a869c5087abe2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/tables/zipball/6a2ffb0d6e2d70d28ffaf1d8bd0a869c5087abe2",
+                "url": "https://api.github.com/repos/php/tables/zipball/6a2ffb0d6e2d70d28ffaf1d8bd0a869c5087abe2",
                 "reference": "6a2ffb0d6e2d70d28ffaf1d8bd0a869c5087abe2",
                 "shasum": ""
             },
             "require": {
-                "filament/actions": "self.version",
-                "filament/forms": "self.version",
-                "filament/query-builder": "self.version",
-                "filament/support": "self.version",
+                "/actions": "self.version",
+                "/forms": "self.version",
+                "/query-builder": "self.version",
+                "/support": "self.version",
                 "php": "^8.2"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Filament\\Tables\\TablesServiceProvider"
+                        "\\Tables\\TablesServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Filament\\Tables\\": "src"
+                    "\\Tables\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1360,43 +1360,43 @@
                 "MIT"
             ],
             "description": "Easily add beautiful tables to any Livewire component.",
-            "homepage": "https://github.com/filamentphp/filament",
+            "homepage": "https://github.com/php/",
             "support": {
-                "issues": "https://github.com/filamentphp/filament/issues",
-                "source": "https://github.com/filamentphp/filament"
+                "issues": "https://github.com/php//issues",
+                "source": "https://github.com/php/"
             },
             "time": "2026-05-22T07:42:04+00:00"
         },
         {
-            "name": "filament/widgets",
+            "name": "/widgets",
             "version": "v5.6.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/filamentphp/widgets.git",
+                "url": "https://github.com/php/widgets.git",
                 "reference": "6fffb6150256b1148ecc2b782991a789687cec44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filamentphp/widgets/zipball/6fffb6150256b1148ecc2b782991a789687cec44",
+                "url": "https://api.github.com/repos/php/widgets/zipball/6fffb6150256b1148ecc2b782991a789687cec44",
                 "reference": "6fffb6150256b1148ecc2b782991a789687cec44",
                 "shasum": ""
             },
             "require": {
-                "filament/schemas": "self.version",
-                "filament/support": "self.version",
+                "/schemas": "self.version",
+                "/support": "self.version",
                 "php": "^8.2"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
-                        "Filament\\Widgets\\WidgetsServiceProvider"
+                        "\\Widgets\\WidgetsServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Filament\\Widgets\\": "src"
+                    "\\Widgets\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1404,10 +1404,10 @@
                 "MIT"
             ],
             "description": "Easily add beautiful dashboard widgets to any Livewire component.",
-            "homepage": "https://github.com/filamentphp/filament",
+            "homepage": "https://github.com/php/",
             "support": {
-                "issues": "https://github.com/filamentphp/filament/issues",
-                "source": "https://github.com/filamentphp/filament"
+                "issues": "https://github.com/php//issues",
+                "source": "https://github.com/php/"
             },
             "time": "2026-05-20T17:27:47+00:00"
         },

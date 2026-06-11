@@ -48,6 +48,13 @@ class DashboardController extends Controller
             11 => 'November',
             12 => 'Desember',
         ];
+        $stats = [
+            'total_puskesmas' => DB::table('puskesmas')->count(),
+            'total_laporan'   => DB::table('data_phbs')->whereYear('created_at', date('Y'))->count(),
+            'total_kk'        => DB::table('data_phbs')->sum('jumlah_kk_total') ?? 0,
+            'rata_phbs'       => round(DB::table('data_phbs')->avg('total_indikator_phbs') ?? 0, 1),
+
+        ];
 
         $tahun    = $req->get('tahun', date('Y'));
         $bulan    = $req->get('bulan', 0);
@@ -72,10 +79,9 @@ class DashboardController extends Controller
         }
 
         if ($kategori === 'cukup') {
-            $query->whereBetween('d.persen_phbs', [60, 79.99]);
-        }
+            $query->whereBetween('d.persen_phbs', [60, 79.99]);}
 
-        if ($kategori === 'kurang') {
+         if ($kategori === 'kurang') {
             $query->where('d.persen_phbs', '<', 60);
         }
 

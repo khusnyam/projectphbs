@@ -152,15 +152,15 @@ body{font-family:var(--fm);background:#f0f7f3;min-height:100vh;display:flex}
           <div class="fr3">
             <div class="fg">
               <label>KK Laki-laki <span>*</span></label>
-              <input type="number" name="jumlah_kk_l" id="kk_l" min="0" value="{{ $v('jumlah_kk_l',0) }}" required oninput="hitungTotal()">
+              <input type="number" name="jumlah_kk_total_l" id="kk_l" min="0" value="{{ $v('jumlah_kk_total_l',0) }}" required oninput="hitungTotal()">
             </div>
             <div class="fg">
               <label>KK Perempuan <span>*</span></label>
-              <input type="number" name="jumlah_kk_p" id="kk_p" min="0" value="{{ $v('jumlah_kk_p',0) }}" required oninput="hitungTotal()">
+              <input type="number" name="jumlah_kk_total_p" id="kk_p" min="0" value="{{ $v('jumlah_kk_total_p',0) }}" required oninput="hitungTotal()">
             </div>
             <div class="fg">
               <label>Total KK</label>
-              <input type="number" name="jumlah_kk_total" id="kk_total" min="0" value="{{ $v('jumlah_kk_total',0) }}" required readonly style="background:var(--g0);font-weight:700;color:#166534">
+              <input type="number" name="jumlah_kk_total_total" id="kk_total" min="0" value="{{ $v('jumlah_kk_total_total',0) }}" required readonly style="background:var(--g0);font-weight:700;color:#166534">
               <div class="hint">Otomatis = KK L + KK P</div>
             </div>
           </div>

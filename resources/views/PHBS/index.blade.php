@@ -487,9 +487,9 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
               <td class="td-pkm">{{ $row->nama_puskesmas }}</td>
               <td style="font-size:.73rem;color:var(--s5)">{{ $namaBulan[$row->bulan]??'Januari' }}</td>
               <td style="font-size:.73rem;color:var(--s5)">{{ $row->tahun }}</td>
-              <td class="td-num">{{ number_format($row->jumlah_kk_l) }}</td>
-              <td class="td-num">{{ number_format($row->jumlah_kk_p) }}</td>
-              <td class="td-num"><strong>{{ number_format($row->jumlah_kk_total) }}</strong></td>
+              <td class="td-num">{{ number_format($row->jumlah_kk_total_l) }}</td>
+              <td class="td-num">{{ number_format($row->jumlah_kk_total_p) }}</td>
+              <td class="td-num"><strong>{{ number_format($row->jumlah_kk_total_total) }}</strong></td>
               <td class="td-num">{{ number_format($row->ber_phbs) }}</td>
               <td class="td-num"><strong style="color:{{ $pc }}">{{ number_format($pct,1) }}%</strong></td>
               <td><span class="badge {{ $bk }}">{{ $kt }}</span></td>

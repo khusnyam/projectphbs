@@ -22,7 +22,7 @@ $inds=[1=>'Persalinan Nakes',2=>'ASI Eksklusif',3=>'Timbang Balita',
        10=>'Bebas Jentik',11=>'Sayur & Buah',12=>'Aktivitas Fisik',13=>'Tdk Merokok'];
 $cols = 7 + count($inds)*2 + 2;
 $tL=$tP=$tT=$tBer=0;
-foreach($laporan as $r){$tL+=$r->jumlah_kk_l;$tP+=$r->jumlah_kk_p;$tT+=$r->jumlah_kk_total;$tBer+=$r->ber_phbs;}
+foreach($laporan as $r){$tL+=$r->jumlah_kk_total_l;$tP+=$r->jumlah_kk_total_p;$tT+=$r->jumlah_kk_total_total;$tBer+=$r->ber_phbs;}
 $avg = $tT>0 ? round(($tBer/$tT)*100,2) : 0;
 @endphp
 <table>
@@ -53,10 +53,17 @@ $avg = $tT>0 ? round(($tBer/$tT)*100,2) : 0;
     <td class="tb">{{ $row->nama_puskesmas }}</td>
     <td class="tc">{{ $namaBulan[$row->bulan]??'-' }}</td>
     <td class="tc">{{ $row->tahun }}</td>
+<<<<<<< Updated upstream
     <td class="tr">{{ number_format($row->jumlah_kk_l) }}</td>
     <td class="tr">{{ number_format($row->jumlah_kk_p) }}</td>
     <td class="tr tb">{{ number_format($row->jumlah_kk_total) }}</td>
     {{-- @for($n=1;$n<=13;$n++)
+=======
+    <td class="tr">{{ number_format($row->jumlah_kk_total_l) }}</td>
+    <td class="tr">{{ number_format($row->jumlah_kk_total_p) }}</td>
+    <td class="tr tb">{{ number_format($row->jumlah_kk_total_total) }}</td>
+    @for($n=1;$n<=13;$n++)
+>>>>>>> Stashed changes
       <td class="tr">{{ number_format($row->{'ind'.$n.'_sasaran'}) }}</td>
       <td class="tr">{{ number_format($row->{'ind'.$n.'_jumlah'}) }}</td>
     @endfor --}}
