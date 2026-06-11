@@ -127,8 +127,8 @@ a { text-decoration: none; color: inherit; }
 .topbar { display: none !important; }
 
 /* Anti-flicker saat hash routing */
-html:not(.app-ready) body { visibility: hidden !important; opacity: 0 !important; }
-html.app-ready body      { visibility: visible !important; opacity: 1 !important; }
+/* html:not(.app-ready) body { visibility: hidden !important; opacity: 0 !important; }
+html.app-ready body      { visibility: visible !important; opacity: 1 !important; } */
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1293,3 +1293,55 @@ body.export-view {
   .filter-card { padding: 18px; margin: 16px 0 20px; }
   .filter-card form { grid-template-columns: 1fr; }
 }
+
+/* ==========================================================================
+   § H. HOMEPAGE (BERANDA) SPECIFIC STYLES 
+   ========================================================================== */
+
+/* Layout Grid Khusus Dashboard Overview */
+.grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 24px; margin-bottom: 32px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; margin-bottom: 32px; }
+
+/* Komponen Kartu Statistik (Stat Cards) */
+.card-stat { background: var(--surface); border: 1px solid var(--border); padding: 24px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 16px; }
+.icon-circle { width: 48px; height: 48px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.ic-green { background: var(--green-bg); color: var(--green); }
+.ic-teal { background: var(--teal-bg); color: var(--teal); }
+.ic-sky { background: var(--sky-bg); color: var(--sky); }
+.ic-amber { background: var(--amber-bg); color: var(--amber); }
+.stat-info { flex: 1; }
+.stat-label { font-size: 13px; color: var(--text-b); font-weight: 500; margin-bottom: 4px; }
+.stat-value { font-size: 24px; font-weight: 700; color: var(--text); line-height: 1; }
+
+/* Komponen Block/Panel Visual Grafik & Tabel */
+.card-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; }
+.block-head { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.block-title { font-size: 16px; font-weight: 600; color: var(--text); }
+.block-body { padding: 24px; flex: 1; }
+
+/* Tabel Khusus Beranda & Perataan Kolom */
+.table-beranda { width: 100%; border-collapse: collapse; text-align: left; font-size: 13.5px; }
+.table-beranda th { padding: 12px 16px; background: var(--bg); color: var(--text-b); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border); }
+.table-beranda td { padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+.table-beranda tr:last-child td { border-bottom: none; }
+.td-rank-width { width: 44px; text-align: right; } /* Sesuaikan nama class ini dengan selector asli kolom ranking Anda */
+
+/* Sistem Elemen Peringkat (Ranking Numbers) */
+.rank { width: 24px; height: 24px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+.rk-1 { background: #fef3c7; color: #b45309; }
+.rk-2 { background: #dcfce7; color: #15803d; }
+.rk-n { background: var(--bg); color: var(--text-muted); }
+
+/* Modifikasi Badge Kategori Tingkat PHBS */
+.b-tinggi { background: #dcfce7; color: #15803d; }
+.b-sedang { background: #fef9c3; color: #a16207; }
+.b-rendah { background: #ffedd5; color: #c2410c; }
+.b-sangatrendah { background: #fee2e2; color: #b91c1c; }
+
+/* Komponen State Kosong (Empty State Grafik/Tabel) */
+.empty { text-align: center; padding: 48px 20px; color: var(--text-muted); }
+.empty svg { opacity: .25; margin-bottom: 10px; }
+.empty p { font-size: 13px; }
+
+/* Footer Khusus Halaman Beranda */
+.footer { text-align: center; padding: 24px; font-size: 11.5px; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: auto; }

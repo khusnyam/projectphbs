@@ -1,284 +1,6 @@
-{{-- resources/views/dashboard/index.blade.php --}}
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard PHBS – SIP-PHBS Kab. Sleman</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-
-    
-        {{-- CSS diambil dari file terpadu sip-phbs-unified.css
-        Salin file ke: public/css/sip-phbs-unified.css
-        lalu aktifkan baris di bawah ini, dan hapus blok <style> inline. --}}
-        {{-- <link rel="stylesheet" href="{{ asset('style/style.css') }}"> --}}
-   
-
-    <style>
-    /* Ambil dari § 1–16 file sip-phbs-unified.css */
-    :root{
-        --green:#22c55e;--green-bg:#f0fdf4;--green-ring:#bbf7d0;
-        --teal:#14b8a6;--teal-bg:#f0fdfa;
-        --sky:#0ea5e9;--sky-bg:#f0f9ff;
-        --amber:#f59e0b;--amber-bg:#fffbeb;--amber-ring:#fde68a;
-        --red:#ef4444;--red-bg:#fef2f2;--red-ring:#fecaca;
-        --orange:#f97316;
-        --primary:#2563eb;--primary-dk:#1d4ed8;--primary-lt:#eff6ff;
-        --sb-bg:#0f1629;
-        --sb-hover:rgba(255,255,255,.06);--sb-active:rgba(255,255,255,.09);
-        --sb-border:rgba(255,255,255,.07);--sb-text:rgba(255,255,255,.65);
-        --sb-head:rgba(255,255,255,.30);
-        --surface:#ffffff;--bg:#f1f5f9;--border:#e2e8f0;
-        --text:#0f172a;--text-b:#475569;--text-muted:#94a3b8;
-        --radius:12px;--radius-sm:8px;
-        --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
-        --shadow-lg:0 10px 25px rgba(0,0,0,.12);
-        --sidebar-w:220px;
-        --mono:'JetBrains Mono',monospace;
-    }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{scroll-behavior:smooth;}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text-b);min-height:100vh;}
-    a{text-decoration:none;color:inherit;}
-    /* SIDEBAR */
-    .sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--sb-bg);display:flex;flex-direction:column;border-right:1px solid var(--sb-border);z-index:200;overflow-y:auto;}
-    .sb-brand{padding:20px 16px 18px;border-bottom:1px solid var(--sb-border);display:flex;align-items:center;gap:11px;}
-    .sb-logo{width:38px;height:38px;border-radius:10px;flex-shrink:0;background:linear-gradient(135deg,#2563eb,#0ea5e9);display:flex;align-items:center;justify-content:center;}
-    .sb-logo svg{color:#fff;}
-    .sb-name strong{display:block;font-size:14px;font-weight:800;color:#fff;letter-spacing:-.2px;}
-    .sb-name span{display:block;font-size:10px;color:var(--sb-text);margin-top:2px;line-height:1.3;}
-    .sb-section{padding:18px 10px 6px;}
-    .sb-label{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--sb-head);padding:0 8px;margin-bottom:4px;display:block;}
-    .sb-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--radius-sm);color:var(--sb-text);font-size:13px;font-weight:500;transition:background .15s,color .15s;cursor:pointer;position:relative;width:100%;border:0;background:transparent;font-family:'Inter',sans-serif;text-align:left;}
-    .sb-item:hover{background:var(--sb-hover);color:#fff;}
-    .sb-item.active{background:var(--sb-active);color:#fff;font-weight:600;}
-    .sb-item.active::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--amber);}
-    .sb-item svg{flex-shrink:0;opacity:.75;}
-    .sb-item.active svg{opacity:1;}
-    .sb-footer{margin-top:auto;padding:14px 16px;border-top:1px solid var(--sb-border);}
-    .sb-user{display:flex;align-items:center;gap:10px;}
-    .sb-avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--primary),var(--teal));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;}
-    .sb-user-info strong{display:block;font-size:13px;font-weight:600;color:#fff;line-height:1.2;}
-    .sb-user-info span{display:block;font-size:11px;color:var(--sb-text);margin-top:1px;}
-    /* MAIN */
-    .main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;}
-    .page-wrap{padding:0 28px 40px;}
-    /* HERO */
-    .hero{background:linear-gradient(135deg,#1a3a7a 0%,#1e4db7 55%,#1260ae 100%);padding:30px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
-    .hero-left{flex:1;min-width:0;}
-    .hero-title{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;color:#fff;margin-bottom:8px;}
-    .hero-title svg{opacity:.9;flex-shrink:0;}
-    .hero-desc{font-size:13px;color:rgba(255,255,255,.75);margin-bottom:16px;line-height:1.5;}
-    .hero-badges{display:flex;flex-wrap:wrap;gap:8px;}
-    .hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.14);color:rgba(255,255,255,.9);font-size:12px;font-weight:500;padding:5px 11px;border-radius:20px;border:1px solid rgba(255,255,255,.18);}
-    .hero-right{flex-shrink:0;}
-    .rata-card{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);padding:18px 22px;min-width:220px;backdrop-filter:blur(6px);}
-    .rata-label{font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:8px;}
-    .rata-value{font-family:var(--mono);font-size:38px;font-weight:800;color:#fff;letter-spacing:-2px;line-height:1;margin-bottom:10px;}
-    .rata-bar{height:4px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden;margin-bottom:8px;}
-    .rata-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#22c55e,#86efac);transition:width .6s;}
-    .rata-sub{font-size:12px;color:rgba(255,255,255,.55);}
-    /* FILTER */
-    .filter-section{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 28px;}
-    .filter-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
-    .filter-desc{font-size:12px;color:var(--text-muted);margin-bottom:16px;}
-    .filter-row{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;}
-    .fg{display:flex;flex-direction:column;gap:5px;}
-    .fg label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
-    .fg select,.fg input{border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);outline:none;transition:border-color .15s,box-shadow .15s;}
-    .fg select:focus,.fg input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
-    .fg-sm select{min-width:110px;}
-    .fg-md select{min-width:150px;}
-    .fg-lg select{min-width:240px;}
-    .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--radius-sm);border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;transition:background .15s,transform .1s;}
-    .btn:active{transform:scale(.97);}
-    .btn-primary{background:var(--primary);color:#fff;}.btn-primary:hover{background:var(--primary-dk);}
-    .btn-outline{background:transparent;color:var(--text-b);border:1px solid var(--border);}.btn-outline:hover{background:var(--bg);}
-    /* INFO CARDS */
-    .info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:20px 0 0;}
-    .info-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);display:flex;align-items:flex-start;gap:14px;transition:transform .2s,box-shadow .2s;}
-    .info-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
-    .info-icon{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-    .info-icon.green{background:var(--green-bg);color:var(--green);}
-    .info-icon.red{background:var(--red-bg);color:var(--red);}
-    .info-icon.amber{background:var(--amber-bg);color:var(--amber);}
-    .info-icon.blue{background:var(--primary-lt);color:var(--primary);}
-    .info-body{min-width:0;}
-    .info-label{font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
-    .info-value{font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;}
-    .info-sub{font-size:11.5px;color:var(--text-muted);line-height:1.4;}
-    /* STAT CARDS */
-    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:16px 0 0;}
-    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
-    .stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
-    .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:14px 14px 0 0;}
-    .stat-card.green::before{background:var(--green);}
-    .stat-card.teal::before{background:var(--teal);}
-    .stat-card.amber::before{background:var(--amber);}
-    .stat-card.red::before{background:var(--red);}
-    .stat-icon{font-size:26px;position:absolute;right:18px;top:18px;opacity:.12;}
-    .stat-label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
-    .stat-value{font-size:28px;font-weight:800;font-family:var(--mono);letter-spacing:-1px;color:var(--text);}
-    .stat-sub{font-size:12px;color:var(--text-muted);}
-    /* CHARTS */
-    .charts-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;padding:20px 0 0;}
-    .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
-    .card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-    .card-head-left{display:flex;align-items:center;gap:8px;}
-    .card-title{font-size:13.5px;font-weight:700;color:var(--text);}
-    .card-badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:var(--primary-lt);color:var(--primary);}
-    .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;}
-    .legend-dot{width:9px;height:9px;border-radius:50%;}
-    .legend-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-b);}
-    /* SECTION */
-    .section{padding:20px 0 0;}
-    .section-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
-    .section-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-    .section-head-left{display:flex;align-items:center;gap:8px;}
-    .section-title{font-size:14px;font-weight:700;color:var(--text);}
-    .section-sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
-    /* TABLE */
-    .table-wrap{overflow-x:auto;}
-    .mtx-table{width:100%;border-collapse:collapse;font-size:12px;min-width:1100px;}
-    .mtx-table thead tr{background:#0f1629;}
-    .mtx-table thead th{padding:11px 10px;color:rgba(255,255,255,.8);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;border:none;text-align:left;}
-    .mtx-table thead th.c{text-align:center;}
-    .mtx-table tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
-    .mtx-table tbody tr:last-child{border-bottom:none;}
-    .mtx-table tbody tr:hover{background:#f8fafc;}
-    .mtx-table td{padding:9px 10px;vertical-align:middle;white-space:nowrap;}
-    .mtx-table td.c{text-align:center;}
-    .mtx-name{font-weight:600;color:var(--text);max-width:160px;white-space:normal;line-height:1.3;}
-    .mtx-num{font-family:var(--mono);font-size:12px;font-weight:600;text-align:center;}
-    .ic{display:inline-flex;align-items:center;justify-content:center;min-width:40px;border-radius:5px;padding:3px 4px;font-weight:600;font-size:11px;font-family:var(--mono);}
-    .ic-h{background:#dcfce7;color:#15803d;}
-    .ic-m{background:#fef9c3;color:#a16207;}
-    .ic-l{background:#ffedd5;color:#c2410c;}
-    .ic-v{background:#fee2e2;color:#b91c1c;}
-    .ic-n{background:#f1f5f9;color:#94a3b8;}
-    .rkp-table{width:100%;border-collapse:collapse;font-size:13px;}
-    .rkp-table thead tr{background:var(--bg);}
-    .rkp-table thead th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);border-bottom:1px solid var(--border);white-space:nowrap;}
-    .rkp-table thead th.r{text-align:right;}
-    .rkp-table tbody tr{border-bottom:1px solid var(--border);transition:background .1s;}
-    .rkp-table tbody tr:last-child{border-bottom:none;}
-    .rkp-table tbody tr:hover{background:#f8fafc;}
-    .rkp-table td{padding:11px 14px;vertical-align:middle;}
-    .rkp-table td.r{text-align:right;font-family:var(--mono);font-size:12px;}
-    .prog-wrap{display:flex;align-items:center;gap:8px;}
-    .prog-bar{height:5px;border-radius:99px;background:var(--border);overflow:hidden;flex:1;min-width:60px;}
-    .prog-fill{height:100%;border-radius:99px;}
-    .pg-green{background:var(--green);}
-    .pg-amber{background:var(--amber);}
-    .pg-orange{background:var(--orange);}
-    .pg-red{background:var(--red);}
-    .prog-pct{font-family:var(--mono);font-size:11.5px;font-weight:700;min-width:44px;text-align:right;}
-    .rank{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
-    .rk-1{background:#fef3c7;color:#b45309;}
-    .rk-2{background:#dcfce7;color:#15803d;}
-    .rk-n{background:var(--bg);color:var(--text-muted);}
-    .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;}
-    .b-tinggi{background:#dcfce7;color:#15803d;}
-    .b-sedang{background:#fef9c3;color:#a16207;}
-    .b-rendah{background:#ffedd5;color:#c2410c;}
-    .b-sangatrendah{background:#fee2e2;color:#b91c1c;}
-    .empty{text-align:center;padding:48px 20px;color:var(--text-muted);}
-    .empty svg{opacity:.25;margin-bottom:10px;}
-    .empty p{font-size:13px;}
-    .footer{text-align:center;font-size:11.5px;color:var(--text-muted);padding:28px 0 0;border-top:1px solid var(--border);margin-top:28px;}
-    /* Legend matrix */
-    .mtx-legend{display:flex;gap:8px;flex-wrap:wrap;padding:12px 20px;border-top:1px solid var(--border);}
-    .mtx-legend span{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;}
-    /* Tren chart */
-    .tren-wrap{padding:16px 0 0;}
-    @media(max-width:900px){
-        .sidebar{display:none;}
-        .main{margin-left:0;}
-        .charts-grid,.info-grid,.stat-grid{grid-template-columns:1fr;}
-        .hero{flex-direction:column;}
-        .hero-right{width:100%;}
-        .rata-card{width:100%;}
-    }
-    </style>
-</head>
-<body>
-
-@php
-    $authUser = auth()->user();
-    $userName = $authUser->name ?? 'Admin Dinkes';
-    $userRole = 'Dinas Kesehatan';
-@endphp
-
-{{-- ══════════════════════ SIDEBAR ══════════════════════ --}}
-<aside class="sidebar">
-    <div class="sb-brand">
-        <div class="sb-logo">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/>
-            </svg>
-        </div>
-        <div class="sb-name">
-            <strong>SIP-PHBS</strong>
-            <span>Sistem Informasi PHBS Sleman</span>
-        </div>
-    </div>
-
-    <div class="sb-section">
-        <span class="sb-label">Menu Utama</span>
-
-        <a href="{{ route('dashboard') }}" class="sb-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-            </svg>
-            Beranda
-        </a>
-
-        @if(\Illuminate\Support\Facades\Route::has('phbs.index'))
-        <a href="{{ route('phbs.index') }}" class="sb-item {{ request()->routeIs('phbs.*') ? 'active' : '' }}">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path d="M3 10h18M3 14h18M10 3v18M14 3v18"/>
-            </svg>
-            Laporan Rekapitulasi
-        </a>
-        @endif
-
-        @if(\Illuminate\Support\Facades\Route::has('peta.index'))
-        <a href="{{ route('peta.index') }}" class="sb-item {{ request()->routeIs('peta.*') ? 'active' : '' }}">
-            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
-            </svg>
-            Peta Sebaran
-        </a>
-        @endif
-    </div>
-
-    <div class="sb-section">
-        <span class="sb-label">Akun</span>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="sb-item">
-                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-                </svg>
-                Logout
-            </button>
-        </form>
-    </div>
-
-    <div class="sb-footer">
-        <div class="sb-user">
-            <div class="sb-avatar">{{ strtoupper(substr($userName, 0, 1)) }}</div>
-            <div class="sb-user-info">
-                <strong>{{ $userName }}</strong>
-                <span>{{ $userRole }}</span>
-            </div>
-        </div>
-    </div>
-</aside>
-
+@extends('layouts.sidebar')
+@section('title','Beranda - SIP-PHBS')
+@section('content')
 {{-- ══════════════════════ MAIN ══════════════════════ --}}
 <main class="main">
 
@@ -347,7 +69,7 @@
         </div>
         <p class="filter-desc">Pilih tahun, bulan, atau puskesmas untuk menyesuaikan data yang ditampilkan.</p>
 
-        <form method="GET" action="{{ route('dashboard') }}">
+        <form method="GET" action="{{ route('beranda') }}">
             <div class="filter-row">
                 <div class="fg fg-sm">
                     <label>Tahun</label>
@@ -388,7 +110,7 @@
                     </svg>
                     Terapkan
                 </button>
-                <a href="{{ route('dashboard') }}" class="btn btn-outline">Reset</a>
+                <a href="{{ route('beranda') }}" class="btn btn-outline">Reset</a>
             </div>
         </form>
     </div>
@@ -441,7 +163,7 @@
             </div>
 
             {{-- Status Laporan --}}
-            <div class="info-card">
+            {{-- <div class="info-card">
                 <div class="info-icon amber">
                     <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
@@ -451,8 +173,8 @@
                     <div class="info-label">Status Laporan</div>
                     {{-- <div class="info-value">{{ $statusTerkirim }} terkirim</div> --}}
                     {{-- <div class="info-sub">{{ $statusDraft }} draft · periode {{ $tahun }}</div> --}}
-                </div>
-            </div>
+                {{-- </div> --}}
+            {{-- </div> --}}
 
             {{-- Rata-rata PHBS --}}
             <div class="info-card">
@@ -870,6 +592,7 @@ new Chart(document.getElementById('chartPie'), {
     }
 });
 
+
 // ── Line: tren bulanan ────────────────────────────────────────────────
 @if(count($trenLabels) > 0)
 new Chart(document.getElementById('chartTren'), {
@@ -914,5 +637,6 @@ new Chart(document.getElementById('chartTren'), {
 });
 @endif
 </script>
+@endsection
 </body>
 </html>
