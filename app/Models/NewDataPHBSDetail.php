@@ -15,6 +15,7 @@ class NewDataPHBSDetail extends Model
 
     protected $fillable = [
         'id_phbs',
+        'id_puskesmas',
         'id_indikator',
         'jumlah_sasaran',
         'jumlah_capaian',
@@ -48,24 +49,25 @@ class NewDataPHBSDetail extends Model
     }
 
     //accessor
-    protected $appends = ['persentase'];
+    protected $appends = ['persentase', 'jumlah_sasaran'];
 
-    public function getPersentaseAttribute()
-    {
-        $sasaran = $this->jumlah_sasaran;
+    // public function getPersentaseAttribute()
+    // {
+    //     $sasaran = $this->jumlah_sasaran;
 
-        // JIKA jumlah_sasaran bernilai NULL di database (Kasus Indikator 4-13),
-        // MAKA otomatis ambil nilai dari total KK yang ada di tabel header via relasi
-        if (is_null($sasaran) && $this->header) {
-            $sasaran = $this->header->jumlah_kk_total;
-        }
+    //     // JIKA jumlah_sasaran bernilai NULL di database (Kasus Indikator 4-13),
+    //     // MAKA otomatis ambil nilai dari total KK yang ada di tabel header via relasi
+    //     if (is_null($sasaran) && $this->header) {
+    //         $sasaran = $this->header->jumlah_kk_total;
+    //     }
 
-        // Jalankan rumus persentase dengan aman (hindari pembagian dengan angka 0)
-        return $sasaran > 0
-            ? round(($this->jumlah_capaian / $sasaran) * 100, 2)
-            : 0;
-    }
+    //     // Jalankan rumus persentase dengan aman (hindari pembagian dengan angka 0)
+    //     return $sasaran > 0
+    //         ? round(($this->jumlah_capaian / $sasaran) * 100, 2)
+    //         : 0;
+    // }
 
+    
     // public function getPersentaseAttribute() //persentase tiap indikator
     // {
     //     return $this->jumlah_sasaran > 0
@@ -78,7 +80,7 @@ class NewDataPHBSDetail extends Model
         if (in_array($this->id_indikator, [1,2,3])) {
         return $value;
         }
-
-        return $this->jumlah_kk_lk + $this->jumlah_kk_pr;
+        
+        return $this->header?->jumlah_kk_total ?? 0;
     }
 }

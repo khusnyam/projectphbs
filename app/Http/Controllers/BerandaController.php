@@ -47,9 +47,9 @@ class BerandaController extends Controller
                 'p.nama_puskesmas',
                 'k.nama_kecamatan as kecamatan',
                 // DB::raw("COALESCE(p.kepala_puskesmas, '-') AS kepala_puskesmas"),
-                DB::raw('COUNT(dp.id_phbs)                                              AS jumlah_laporan'),
-                DB::raw('SUM(dp.jumlah_kk_lk + dp.jumlah_kk_pr)                        AS total_kk'),
-                DB::raw('SUM(dp.ber_phbs)                                               AS total_ber_phbs'),
+                DB::raw('COUNT(dp.id_phbs) AS jumlah_laporan'),
+                DB::raw('SUM(dp.jumlah_kk_lk + dp.jumlah_kk_pr) AS total_kk'),
+                DB::raw('SUM(dp.ber_phbs) AS total_ber_phbs'),
                 DB::raw('ROUND(SUM(dp.ber_phbs)/NULLIF(SUM(dp.jumlah_kk_lk+dp.jumlah_kk_pr),0)*100,2) AS persentase_phbs'),
             )
             ->groupBy('p.id_puskesmas', 'p.nama_puskesmas', 'k.nama_kecamatan')
@@ -71,7 +71,7 @@ class BerandaController extends Controller
         $allIndikators = DB::table('indikator_phbs')->orderBy('id_indikator')->get();
  
         $detailAgg = DB::table('data_phbs_detail as dpd')
-            ->join('data_phbs as dp',   'dpd.id_phbs',     '=', 'dp.id_phbs')
+            ->join('data_phbs as dp',   'dpd.id_phbs', '=', 'dp.id_phbs')
             ->join('puskesmas as p',    'dp.id_puskesmas', '=', 'p.id_puskesmas')
             ->where('dp.tahun', $tahun)
             // ->where('dp.status_laporan', 'terkirim')
@@ -80,14 +80,14 @@ class BerandaController extends Controller
             ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
             ->select(
                 'dpd.id_indikator',
-                DB::raw('SUM(dpd.jumlah_sasaran)  AS total_sasaran'),
+                DB::raw('SUM(CASE WHEN dpd.id_indikator IN (1,2,3) THEN dpd.jumlah_sasaran ELSE (dp.jumlah_kk_lk + dp.jumlah_kk_pr) END) AS total_sasaran'),
                 DB::raw('SUM(dpd.jumlah_capaian)  AS total_jumlah'),
-                DB::raw('ROUND(SUM(dpd.jumlah_capaian)/NULLIF(SUM(dpd.jumlah_sasaran),0)*100,2) AS persentase'),
+                DB::raw('ROUND(SUM(dpd.jumlah_capaian) / NULLIF(SUM(CASE WHEN dpd.id_indikator IN (1,2,3) THEN dpd.jumlah_sasaran ELSE (dp.jumlah_kk_lk + dp.jumlah_kk_pr) END), 0) * 100, 2) AS persentase'),
             )
             ->groupBy('dpd.id_indikator')
             ->get()
             ->keyBy('id_indikator');
- 
+
         $rekapIndikator = $allIndikators->mapWithKeys(function ($ind) use ($detailAgg) {
             $agg = $detailAgg->get($ind->id_indikator);
             return [
@@ -129,7 +129,7 @@ class BerandaController extends Controller
             ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
             ->select(
                 'p.id_puskesmas', 'dpd.id_indikator',
-                DB::raw('ROUND(SUM(dpd.jumlah_capaian)/NULLIF(SUM(dpd.jumlah_sasaran),0)*100,1) AS pct'),
+                DB::raw('ROUND(SUM(dpd.jumlah_capaian) / NULLIF(SUM(CASE WHEN dpd.id_indikator IN (1,2,3) THEN dpd.jumlah_sasaran ELSE (dp.jumlah_kk_lk + dp.jumlah_kk_pr) END), 0) * 100, 2) AS pct'),
             )
             ->groupBy('p.id_puskesmas', 'dpd.id_indikator')
             ->get()
@@ -168,14 +168,14 @@ class BerandaController extends Controller
                 DB::raw('ROUND(SUM(dp.ber_phbs)/NULLIF(SUM(dp.jumlah_kk_lk+dp.jumlah_kk_pr),0)*100,2) AS rata_rata'),
             )
             ->groupBy('dp.bulan')
-            ->orderBy('dp.bulan')
+            // ->orderBy('dp.bulan')
             ->get();
- 
-        $trenLabels = $trenBulan->map(fn($t) => NewDataPHBS::namaBulan((int) $t->bulan))->toArray();
+        $trenLabels = $trenBulan->pluck('bulan')->toArray();
+        // $trenLabels = $trenBulan->map(fn($t) => NewDataPHBS::namaBulan((int) $t->bulan))->toArray();
         $trenData   = $trenBulan->pluck('rata_rata')->map(fn($v) => (float) $v)->toArray();
  
         // target nasional: rata-rata dari tabel, fallback 70
-        // $targetNasional = (float) (NewIndikator::aktif()->avg('target_nasional') ?? 70);
+        // $total_sasaran = (float) (NewIndikator::aktif()->avg('target_nasional') ?? 70);
  
         // ── Grafik batang ───────────────────────────────────────────────────────
         $grafikLabels = $rekapData->pluck('nama_puskesmas')
