@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,7 +12,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect('/dashboard');
+            return redirect()->route('dashboard');
         }
         return view('auth.login');
     }
@@ -28,22 +29,39 @@ class LoginController extends Controller
             'password.min'      => 'Password minimal 6 karakter.',
         ]);
 
-        $user = \App\Models\User::where('email', $request->email)->first();
+        // Cek apakah email terdaftar
+        $user = User::where('email', $request->email)->first();
 
         if (!$user) {
-            return back()->withErrors(['email' => 'Email tidak terdaftar.'])->withInput($request->only('email'));
+            return back()
+                ->withErrors(['email' => 'Email tidak terdaftar.'])
+                ->withInput($request->only('email'));
         }
 
-        if ($user->status_aktif == 0) {
-            return back()->withErrors(['email' => 'Akun Anda tidak aktif. Hubungi Admin.'])->withInput($request->only('email'));
+        // Cek status aktif
+        if (!$user->status_aktif) {
+            return back()
+                ->withErrors(['email' => 'Akun Anda tidak aktif. Hubungi Admin.'])
+                ->withInput($request->only('email'));
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->has('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+        // Cek password
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->has('remember'))) {
+            return back()
+                ->withErrors(['password' => 'Password yang Anda masukkan salah.'])
+                ->withInput($request->only('email'));
         }
 
-        return back()->withErrors(['password' => 'Password yang Anda masukkan salah.'])->withInput($request->only('email'));
+        $request->session()->regenerate();
+
+        // Redirect berdasarkan role
+        $role = Auth::user()->role->role ?? 'puskesmas';
+
+        if ($role === 'dinkes') {
+            return redirect()->route('dashboard.dinkes');
+        }
+
+        return redirect()->route('dashboard.puskesmas');
     }
 
     public function logout(Request $request)
@@ -51,6 +69,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

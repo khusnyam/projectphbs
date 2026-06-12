@@ -5,9 +5,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PhbsController;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Redirect root ke login
+Route::get('/', fn() => redirect()->route('login'));
 
 // Auth
 Route::middleware('guest')->group(function () {
@@ -15,18 +14,20 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
 });
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->name('logout')
+    ->middleware('auth');
 
 // Protected
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard',          [DashboardController::class, 'dinkes'])->name('dashboard.dinkes');
+    Route::get('/dashboard/puskesmas',[DashboardController::class, 'puskesmas'])->name('dashboard.puskesmas');
+
+    // Alias /dashboard → auto redirect sesuai role
+    Route::get('/dashboard/redirect', [DashboardController::class, 'redirect'])->name('dashboard');
 
     // PHBS
-    Route::get('/phbs',              [PhbsController::class, 'index'])->name('phbs.index');
-    Route::get('/phbs/export',       [PhbsController::class, 'exportExcel'])->name('phbs.export');
-    Route::get('/phbs/form',         [PhbsController::class, 'form'])->name('phbs.form');
-    Route::post('/phbs',             [PhbsController::class, 'store'])->name('phbs.store');
-    Route::get('/phbs/{id}/edit',    [PhbsController::class, 'edit'])->name('phbs.edit');
-    Route::put('/phbs/{id}',         [PhbsController::class, 'update'])->name('phbs.update');
-    Route::delete('/phbs/{id}',      [PhbsController::class, 'destroy'])->name('phbs.destroy');
+    Route::get('/phbs', [PhbsController::class, 'index'])->name('phbs.index');
+    Route::get('/phbs/form', [PhbsController::class, 'form'])->name('phbs.form');
+    Route::get('/phbs/export', [PhbsController::class, 'exportExcel'])->name('phbs.export');
 });

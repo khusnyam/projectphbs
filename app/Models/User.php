@@ -10,18 +10,34 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $table      = 'users';
-    protected $primaryKey = 'id_users';
+    protected $primaryKey = 'id_user';
 
     protected $fillable = [
-        'nama_user',
-        'username',
+        'id_role',
+        'name',
         'email',
         'password',
-        'role',
-        'id_puskesmas',
-        'no_hp',
         'status_aktif',
     ];
 
-    protected $hidden = ['password'];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'status_aktif'      => 'boolean',
+        'password'          => 'hashed',
+    ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'id_role', 'id_role');
+    }
+
+    public function puskesmas()
+    {
+        return $this->hasOne(Puskesmas::class, 'id_user', 'id_user');
+    }
 }
