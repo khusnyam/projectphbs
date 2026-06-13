@@ -534,11 +534,17 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
               <td style="font-size:.73rem;color:var(--s5)">{{ $namaBulan[$row->bulan]??'Januari' }}</td>
 >>>>>>> a0aff25b32e0e6d800417eb10bc7249656eea7fd
               <td style="font-size:.73rem;color:var(--s5)">{{ $row->tahun }}</td>
+<<<<<<< HEAD
+              <td class="td-num">{{ number_format($row->jumlah_kk_total_l) }}</td>
+              <td class="td-num">{{ number_format($row->jumlah_kk_total_p) }}</td>
+              <td class="td-num"><strong>{{ number_format($row->jumlah_kk_total_total) }}</strong></td>
+=======
               <td class="td-num">{{ number_format($row->jumlah_kk_lk) }}</td>
               <td class="td-num">{{ number_format($row->jumlah_kk_pr) }}</td>
               <td class="td-num">
                 <strong>{{ number_format($row->jumlah_kk_total) }}</strong>
               </td>
+>>>>>>> c5bd410bf616519ac078a6e7f4976fcb8ea3f1cb
               <td class="td-num">{{ number_format($row->ber_phbs) }}</td>
               <td class="td-num">
                 <strong style="color:{{ $pc }}">{{ number_format($pct, 1) }}%</strong>

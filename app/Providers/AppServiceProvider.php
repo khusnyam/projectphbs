@@ -21,23 +21,37 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Debug: Lacak semua gate check yang terjadi
+        // DEBUG: Log gate checks
         Gate::after(function ($user, $ability, $result, $arguments) {
-            Log::info('GATE CHECK', [
-                'ability' => $ability,
-                'result'  => $result,
-                'user_id' => $user?->id,
-                'trace'   => collect(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8))
-                                ->pluck('function')->join(' → '),
+            Log::info('GATE_CHECK', [
+                'ability'   => $ability,
+                'result'    => $result,
+                'user_id'   => $user?->id_user,
+                'user_role' => $user?->id_role,
+                'user_email' => $user?->email,
             ]);
         });
 
+        // Gate untuk Dinkes (role 1)
         Gate::define('akses-dinkes', function ($user) {
-            return $user->id_role == 1;
+            $allowed = $user && $user->id_role == 1;
+            Log::info('GATE_DINKES', [
+                'user_id' => $user?->id_user,
+                'user_role' => $user?->id_role,
+                'allowed' => $allowed,
+            ]);
+            return $allowed;
         });
 
+        // Gate untuk Puskesmas (role 2)
         Gate::define('akses-puskesmas', function ($user) {
-            return $user->id_role == 2;
+            $allowed = $user && $user->id_role == 2;
+            Log::info('GATE_PUSKESMAS', [
+                'user_id' => $user?->id_user,
+                'user_role' => $user?->id_role,
+                'allowed' => $allowed,
+            ]);
+            return $allowed;
         });
     }
 

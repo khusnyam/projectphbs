@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CapaianBulanan;
+use App\Models\NewDataPHBS;
+use App\Models\NewDataPHBSDetail;
 use App\Models\Puskesmas;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,76 +13,186 @@ class PetaController extends Controller
 {
     // ── Helpers ──────────────────────────────────────────────────────────────
 
-    /** Tahun yang tersedia di tabel capaian_bulanan. */
-    private function availableYears(): array
+    /**
+     * Integer 1–12 → nama bulan string (sesuai isi kolom data_phbs.bulan).
+     */
+    private function monthIntToStr(int $bulan): string
     {
-        return CapaianBulanan::selectRaw('DISTINCT tahun')
-            ->orderBy('tahun', 'desc')
-            ->pluck('tahun')
-            ->toArray();
+        return [
+            1  => 'Januari',  2  => 'Februari', 3  => 'Maret',
+            4  => 'April',    5  => 'Mei',       6  => 'Juni',
+            7  => 'Juli',     8  => 'Agustus',   9  => 'September',
+            10 => 'Oktober',  11 => 'November',  12 => 'Desember',
+        ][$bulan] ?? 'Januari';
     }
 
-    /** Bulan yang tersedia untuk tahun tertentu. */
-    private function availableMonths(int $tahun): array
-    {
-        return CapaianBulanan::where('tahun', $tahun)
-            ->selectRaw('DISTINCT bulan')
-            ->orderBy('bulan')
-            ->pluck('bulan')
-            ->toArray();
-    }
-
+    /**
+     * Terima bulan dalam bentuk apapun (integer atau nama string),
+     * kembalikan integer 1–12.
+     */
     private function normalizeMonth($bulan): int
     {
         if (is_numeric($bulan)) {
             return (int) $bulan;
         }
 
-        $bulan = trim(strtolower((string) $bulan));
-        $names = [
-            1 => 'januari',
-            2 => 'februari',
-            3 => 'maret',
-            4 => 'april',
-            5 => 'mei',
-            6 => 'juni',
-            7 => 'juli',
-            8 => 'agustus',
-            9 => 'september',
-            10 => 'oktober',
-            11 => 'november',
-            12 => 'desember',
+        $map = [
+            'januari'   => 1,  'februari'  => 2,  'maret'     => 3,
+            'april'     => 4,  'mei'       => 5,  'juni'      => 6,
+            'juli'      => 7,  'agustus'   => 8,  'september' => 9,
+            'oktober'   => 10, 'november'  => 11, 'desember'  => 12,
         ];
 
-        $key = array_search($bulan, array_map('strtolower', $names), true);
-
-        return $key ?: date('n');
+        return $map[strtolower(trim((string) $bulan))] ?? (int) date('n');
     }
 
     /**
-     * Query capaian bulan+tahun tertentu, di-join ke puskesmas.
-     * Jika bulan/tahun tidak ada, fallback ke persentase_capaian di tabel puskesmas.
+     * Tahun yang tersedia di data_phbs.
+     * Kolom tahun disimpan sebagai string → di-cast ke integer.
      */
-    private function queryCapaian($bulan, int $tahun)
+    private function availableYears(): array
     {
-        $bulan = $this->normalizeMonth($bulan);
+        return NewDataPHBS::selectRaw('DISTINCT CAST(tahun AS UNSIGNED) AS tahun')
+            ->orderByRaw('CAST(tahun AS UNSIGNED) DESC')
+            ->pluck('tahun')
+            ->map(fn ($y) => (int) $y)
+            ->toArray();
+    }
 
-        return Puskesmas::leftJoin('capaian_bulanan', function ($join) use ($bulan, $tahun) {
-            $join->on('puskesmas.id_puskesmas', '=', 'capaian_bulanan.id_puskesmas')
-                 ->where('capaian_bulanan.bulan', $bulan)
-                 ->where('capaian_bulanan.tahun', $tahun);
+    /**
+     * Bulan (integer) yang tersedia untuk tahun tertentu.
+     */
+    private function availableMonths(int $tahun): array
+    {
+        $map = [
+            'januari'   => 1,  'februari'  => 2,  'maret'     => 3,
+            'april'     => 4,  'mei'       => 5,  'juni'      => 6,
+            'juli'      => 7,  'agustus'   => 8,  'september' => 9,
+            'oktober'   => 10, 'november'  => 11, 'desember'  => 12,
+        ];
+
+        return NewDataPHBS::selectRaw('DISTINCT bulan')
+            ->where('tahun', (string) $tahun)
+            ->pluck('bulan')
+            ->map(fn ($b) => $map[strtolower(trim($b))] ?? null)
+            ->filter()
+            ->sort()
+            ->values()
+            ->toArray();
+    }
+
+    /**
+     * Query utama: puskesmas + data_phbs + data_phbs_detail (semua 13 indikator).
+     *
+     * Rumus persentase_capaian — sama persis dengan getPersentaseAttribute() model:
+     *   Indikator 1-3  : sasaran dari kolom jumlah_sasaran (tidak NULL)
+     *   Indikator 4-13 : sasaran NULL → fallback ke jumlah_kk_lk + jumlah_kk_pr
+     *
+     *   persentase = SUM(capaian) / SUM(sasaran_efektif) * 100
+     *
+     * Fallback jika tidak ada record data_phbs bulan+tahun tsb → persentase = 0
+     */
+    private function queryCapaian(int $bulan, int $tahun)
+    {
+        $bulanStr = $this->monthIntToStr($bulan);
+        $tahunStr = (string) $tahun;
+
+        return Puskesmas::join('kecamatans', 'puskesmas.id_kecamatan', '=', 'kecamatans.id_kecamatan')
+        ->leftJoin('data_phbs', function ($join) use ($bulanStr, $tahunStr) {
+            $join->on('puskesmas.id_puskesmas', '=', 'data_phbs.id_puskesmas')
+                 ->where('data_phbs.bulan', $bulanStr)
+                 ->where('data_phbs.tahun', $tahunStr);
+        })
+        ->leftJoin('data_phbs_detail', function ($join) {
+            // Join SEMUA indikator (1-13) tanpa filter NULL
+            $join->on('data_phbs.id_phbs', '=', 'data_phbs_detail.id_phbs');
         })
         ->select([
             'puskesmas.id_puskesmas',
             'puskesmas.nama_puskesmas',
-            'puskesmas.kecamatan',
-            'puskesmas.jumlah_kk_total',
-            'puskesmas.geojson_polygon',
-            DB::raw('COALESCE(capaian_bulanan.persentase_capaian, puskesmas.persentase_capaian) AS persentase_capaian'),
-            DB::raw('COALESCE(capaian_bulanan.status_kategori,    puskesmas.status_kategori)    AS status_kategori'),
-            DB::raw('COALESCE(capaian_bulanan.jumlah_tercapai, 0) AS jumlah_tercapai'),
-            DB::raw('COALESCE(capaian_bulanan.jumlah_sasaran,  puskesmas.jumlah_kk_total) AS jumlah_sasaran'),
-        ]);
+            'kecamatans.nama_kecamatan AS kecamatan',   // dari tabel kecamatans
+            'kecamatans.geojson_polygon',                // polygon ada di kecamatans
+            'kecamatans.id_kecamatan',
+
+            // jumlah_kk_total diambil dari data_phbs (lk+pr), fallback 0
+            DB::raw('COALESCE(
+                data_phbs.jumlah_kk_lk + data_phbs.jumlah_kk_pr, 0
+            ) AS jumlah_kk_total'),
+
+            // Total KK dipantau bulan ini
+            DB::raw('COALESCE(
+                data_phbs.jumlah_kk_lk + data_phbs.jumlah_kk_pr, 0
+            ) AS jumlah_sasaran'),
+
+            // Jumlah KK ber-PHBS dari header, fallback 0
+            DB::raw('COALESCE(data_phbs.ber_phbs, 0) AS jumlah_tercapai'),
+
+            /*
+             * Persentase capaian:
+             * - Indikator 1-3: pakai jumlah_sasaran dari DB
+             * - Indikator 4-13: jumlah_sasaran NULL → COALESCE ke total KK header
+             * - Jika tidak ada data bulan ini (left join miss) → 0
+             */
+            DB::raw('CASE
+                WHEN data_phbs.id_phbs IS NULL
+                THEN 0
+                WHEN SUM(
+                    COALESCE(
+                        data_phbs_detail.jumlah_sasaran,
+                        data_phbs.jumlah_kk_lk + data_phbs.jumlah_kk_pr
+                    )
+                ) = 0
+                THEN 0
+                ELSE ROUND(
+                    SUM(data_phbs_detail.jumlah_capaian)
+                    / SUM(
+                        COALESCE(
+                            data_phbs_detail.jumlah_sasaran,
+                            data_phbs.jumlah_kk_lk + data_phbs.jumlah_kk_pr
+                        )
+                    ) * 100, 2
+                )
+            END AS persentase_capaian'),
+        ])
+        ->groupBy(
+            'puskesmas.id_puskesmas',
+            'puskesmas.nama_puskesmas',
+            'kecamatans.id_kecamatan',
+            'kecamatans.nama_kecamatan',
+            'kecamatans.geojson_polygon',
+            'data_phbs.id_phbs',
+            'data_phbs.jumlah_kk_lk',
+            'data_phbs.jumlah_kk_pr',
+            'data_phbs.ber_phbs'
+        );
+    }
+
+    // ── Warna & Kategori ─────────────────────────────────────────────────────
+
+    /**
+     * Warna choropleth — threshold sesuai blade & legend:
+     *   < 30  → merah  (#e74c3c) — "Sangat Rendah"
+     *  30–49  → oranye (#e67e22) — "Rendah"
+     *  50–69  → toska  (#1abc9c) — "Sedang"
+     *  >= 70  → hijau  (#27ae60) — "Tinggi"
+     */
+    private function colorByPct(float $pct): string
+    {
+        if ($pct < 30)  return '#e74c3c';
+        if ($pct < 50)  return '#e67e22';
+        if ($pct < 70)  return '#1abc9c';
+        return '#27ae60';
+    }
+
+    /**
+     * Label status — harus persis sama dengan key getStatusColors() di blade.
+     */
+    private function statusByPct(float $pct): string
+    {
+        if ($pct < 30)  return 'Sangat Rendah';
+        if ($pct < 50)  return 'Rendah';
+        if ($pct < 70)  return 'Sedang';
+        return 'Tinggi';
     }
 
     // ── Pages ─────────────────────────────────────────────────────────────────
@@ -93,7 +204,7 @@ class PetaController extends Controller
         $bulan     = $this->normalizeMonth($request->get('bulan', date('n')));
         $bulanList = $this->availableMonths($tahun);
 
-        // Pastikan bulan valid untuk tahun yg dipilih
+        // Pastikan bulan valid untuk tahun yang dipilih
         if (!in_array($bulan, $bulanList) && count($bulanList)) {
             $bulan = max($bulanList);
         }
@@ -101,16 +212,24 @@ class PetaController extends Controller
         $rows = $this->queryCapaian($bulan, $tahun)->get();
 
         $totalPuskesmas  = $rows->count();
-        $rataRataCapaian = $rows->avg('persentase_capaian');
-        $totalKK   = $rows->sum('jumlah_kk_total');
+        $rataRataCapaian = round((float) $rows->avg('persentase_capaian'), 1);
+        $totalKK         = $rows->sum('jumlah_kk_total');
 
+        /*
+         * Key statistik → ID elemen blade:
+         *   'sangat_rendah' → id="k-merah"   (< 30%)
+         *   'rendah'        → id="k-oranye"  (30–49%)
+         *   'sedang'        → id="k-kuning"  (50–69%)
+         *   'tinggi'        → id="k-hijau"   (>= 70%)
+         */
         $statistik = [
-            'rendah'        => $rows->where('persentase_capaian', '<', 60)->count(),
-            'sedang'        => $rows->filter(fn($r) => $r->persentase_capaian >= 60 && $r->persentase_capaian <= 80)->count(),
-            'tinggi'        => $rows->where('persentase_capaian', '>', 80)->count(),
+            'sangat_rendah' => $rows->filter(fn ($r) => (float) $r->persentase_capaian < 30)->count(),
+            'rendah'        => $rows->filter(fn ($r) => (float) $r->persentase_capaian >= 30 && (float) $r->persentase_capaian < 50)->count(),
+            'sedang'        => $rows->filter(fn ($r) => (float) $r->persentase_capaian >= 50 && (float) $r->persentase_capaian < 70)->count(),
+            'tinggi'        => $rows->filter(fn ($r) => (float) $r->persentase_capaian >= 70)->count(),
         ];
 
-        return view('peta.index', compact(
+        return view('dinkes.peta.index', compact(
             'totalPuskesmas', 'rataRataCapaian', 'totalKK',
             'statistik', 'bulan', 'tahun', 'bulanList', 'tahunList'
         ));
@@ -118,7 +237,6 @@ class PetaController extends Controller
 
     // ── API JSON ──────────────────────────────────────────────────────────────
 
-    /** GeoJSON FeatureCollection dengan filter bulan+tahun. */
     public function geojson(Request $request): JsonResponse
     {
         $tahun = (int) $request->get('tahun', date('Y'));
@@ -127,14 +245,23 @@ class PetaController extends Controller
         $rows = $this->queryCapaian($bulan, $tahun)->get();
 
         $features = $rows->map(function ($row) {
-            $pct   = (float) $row->persentase_capaian;
-            $warna = $this->colorByPct($pct);
+
+    $pct = (float) $row->persentase_capaian;
+
+    $geometry = $row->geojson_polygon;
+
+    // decode pertama
+    $geometry = json_decode($geometry, true);
+
+    // kalau hasilnya masih string, decode lagi
+    if (is_string($geometry)) {
+        $geometry = json_decode($geometry, true);
+    }
+
 
             return [
-                'type'     => 'Feature',
-                'geometry' => is_string($row->geojson_polygon)
-                    ? json_decode($row->geojson_polygon, true)
-                    : $row->geojson_polygon,
+                'type' => 'Feature',
+                'geometry' => $geometry,
                 'properties' => [
                     'id'                 => $row->id_puskesmas,
                     'nama_puskesmas'     => $row->nama_puskesmas,
@@ -143,10 +270,10 @@ class PetaController extends Controller
                     'jumlah_kk_total'    => (int) $row->jumlah_kk_total,
                     'jumlah_tercapai'    => (int) $row->jumlah_tercapai,
                     'jumlah_sasaran'     => (int) $row->jumlah_sasaran,
-                    'status_kategori'    => $row->status_kategori,
-                    'warna'              => $warna,
-                ],
-            ];
+                    'status_kategori'    => $this->statusByPct($pct),
+                    'warna'              => $this->colorByPct($pct),
+    ]
+];
         })->values()->toArray();
 
         return response()->json([
@@ -156,7 +283,6 @@ class PetaController extends Controller
         ]);
     }
 
-    /** Daftar puskesmas (sidebar) dengan filter bulan+tahun. */
     public function list(Request $request): JsonResponse
     {
         $tahun = (int) $request->get('tahun', date('Y'));
@@ -168,14 +294,15 @@ class PetaController extends Controller
 
         $data = $rows->map(function ($row) {
             $pct = (float) $row->persentase_capaian;
+
             return [
                 'id'                 => $row->id_puskesmas,
                 'nama_puskesmas'     => $row->nama_puskesmas,
                 'kecamatan'          => $row->kecamatan,
                 'persentase_capaian' => $pct,
-                'jumlah_kk_total'    => number_format($row->jumlah_kk_total, 0, ',', '.'),
-                'jumlah_tercapai'    => number_format($row->jumlah_tercapai, 0, ',', '.'),
-                'status_kategori'    => $row->status_kategori,
+                'jumlah_kk_total'    => (int) $row->jumlah_kk_total,
+                'jumlah_tercapai'    => (int) $row->jumlah_tercapai,
+                'status_kategori'    => $this->statusByPct($pct),
                 'warna'              => $this->colorByPct($pct),
             ];
         });
@@ -183,7 +310,6 @@ class PetaController extends Controller
         return response()->json($data);
     }
 
-    /** Detail satu puskesmas pada bulan+tahun tertentu. */
     public function show(int $id, Request $request): JsonResponse
     {
         $tahun = (int) $request->get('tahun', date('Y'));
@@ -200,19 +326,18 @@ class PetaController extends Controller
             'nama_puskesmas'     => $row->nama_puskesmas,
             'kecamatan'          => $row->kecamatan,
             'persentase_capaian' => $pct,
-            'jumlah_kk_total'    => number_format($row->jumlah_kk_total, 0, ',', '.'),
-            'jumlah_tercapai'    => number_format($row->jumlah_tercapai, 0, ',', '.'),
-            'jumlah_sasaran'     => number_format($row->jumlah_sasaran,  0, ',', '.'),
-            'status_kategori'    => $row->status_kategori,
+            'jumlah_kk_total'    => (int) $row->jumlah_kk_total,
+            'jumlah_tercapai'    => (int) $row->jumlah_tercapai,
+            'jumlah_sasaran'     => (int) $row->jumlah_sasaran,
+            'status_kategori'    => $this->statusByPct($pct),
             'warna'              => $this->colorByPct($pct),
         ]);
     }
 
-    /** Daftar tahun + bulan yang tersedia (untuk populate dropdown). */
     public function periodeList(Request $request): JsonResponse
     {
         $tahunList = $this->availableYears();
-        $tahun     = (int) $request->get('tahun', $tahunList[0] ?? date('Y'));
+        $tahun     = (int) $request->get('tahun', $tahunList[0] ?? (int) date('Y'));
         $bulanList = $this->availableMonths($tahun);
 
         return response()->json([
@@ -220,17 +345,8 @@ class PetaController extends Controller
             'bulan_list' => $bulanList,
             'active'     => [
                 'tahun' => $tahun,
-                'bulan' => (int) $request->get('bulan', max($bulanList ?: [1])),
+                'bulan' => (int) $request->get('bulan', $bulanList ? max($bulanList) : 1),
             ],
         ]);
-    }
-
-    // ── Utility ───────────────────────────────────────────────────────────────
-
-    private function colorByPct(float $pct): string
-    {
-        if ($pct <= 60) return '#e74c3c';
-        if ($pct <= 80) return '#f1c40f';
-        return '#27ae60';
     }
 }
