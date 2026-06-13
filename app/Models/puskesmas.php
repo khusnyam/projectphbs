@@ -1,42 +1,42 @@
 <?php
 
-namespace App\Models;
+// namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use app\Models\data_phbs;
-use App\Models\data_phbs as ModelsData_phbs;
+// use Illuminate\Database\Eloquent\Factories\HasFactory;
+// use Illuminate\Database\Eloquent\Model;
+// use app\Models\data_phbs;
+// use App\Models\data_phbs as ModelsData_phbs;
 
-class Puskesmas extends Model
-{
-    protected $table      = 'puskesmas';
-    protected $primaryKey = 'id_puskesmas';
+// class Puskesmas extends Model
+// {
+//     protected $table      = 'puskesmas';
+//     protected $primaryKey = 'id_puskesmas';
 
-    protected $fillable = [
-        'id_user',
-        'id_kecamatan',
-        'nama_puskesmas',
-        'alamat',
-        'email',
-        'status_aktif',
-    ];
+//     protected $fillable = [
+//         'id_user',
+//         'id_kecamatan',
+//         'nama_puskesmas',
+//         'alamat',
+//         'email',
+//         'status_aktif',
+//     ];
 
-    protected $casts = [
-        'status_aktif' => 'boolean',
-    ];
+//     protected $casts = [
+//         'status_aktif' => 'boolean',
+//     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
-    }
+//     public function user()
+//     {
+//         return $this->belongsTo(User::class, 'id_user', 'id_user');
+//     }
 
-    public function kecamatan()
-    {
-        return $this->belongsTo(Kecamatan::class, 'id_kecamatan', 'id_kecamatan');
-    }
+//     public function kecamatan()
+//     {
+//         return $this->belongsTo(Kecamatan::class, 'id_kecamatan', 'id_kecamatan');
+//     }
 
-    public function dataPhbs()
-    {
-        return $this->hasMany(DataPhbs::class, 'id_puskesmas', 'id_puskesmas');
-    }
-}
+//     public function dataPhbs()
+//     {
+//         return $this->hasMany(DataPhbs::class, 'id_puskesmas', 'id_puskesmas');
+//     }
+// }

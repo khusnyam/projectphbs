@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataPhbs;
-use App\Models\Puskesmas;
+use App\Models\NewDataPHBS;
+use App\Models\NewPuskesmas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,11 +18,11 @@ class LaporanController extends Controller
         $pkmId    = $request->get('puskesmas_id', 0);
         $kategori = $request->get('kategori', '');
 
-        $puskesmasList = Puskesmas::where('status_aktif', true)
+        $puskesmasList = NewPuskesmas::where('status_aktif', true)
             ->orderBy('nama_puskesmas')
             ->get();
 
-        $query = DataPhbs::with('puskesmas')
+        $query = NewDataPHBS::with('puskesmas')
             ->where('tahun', $tahun);
 
         if ($role === 'puskesmas') {
@@ -84,13 +84,13 @@ class LaporanController extends Controller
 
     public function edit($id)
     {
-        $laporan = DataPhbs::with('puskesmas')->findOrFail($id);
+        $laporan = NewDataPHBS::with('puskesmas')->findOrFail($id);
         return view('PHBS.edit', compact('laporan'));
     }
 
     public function update(Request $request, $id)
     {
-        $laporan = DataPhbs::findOrFail($id);
+        $laporan = NewDataPHBS::findOrFail($id);
         $laporan->update($request->only([
             'bulan', 'tahun', 'jumlah_kk_lk', 'jumlah_kk_pr', 'ber_phbs'
         ]));
@@ -99,7 +99,7 @@ class LaporanController extends Controller
 
     public function destroy($id)
     {
-        DataPhbs::findOrFail($id)->delete();
+        NewDataPHBS::findOrFail($id)->delete();
         return redirect()->route('phbs.index')->with('success', 'Data berhasil dihapus.');
     }
 }

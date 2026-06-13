@@ -23,18 +23,18 @@
 // }
 
 
-class Role extends Model
-{
-    protected $table      = 'roles';
-    protected $primaryKey = 'id_role';
+// class Role extends Model
+// {
+//     protected $table      = 'roles';
+//     protected $primaryKey = 'id_role';
 
-    protected $fillable = [
-        'nama_role',
-        'role',
-    ];
+//     protected $fillable = [
+//         'nama_role',
+//         'role',
+//     ];
 
-    public function users()
-    {
-        return $this->hasMany(User::class, 'id_role', 'id_role');
-    }
-}
+//     public function users()
+//     {
+//         return $this->hasMany(User::class, 'id_role', 'id_role');
+//     }
+// }
