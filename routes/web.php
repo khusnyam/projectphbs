@@ -13,6 +13,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PhbsInputController;
 use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\DashboardPhbsController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -46,7 +47,7 @@ Route::middleware('auth:web')->group(function () {
     // Route::get('/beranda', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda');
-        Route::get('/dashboard-phbs', [DashboardController::class, 'dinkes'])->name('phbs.dashboard');
+        Route::get('/dashboard-phbs', [DashboardPhbsController::class, 'index'])->name('dashboard.phbs');
         Route::get('/peta', [PetaController::class, 'index'])->name('peta.index');
 
         // 3. Kelompok Rute API Puskesmas & Peta (Dibutuhkan oleh AJAX / JavaScript)

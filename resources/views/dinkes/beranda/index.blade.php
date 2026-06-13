@@ -8,54 +8,12 @@
     <div class="hero">
         <div class="hero-left">
             <div class="hero-title">
-                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                </svg>
-                Dashboard PHBS — Dinas Kesehatan
+                Dashboard PHBS Rumah Tangga
             </div>
             <p class="hero-desc">
                 Pemantauan capaian 13 indikator Perilaku Hidup Bersih dan Sehat (PHBS)
                 berdasarkan laporan seluruh puskesmas di Kabupaten Sleman.
             </p>
-            <div class="hero-badges">
-                <span class="hero-badge">
-                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
-                    </svg>
-                    {{ $bulan ? \App\Models\NewDataPHBS::namaBulan($bulan) : 'Semua Bulan' }} {{ $tahun }}
-                </span>
-                <span class="hero-badge">
-                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/>
-                    </svg>
-                    @if($id_puskesmas)
-                        {{ $puskesmasList->firstWhere('id_puskesmas', $id_puskesmas)?->nama_puskesmas ?? 'Puskesmas Terpilih' }}
-                    @else
-                        Semua Puskesmas ({{ $puskesmasList->count() }})
-                    @endif
-                </span>
-                <span class="hero-badge">
-                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                    </svg>
-                    13 Indikator PHBS
-                </span>
-            </div>
-        </div>
-
-        <div class="hero-right">
-            <div class="rata-card">
-                <div class="rata-label">Rata-rata Ber-PHBS</div>
-                <div class="rata-value">
-                    {{ number_format($rataRataPhbs, 1) }}<span style="font-size:20px">%</span>
-                </div>
-                <div class="rata-bar">
-                    <div class="rata-fill" style="width:{{ min($rataRataPhbs, 100) }}%"></div>
-                </div>
-                {{-- <div class="rata-sub">
-                    {{ $statusTerkirim }} terkirim &bull; {{ $statusDraft }} draft &bull; {{ $tahun }}
-                </div> --}}
-            </div>
         </div>
     </div>
 
@@ -67,7 +25,7 @@
             </svg>
             Filter Dashboard
         </div>
-        <p class="filter-desc">Pilih tahun, bulan, atau puskesmas untuk menyesuaikan data yang ditampilkan.</p>
+        <p class="filter-desc"></p>
 
         <form method="GET" action="{{ route('beranda') }}">
             <div class="filter-row">
@@ -133,8 +91,7 @@
                     <div class="info-value">{{ $puskesmasTertinggi?->nama_puskesmas ?? '–' }}</div>
                     <div class="info-sub">
                         @if($puskesmasTertinggi)
-                            {{ number_format((float)$puskesmasTertinggi->persentase_phbs, 1) }}% Ber-PHBS
-                            @if($puskesmasTertinggi->kecamatan) · {{ $puskesmasTertinggi->kecamatan }} @endif
+                            {{ number_format((float)$puskesmasTertinggi->persentase_phbs, 1) }}% Ber-PHBS 
                         @else
                             Belum ada data pada periode ini
                         @endif
@@ -162,20 +119,6 @@
                 </div>
             </div>
 
-            {{-- Status Laporan --}}
-            {{-- <div class="info-card">
-                <div class="info-icon amber">
-                    <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-                    </svg>
-                </div>
-                <div class="info-body">
-                    <div class="info-label">Status Laporan</div>
-                    {{-- <div class="info-value">{{ $statusTerkirim }} terkirim</div> --}}
-                    {{-- <div class="info-sub">{{ $statusDraft }} draft · periode {{ $tahun }}</div> --}}
-                {{-- </div> --}}
-            {{-- </div> --}}
-
             {{-- Rata-rata PHBS --}}
             <div class="info-card">
                 <div class="info-icon blue">
@@ -194,25 +137,21 @@
         {{-- ─── STAT CARDS — Distribusi 4 level ─────────────────────── --}}
         <div class="stat-grid">
             <div class="stat-card green">
-                <span class="stat-icon">🏆</span>
                 <div class="stat-label">Tinggi ≥ 70%</div>
                 <div class="stat-value">{{ $distribusiTinggi }}</div>
                 <div class="stat-sub">puskesmas</div>
             </div>
             <div class="stat-card teal">
-                <span class="stat-icon">📊</span>
                 <div class="stat-label">Sedang 50–69%</div>
                 <div class="stat-value">{{ $distribusiSedang }}</div>
                 <div class="stat-sub">puskesmas</div>
             </div>
             <div class="stat-card amber">
-                <span class="stat-icon">⚠️</span>
                 <div class="stat-label">Rendah 30–49%</div>
                 <div class="stat-value">{{ $distribusiRendah }}</div>
                 <div class="stat-sub">puskesmas</div>
             </div>
             <div class="stat-card red">
-                <span class="stat-icon">🔴</span>
                 <div class="stat-label">Sangat Rendah &lt;30%</div>
                 <div class="stat-value">{{ $distribusiSangatRendah }}</div>
                 <div class="stat-sub">puskesmas</div>
@@ -226,9 +165,6 @@
             <div class="chart-card">
                 <div class="card-head">
                     <div class="card-head-left">
-                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2.5">
-                            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                        </svg>
                         <span class="card-title">Capaian Ber-PHBS per Puskesmas</span>
                     </div>
                     <span class="card-badge">{{ $tahun }}</span>
@@ -246,9 +182,6 @@
             <div class="chart-card">
                 <div class="card-head">
                     <div class="card-head-left">
-                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2.5">
-                            <circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 010 20"/>
-                        </svg>
                         <span class="card-title">Distribusi Capaian</span>
                     </div>
                     <span class="card-badge">{{ $rekapData->count() }} PKM</span>
@@ -271,9 +204,6 @@
             <div class="chart-card">
                 <div class="card-head">
                     <div class="card-head-left">
-                        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2.5">
-                            <path d="M3 3v18h18M7 16l4-4 4 4 4-4"/>
-                        </svg>
                         <span class="card-title">Tren Rata-rata Capaian Ber-PHBS per Bulan</span>
                     </div>
                     <span class="card-badge">{{ $tahun }}</span>
@@ -288,9 +218,6 @@
             <div class="section-card">
                 <div class="section-head">
                     <div class="section-head-left">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2.5">
-                            <path d="M3 10h18M3 14h18M10 3v18M14 3v18"/>
-                        </svg>
                         <div>
                             <div class="section-title">Matriks 13 Indikator PHBS per Puskesmas</div>
                             <div class="section-sub">Persentase capaian setiap indikator — warna menunjukkan tingkat capaian</div>
@@ -299,7 +226,7 @@
                     <span class="card-badge">{{ $matriksData->count() }} puskesmas</span>
                 </div>
 
-                <div class="table-wrap">
+                <div class="table-wrap" style="padding:10px;">
                     @if($matriksData->isEmpty())
                         <div class="empty">
                             <svg width="44" height="44" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -356,8 +283,7 @@
                     <span class="ic-m">50–69%</span>
                     <span class="ic-l">30–49%</span>
                     <span class="ic-v">&lt; 30%</span>
-                    <span class="ic-n">–</span>
-                    <span style="font-size:11px;color:var(--text-muted);margin-left:4px;">= tidak ada data</span>
+                    <span class="ic-n">– (tidak ada data)</span>
                 </div>
             </div>
         </div>
@@ -367,9 +293,6 @@
             <div class="section-card">
                 <div class="section-head">
                     <div class="section-head-left">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2.5">
-                            <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                        </svg>
                         <div>
                             <div class="section-title">Rekapitulasi Ber-PHBS per Puskesmas</div>
                             <div class="section-sub">Diurutkan berdasarkan persentase capaian tertinggi · Tahun {{ $tahun }}</div>
@@ -378,7 +301,7 @@
                     <span class="card-badge">{{ $rekapData->count() }} puskesmas</span>
                 </div>
 
-                <div class="table-wrap">
+                <div class="table-wrap" style="padding:10px;">
                     @if($rekapData->isEmpty())
                         <div class="empty">
                             <svg width="44" height="44" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -390,10 +313,10 @@
                     <table class="rkp-table">
                         <thead>
                             <tr>
-                                <th style="width:34px;">#</th>
+                                <th style="width:34px;">No</th>
                                 <th>Nama Puskesmas</th>
                                 <th>Kecamatan</th>
-                                <th>Kepala Puskesmas</th>
+                                {{-- <th>Kepala Puskesmas</th> --}}
                                 <th class="r">Laporan</th>
                                 <th class="r">Total KK</th>
                                 <th class="r">Ber-PHBS</th>
@@ -418,7 +341,7 @@
                                     </td>
                                     <td style="font-weight:600;color:var(--text);">{{ $row->nama_puskesmas }}</td>
                                     <td>{{ $row->kecamatan ?? '–' }}</td>
-                                    <td style="color:var(--text-b);">{{ $row->kepala_puskesmas ?? '–' }}</td>
+                                    {{-- <td style="color:var(--text-b);">{{ $row->kepala_puskesmas ?? '–' }}</td> --}}
                                     <td class="r">{{ number_format($row->jumlah_laporan) }}</td>
                                     <td class="r">{{ number_format($row->total_kk) }}</td>
                                     <td class="r">{{ number_format($row->total_ber_phbs) }}</td>
@@ -466,7 +389,7 @@
                                 <th>Nama Indikator</th>
                                 <th class="r">Total Sasaran</th>
                                 <th class="r">Total Capaian</th>
-                                <th class="r">Target</th>
+                                {{-- <th class="min-width:80px">Target</th> --}}
                                 <th style="min-width:200px;">Persentase</th>
                                 <th style="text-align:center;">Level</th>
                             </tr>
@@ -638,5 +561,3 @@ new Chart(document.getElementById('chartTren'), {
 @endif
 </script>
 @endsection
-</body>
-</html>
