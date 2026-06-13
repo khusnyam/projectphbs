@@ -23,7 +23,6 @@
 // }
 
 
-<<<<<<< HEAD
 class Role extends Model
 {
     protected $table      = 'roles';
@@ -39,5 +38,3 @@ class Role extends Model
         return $this->hasMany(User::class, 'id_role', 'id_role');
     }
 }
-=======
->>>>>>> a0aff25b32e0e6d800417eb10bc7249656eea7fd
