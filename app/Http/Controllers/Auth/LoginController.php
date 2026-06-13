@@ -56,10 +56,10 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         // Redirect berdasarkan role
-        $role = Auth::user()->role->role ?? 'puskesmas';
+        $role = Auth::user()->id_role ?? 2;
 
-        if ($role === 'dinkes') {
-            return redirect()->route('dinkes.beranda.index');
+        if ($role = 1) {
+            return redirect()->route('beranda');
         }
 
         return redirect()->route('puskesmas.dashboard.index');

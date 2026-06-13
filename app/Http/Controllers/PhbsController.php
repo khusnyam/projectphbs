@@ -6,9 +6,7 @@ use App\Models\NewDataPhbs;
 use App\Models\NewPuskesmas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\NewDataPHBS;
 use App\Models\NewDataPHBSDetail;
-use App\Models\NewPuskesmas;
 
 class PhbsController extends Controller
 {

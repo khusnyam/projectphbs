@@ -18,16 +18,16 @@ class PBerandaController extends Controller
     {
         $user = Auth::user();
 
-        // Validasi user adalah puskesmas
-        if ($user->role->role !== 'puskesmas') {
-            abort(403, 'Akses hanya untuk pengguna Puskesmas');
-        }
+        // // Validasi user adalah puskesmas
+        // if ($user->id_role != 2) {
+        //     abort(403, 'Akses hanya untuk pengguna Puskesmas');
+        // }
 
         // Get puskesmas dari auth user
-        $puskesmas = $user->puskesmas;
-        if (!$puskesmas) {
-            abort(403, 'Pengguna belum terhubung dengan puskesmas');
-        }
+        $puskesmas = $user;
+        // if (!$puskesmas) {
+        //     abort(403, 'Pengguna belum terhubung dengan puskesmas');
+        // }
 
         // Parameters
         $tahun = $request->query('tahun', date('Y'));
@@ -98,7 +98,7 @@ class PBerandaController extends Controller
         $rasioData = $this->formatRasioData($details);
         $indicators = $this->formatIndicators($details);
 
-        return view('beranda.index', [
+        return view('puskesmas.dashboard.index', [
             'puskesmas' => $puskesmas,
             'tahun' => $tahun,
             'bulan' => $bulan,
