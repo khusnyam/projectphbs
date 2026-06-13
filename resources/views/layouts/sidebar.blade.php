@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
-    {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
-    <link rel="stylesheet" href="{{ asset('css/dinkes.beranda.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {{-- Link ke style.css gabungan Anda --}}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dinkes.beranda.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/formulir.css') }}">
+    
 </head>
 <body>
 {{-- <div class="flex"> --}}
@@ -69,12 +73,12 @@
     </div>
 
     @php
-    $authUser = auth()->user();
-    $userName = $authUser->name ?? 'Admin';
-    $userRole = $authUser->id_role == 1
-        ? 'Dinas Kesehatan'
-        : ($authUser->id_role == 2 ? 'Puskesmas' : 'Role Tidak Dikenal');
-    @endphp
+$authUser = auth()->user();
+$userName = $authUser->name ?? 'Guest';
+$userRole = $authUser
+    ? ($authUser->id_role == 1 ? 'Dinas Kesehatan' : ($authUser->id_role == 2 ? 'Puskesmas' : 'Role Tidak Dikenal'))
+    : 'Tamu';
+@endphp
 
     <div class="sb-footer">
         <div class="sb-user">

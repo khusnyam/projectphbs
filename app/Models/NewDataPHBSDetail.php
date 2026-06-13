@@ -5,80 +5,70 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Model untuk tabel data_phbs_detail
+ *
+ * Kolom aktual DB:
+ *   id_detail_phbs | id_phbs | id_indikator
+ *   jumlah_sasaran (nullable) | jumlah_capaian
+ *
+ * Kolom persentase & kategori_capaian TIDAK ADA di DB.
+ * → dihitung via accessor getPersentaseAttribute (virtual, di $appends).
+ *
+ * Logika sasaran:
+ *   - Indikator 1-3: jumlah_sasaran diisi dari input user (tidak NULL)
+ *   - Indikator 4-13: jumlah_sasaran disimpan NULL di DB,
+ *     accessor otomatis ambil jumlah_kk_total dari relasi header.
+ */
 class NewDataPHBSDetail extends Model
 {
     use HasFactory;
 
-    protected $table = 'data_phbs_detail';
-
+    protected $table      = 'data_phbs_detail';
     protected $primaryKey = 'id_detail_phbs';
 
     protected $fillable = [
         'id_phbs',
         'id_indikator',
-        'jumlah_sasaran',
+        'jumlah_sasaran',  // nullable untuk indikator 4-13
         'jumlah_capaian',
     ];
 
-   //relasi ke header (data_phbs), indikator
-    public function header()
-    {
-        return $this->belongsTo(
-            NewDataPHBS::class, 
-            'id_phbs', 
-            'id_phbs');
-    }
-
-    public function indikator()
-    {
-        return $this->belongsTo(
-            NewIndikator::class,
-            'id_indikator',
-            'id_indikator'
-        );
-    }
-
-    public function puskesmas()
-    {
-        return $this->belongsTo(
-            NewPuskesmas::class,
-            'id_puskesmas',
-            'id_puskesmas'
-        );
-    }
-
-    //accessor
+    // Virtual accessor
     protected $appends = ['persentase'];
 
-    public function getPersentaseAttribute()
+    // ── Accessor ─────────────────────────────────────────────────────────
+
+    /**
+     * Hitung persentase capaian.
+     * Jika jumlah_sasaran NULL (indikator 4-13), ambil total KK dari header.
+     */
+    public function getPersentaseAttribute(): float
     {
         $sasaran = $this->jumlah_sasaran;
 
-        // JIKA jumlah_sasaran bernilai NULL di database (Kasus Indikator 4-13),
-        // MAKA otomatis ambil nilai dari total KK yang ada di tabel header via relasi
         if (is_null($sasaran) && $this->header) {
             $sasaran = $this->header->jumlah_kk_total;
         }
 
-        // Jalankan rumus persentase dengan aman (hindari pembagian dengan angka 0)
         return $sasaran > 0
             ? round(($this->jumlah_capaian / $sasaran) * 100, 2)
-            : 0;
+            : 0.0;
     }
 
-    // public function getPersentaseAttribute() //persentase tiap indikator
-    // {
-    //     return $this->jumlah_sasaran > 0
-    //         ? round(($this->jumlah_capaian / $this->jumlah_sasaran) * 100, 2)
-    //         : 0;
-    // }
+    // ── Relasi ──────────────────────────────────────────────────────────
 
-    public function getJumlahSasaranAttribute($value)
+    /**
+     * Relasi ke header data_phbs.
+     * Dibutuhkan oleh getPersentaseAttribute untuk ind 4-13.
+     */
+    public function header()
     {
-        if (in_array($this->id_indikator, [1,2,3])) {
-        return $value;
-        }
+        return $this->belongsTo(NewDataPHBS::class, 'id_phbs', 'id_phbs');
+    }
 
-        return $this->jumlah_kk_lk + $this->jumlah_kk_pr;
+    public function indikator()
+    {
+        return $this->belongsTo(NewIndikator::class, 'id_indikator', 'id_indikator');
     }
 }

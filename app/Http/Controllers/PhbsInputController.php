@@ -5,210 +5,205 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\NewDataPHBS;
 use App\Models\NewDataPHBSDetail;
-use App\Models\puskesmas;
-use Illuminate\Support\Facades\Auth;
+use App\Models\NewPuskesmas;
 use App\Models\NewIndikator;
+use Illuminate\Support\Facades\Auth;
 
 class PhbsInputController extends Controller
 {
-    // FORM INPUT
-    public function create()
+    /**
+     * Tampilkan halaman tunggal: Input + History
+     * GET /phbs  atau  GET /phbs/create
+     */
+    public function index(Request $request)
     {
-        $puskesmas = puskesmas::all();
-        $allIndikator = NewIndikator::pluck('nama_indikator')->toArray();
-        $targetIndikator = NewIndikator::pluck('target_nasional')->toArray();
+        // Data untuk form input
+        $puskesmas    = NewPuskesmas::orderBy('nama_puskesmas')->get();
+        $allIndikator = NewIndikator::orderBy('id_indikator')->get();
 
-        return view('phbs.create', compact('puskesmas', 'allIndikator', 'targetIndikator'));
-    }
+        // Data untuk history
+        $query = NewDataPHBS::with(['puskesmas', 'details.indikator']);
 
-    // SIMPAN DATA
-    public function store(Request $request)
-    {
-
-        $request->validate([
-            'bulan' => 'required',
-            'tahun' => 'required',
-            'jumlah_kk_total' => 'integer|min:0|default:20',
-        ]);
-
-        $id_puskesmas = Auth::user()->id_puskesmas;
-
-        $jumlah = $request->input('jumlah_input', []);
-
-        $total = array_sum($jumlah);
-
-        $persenPhbs = $request->jumlah_kk_total > 0
-            ? round($total / $request->jumlah_kk_total * 100, 2)
-            : 0;
-
-        if ($total >= 100) {
-            $kategori = 'Baik';
-        } elseif ($total >= 50) {
-            $kategori = 'Cukup';
-        } else {
-            $kategori = 'Kurang';
+        // Role 2 = puskesmas → hanya lihat data milik sendiri
+        if (Auth:: check () && Auth::user()->id_role == 2) {
+            $query->where('id_puskesmas', Auth::user()->id_puskesmas);
+        } elseif ($request->filled('puskesmas')) {
+            $query->where('id_puskesmas', $request->puskesmas);
         }
 
+        if ($request->filled('bulan')) {
+            $query->where('bulan', $request->bulan);
+        }
+        if ($request->filled('tahun')) {
+            $query->where('tahun', $request->tahun);
+        }
+
+        $historyData = $query
+            ->orderByDesc('tahun')
+            ->orderBy('bulan')
+            ->paginate(10)
+            ->withQueryString();
+
+        // Info footer sidebar
+        $footerName    = Auth::user()->name ?? '-';
+        $footerRole    = Auth::user()->role->nama_role ?? 'Puskesmas';
+        $footerInitial = strtoupper(substr($footerName, 0, 1));
+
+        return view('puskesmas.dashboard.formulir.input', compact(
+            'puskesmas',
+            'allIndikator',
+            'historyData',
+            'footerName',
+            'footerRole',
+            'footerInitial'
+        ));
+    }
+
+    /**
+     * Simpan data baru
+     * POST /phbs/store
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'bulan'        => 'required|string',
+            'tahun'        => 'required|integer|min:2000|max:2100',
+            'jumlah_kk_lk' => 'required|integer|min:0',
+            'jumlah_kk_pr' => 'required|integer|min:0',
+        ]);
+
+        $id_puskesmas  = Auth::user()->id_puskesmas;
+        $jumlah        = $request->input('jumlah_input', []);
+        $sasaran       = $request->input('sasaran_input', []);
+        $jumlahKkTotal = $request->jumlah_kk_lk + $request->jumlah_kk_pr;
+        $berPhbs       = array_sum($jumlah);
+
+        $persenPhbs = $jumlahKkTotal > 0
+            ? round($berPhbs / $jumlahKkTotal * 100, 2)
+            : 0;
+
+        $kategori = match (true) {
+            $persenPhbs >= 80 => 'Baik',
+            $persenPhbs >= 50 => 'Cukup',
+            default           => 'Kurang',
+        };
+
         $phbs = NewDataPHBS::create([
-            // 'id_puskesmas' => Auth::user()->id_puskesmas,
-            // 'bulan' => $request->bulan,
-            // 'tahun' => $request->tahun,
-            // 'jumlah_kk_total' => $request->jumlah_kk_total,
-
-            'id_puskesmas'    => Auth::user()->id_puskesmas,
-            'bulan'           => $request->bulan,
-            'tahun'           => $request->tahun,
-            'jumlah_kk_l'     => $request->jumlah_kk_l,
-            'jumlah_kk_p'     => $request->jumlah_kk_p,
-            'jumlah_kk_total' => $request->jumlah_kk_total,
-            'ber_phbs'        => $total,
-            'persen_phbs'     => $persenPhbs,
-            'status_laporan'  => 'draft',
-
-            // 'persalinan_nakes'      => $jumlah[1] ?? 0,
-            // 'asi_eksklusif'         => $jumlah[2] ?? 0,
-            // 'timbang_balita'        => $jumlah[3] ?? 0,
-            // 'air_bersih'            => $jumlah[4] ?? 0,
-            // 'cuci_tangan'           => $jumlah[5] ?? 0,
-            // 'pengelolaan_air_minum' => $jumlah[6] ?? 0,
-            // 'jamban_sehat'          => $jumlah[7] ?? 0,
-            // 'pengelolaan_limbah'    => $jumlah[8] ?? 0,
-            // 'buang_sampah'          => $jumlah[9] ?? 0,
-            // 'pemberantasan_jentik'  => $jumlah[10] ?? 0,
-            // 'makan_buah_sayur'      => $jumlah[11] ?? 0,
-            // 'aktivitas_fisik'       => $jumlah[12] ?? 0,
-            // 'tidak_merokok'         => $jumlah[13] ?? 0,
-
-            // 'total_indikator_phbs' => $total,
-            'kategori_phbs' => $kategori
-            // 'user_penginput' => 1,
+            'id_puskesmas'   => $id_puskesmas,
+            'bulan'          => $request->bulan,
+            'tahun'          => $request->tahun,
+            'jumlah_kk_lk'   => $request->jumlah_kk_lk,
+            'jumlah_kk_pr'   => $request->jumlah_kk_pr,
+            'ber_phbs'       => $berPhbs,
+            'persen_phbs'    => $persenPhbs,
+            'kategori_phbs'  => $kategori,
+            'status_laporan' => 'draft',
         ]);
 
-        $sasaran = $request->input('sasaran_input', []);
+        for ($i = 1; $i <= 13; $i++) {
+            $jumlahSasaran  = (int) ($sasaran[$i] ?? 0);
+            $jumlahCapaian  = (int) ($jumlah[$i]  ?? 0);
+            $sasaranEfektif = $jumlahSasaran > 0 ? $jumlahSasaran : $jumlahKkTotal;
 
-for ($i = 1; $i <= 13; $i++) {
+            NewDataPHBSDetail::create([
+                'id_phbs'        => $phbs->id_phbs,
+                'id_indikator'   => $i,
+                'jumlah_sasaran' => $jumlahSasaran > 0 ? $jumlahSasaran : null,
+                'jumlah_capaian' => $jumlahCapaian,
+            ]);
+        }
 
-    $jumlahSasaran = $sasaran[$i] ?? 0;
-    $jumlahCapaian = $jumlah[$i] ?? 0;
-
-    $persentase = $jumlahSasaran > 0
-        ? ($jumlahCapaian / $jumlahSasaran) * 100
-        : 0;
-
-    if ($persentase >= 80) {
-        $kategoriCapaian = 'Tinggi';
-    } elseif ($persentase >= 50) {
-        $kategoriCapaian = 'Sedang';
-    } else {
-        $kategoriCapaian = 'Rendah';
-    }
-
-    NewDataPHBSDetail::create([
-        'id_phbs' => $phbs->id_phbs,
-        'id_indikator' => $i,
-        'jumlah_sasaran' => $jumlahSasaran,
-        'jumlah_capaian' => $jumlahCapaian,
-        'persentase' => round($persentase),
-        'kategori_capaian' => $kategoriCapaian,
-        'keterangan' => '',
-    ]);
-}
-
+        // Redirect ke route puskesmas.formulir.input (= GET /phbs)
+        // dengan tab history langsung terbuka
         return redirect()
-    ->route('phbs.create')
-    ->with('success', 'Data berhasil disimpan');
-
+            ->route('puskesmas.dashboard.formulir.input', ['tab' => 'history'])
+            ->with('success', 'Data PHBS berhasil disimpan.');
     }
 
-    // HISTORY
-    public function history(Request $request)
-{
-    $query = NewDataPHBS::with([
-    'puskesmas',
-    'details'
-]);
-
-    if (Auth::user()->id_role == 2) { // role puskesmas
-        $query->where('id_puskesmas', Auth::user()->id_puskesmas);
-    } elseif ($request->puskesmas) {
-        $query->where('id_puskesmas', $request->puskesmas);
-    }
-
-    if ($request->bulan) {
-        $query->where('bulan', $request->bulan);
-    }
-
-    if ($request->tahun) {
-        $query->where('tahun', $request->tahun);
-    }
-
-    $data = $query
-        ->orderBy('tahun', 'desc')
-        ->orderBy('bulan')
-        ->paginate(10);
-
-    $puskesmas = puskesmas::all();
-
-    return view(
-        'phbs.history',
-        compact('data', 'puskesmas')
-    );
-}
-    // =====================
-    // EDIT
-    // =====================
-    public function edit($id_phbs)
-    {
-        $id_puskesmas = Auth::user()->id_puskesmas;
-        
-        $phbs = NewDataPHBS::findOrFail($id_phbs);
-
-        $puskesmas = puskesmas::all();
-
-        return view(
-            'phbs.edit',
-            compact(
-                'phbs',
-                'puskesmas'
-            )
-        );
-    }
-
-    // =====================
-    // UPDATE
-    // =====================
-    public function update(Request $request, $id_phbs)
-    {
-        $puskesmas = puskesmas::all();
-        
-        $phbs = NewDataPHBS::findOrFail($id_phbs);
-
-        $phbs->update([
-            'id_puskesmas' => $request->id_puskesmas,
-            'bulan' => $request->bulan,
-            'tahun' => $request->tahun,
-            'jumlah_kk_total' => $request->jumlah_kk_total,
-        ]);
-
-        return redirect()
-            ->route('phbs.history')
-            ->with('success', 'Data berhasil diperbarui');
-    }
-
-    // =====================
-    // DELETE
-    // =====================
+    /**
+     * Hapus data
+     * DELETE /phbs/{id_phbs}
+     */
     public function destroy($id_phbs)
     {
-        $puskesmas = puskesmas::all();
-        
         $phbs = NewDataPHBS::findOrFail($id_phbs);
+
+        if (Auth::check() && Auth::user()->id_role == 2 && $phbs->id_puskesmas != Auth::user()->id_puskesmas) {
+            abort(403);
+        }
 
         $phbs->delete();
 
         return redirect()
-            ->route('phbs.history')
-            ->with('success', 'Data berhasil dihapus');
+            ->route('puskesmas.dashboard.formulir.input', ['tab' => 'history'])
+            ->with('success', 'Data berhasil dihapus.');
     }
 
+    /**
+     * Form edit
+     * GET /phbs/{id_phbs}/edit
+     */
+    public function edit($id_phbs)
+    {
+        $phbs         = NewDataPHBS::with('details.indikator')->findOrFail($id_phbs);
+        $puskesmas    = NewPuskesmas::orderBy('nama_puskesmas')->get();
+        $allIndikator = NewIndikator::orderBy('id_indikator')->get();
+
+        $footerName    = Auth::check() ? (Auth::user()->name ?? '-') : 'Guest';
+$footerRole    = 'Puskesmas';
+$footerInitial = Auth::check() ? strtoupper(substr(Auth::user()->name, 0, 1)) : 'G';
+
+        return view('puskesmas.dashboard.formulir.edit', compact(
+            'phbs', 'puskesmas', 'allIndikator',
+            'footerName', 'footerRole', 'footerInitial'
+        ));
+    }
+
+    /**
+     * Simpan perubahan edit
+     * PUT /phbs/{id_phbs}
+     */
+    public function update(Request $request, $id_phbs)
+    {
+        $request->validate([
+            'bulan'        => 'required|string',
+            'tahun'        => 'required|integer',
+            'jumlah_kk_lk' => 'required|integer|min:0',
+            'jumlah_kk_pr' => 'required|integer|min:0',
+        ]);
+
+        $phbs          = NewDataPHBS::findOrFail($id_phbs);
+        $jumlah        = $request->input('jumlah_input', []);
+        $sasaran       = $request->input('sasaran_input', []);
+        $total         = $request->jumlah_kk_lk + $request->jumlah_kk_pr;
+        $berPhbs       = array_sum($jumlah);
+        $persen        = $total > 0 ? round($berPhbs / $total * 100, 2) : 0;
+
+        $phbs->update([
+            'bulan'         => $request->bulan,
+            'tahun'         => $request->tahun,
+            'jumlah_kk_lk'  => $request->jumlah_kk_lk,
+            'jumlah_kk_pr'  => $request->jumlah_kk_pr,
+            'ber_phbs'      => $berPhbs,
+            'persen_phbs'   => $persen,
+            'kategori_phbs' => $persen >= 80 ? 'Baik' : ($persen >= 50 ? 'Cukup' : 'Kurang'),
+        ]);
+
+        for ($i = 1; $i <= 13; $i++) {
+            $jumlahSasaran = (int) ($sasaran[$i] ?? 0);
+            $jumlahCapaian = (int) ($jumlah[$i]  ?? 0);
+
+            $phbs->details()->updateOrCreate(
+                ['id_phbs' => $phbs->id_phbs, 'id_indikator' => $i],
+                [
+                    'jumlah_sasaran' => $jumlahSasaran > 0 ? $jumlahSasaran : null,
+                    'jumlah_capaian' => $jumlahCapaian,
+                ]
+            );
+        }
+
+        return redirect()
+            ->route('puskesmas.dashboard.formulir.input', ['tab' => 'history'])
+            ->with('success', 'Data PHBS berhasil diperbarui.');
+    }
 }
