@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\NewUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,7 +31,7 @@ class LoginController extends Controller
         ]);
 
         // Cek apakah email terdaftar
-        $user = User::where('email', $request->email)->first();
+        $user = NewUser::where('email', $request->email)->first();
 
         if (!$user) {
             return back()
@@ -59,10 +59,10 @@ class LoginController extends Controller
         $role = Auth::user()->role->role ?? 'puskesmas';
 
         if ($role === 'dinkes') {
-            return redirect()->route('dashboard.dinkes');
+            return redirect()->route('dinkes.beranda.index');
         }
 
-        return redirect()->route('dashboard.puskesmas');
+        return redirect()->route('puskesmas.dashboard.index');
     }
 
     public function logout(Request $request)

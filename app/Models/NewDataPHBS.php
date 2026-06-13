@@ -19,9 +19,9 @@ class NewDataPHBS extends Model
         'jumlah_kk_lk',   // kolom asli di DB
         'jumlah_kk_pr',   // kolom asli di DB
         'ber_phbs',
-        'persen_phbs',    // opsional — tambahkan kolom ini via migration jika belum ada
-        'kategori_phbs',  // opsional
-        'status_laporan', // opsional
+        // 'persen_phbs',    // opsional — tambahkan kolom ini via migration jika belum ada
+        // 'kategori_phbs',  // opsional
+        // 'status_laporan', // opsional
     ];
 
     // ── Accessor: jumlah_kk_total (virtual, tidak disimpan ke DB) ──────────
@@ -30,6 +30,20 @@ class NewDataPHBS extends Model
     public function getJumlahKkTotalAttribute(): int
     {
         return ($this->jumlah_kk_lk ?? 0) + ($this->jumlah_kk_pr ?? 0);
+    }
+
+    public function getPersenPhbsAttribute()
+    {
+        $total = $this->jumlah_kk_total;
+        return $total > 0 ? round(($this->ber_phbs / $total) * 100, 1) : 0;
+    }
+
+    public function getKategoriPhbsAttribute()
+    {
+        $pct = $this->persen_phbs;
+        if ($pct >= 80) return 'Baik';
+        if ($pct >= 60) return 'Cukup';
+        return 'Kurang';
     }
 
     // ── Relasi ────────────────────────────────────────────────────────────

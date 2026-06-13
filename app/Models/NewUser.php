@@ -56,4 +56,16 @@ class NewUser extends Authenticatable
             'status_aktif'      => 'boolean',
             'password'          => 'hashed',
         ];
+
+    public function NewRole()
+    {
+        return $this->belongsTo(NewRole::class, 'id_role', 'id_role');
+    }
+
+    public function NewPuskesmas()
+    {
+        return $this->hasOne(NewPuskesmas::class, 'id_user', 'id_user');
+    }
 }
+
+

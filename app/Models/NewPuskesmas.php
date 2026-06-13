@@ -28,7 +28,7 @@ class NewPuskesmas extends Model
     public function user()
     {
         return $this->belongsTo(
-            User::class,
+            NewUser::class,
             'id_user',
             'id_user'
         );

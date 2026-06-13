@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataPhbs;
-use App\Models\Puskesmas;
+use App\Models\NewDataPhbs;
+use App\Models\NewPuskesmas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,12 +19,12 @@ class PhbsController extends Controller
         $kategori = $request->get('kategori', '');
 
         // Ambil daftar puskesmas untuk filter
-        $puskesmasList = Puskesmas::where('status_aktif', true)
+        $puskesmasList = NewPuskesmas::where('status_aktif', true)
             ->orderBy('nama_puskesmas')
             ->get();
 
         // Query laporan
-        $query = DataPhbs::with('puskesmas')
+        $query = NewDataPhbs::with('puskesmas')
             ->where('tahun', $tahun);
 
         // Kalau role puskesmas, hanya tampilkan data miliknya
