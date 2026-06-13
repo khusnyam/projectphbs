@@ -6,39 +6,24 @@
 // use Illuminate\Database\Eloquent\Model;
 // use Illuminate\Database\Eloquent\Relations\HasMany;
 
-// class indikator_phbs extends Model
-// {
-//     use HasFactory;
+class IndikatorPhbs extends Model
+{
+    protected $table      = 'indikator_phbs';
+    protected $primaryKey = 'id_indikator';
 
-//     // 1. Tentukan nama tabel di database
-//     protected $table = 'indikator_phbs';
+    protected $fillable = [
+        'kode_indikator',
+        'nama_indikator',
+        'deskripsi',
+        'status_aktif',
+    ];
 
-//     // 2. ⚠️ WAJIB: Beritahu Laravel kalau primary key kamu adalah id_indikator
-//     protected $primaryKey = 'id_indikator';
+    protected $casts = [
+        'status_aktif' => 'boolean',
+    ];
 
-//     // 3. Array $fillable untuk kolom yang boleh diisi mass-assignment
-//     protected $fillable = [
-//         'kode_indikator',
-//         'nama_indikator',
-//         'kategori_indikator',
-//         'deskripsi',
-//         'target_nasional',
-//         'status_aktif',
-//     ];
-
-//     // 4. ✨ BONUS TIPS: Mengubah tipe data saat dibaca di Laravel/Filament
-//     protected $casts = [
-//         'status_aktif' => 'boolean', // Mengubah 1/0 di database menjadi true/false di program
-//         'target_nasional' => 'integer'
-//     ];
-
-//     public function scopeAktif($query)
-//     {
-//         return $query->where('status_aktif', true);
-//     }
- 
-//     public function details(): HasMany
-//     {
-//         return $this->hasMany(NewDataPHBSDetail::class, 'id_indikator', 'id_indikator');
-//     }
-// }
+    public function details()
+    {
+        return $this->hasMany(DataPhbsDetail::class, 'id_indikator', 'id_indikator');
+    }
+}

@@ -9,46 +9,59 @@
 
     <div class="sidebar-section">
         <div class="sidebar-title"><i class="fa-solid fa-chart-bar"></i> Rekapitulasi <span id="sidePeriodeLabel" style="margin-left:auto;font-size:.6rem;color:var(--accent);font-family:'IBM Plex Mono',monospace;"></span></div>
-        <div class="kategori-grid">
-            <div class="kategori-card oranye-card" onclick="filterByCategory('merah')">
-                <span class="dot"></span><span class="num" id="k-oranye">{{ $statistik['rendah'] }}</span>
-                <div class="label">Belum Tercapai</div>
-                <div style="font-size:.58rem;color:var(--text-muted);margin-top:2px;">&lt;60%</div>
+        <div class="kategori-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+            <div class="kategori-card merah-card" onclick="filterByCategory('merah')" style="border-top: 3px solid #e74c3c;">
+                <span class="dot"></span><span class="num" id="k-merah">0</span>
+                <div class="label">Sangat Rendah</div>
+                <div style="font-size:.58rem;color:var(--text-muted);margin-top:2px;">&lt;30%</div>
             </div>
-            <div class="kategori-card kuning-card" onclick="filterByCategory('kuning')">
-                <span class="dot"></span><span class="num" id="k-kuning">{{ $statistik['sedang'] }}</span>
-                <div class="label">Cukup Tercapai</div>
-                <div style="font-size:.58rem;color:var(--text-muted);margin-top:2px;">60-80%</div>
+            <div class="kategori-card oranye-card" onclick="filterByCategory('oranye')" style="border-top: 3px solid #e67e22;">
+                <span class="dot"></span><span class="num" id="k-oranye">0</span>
+                <div class="label">Rendah</div>
+                <div style="font-size:.58rem;color:var(--text-muted);margin-top:2px;">30–49%</div>
             </div>
-            <div class="kategori-card hijau-card" onclick="filterByCategory('hijau')">
-                <span class="dot"></span><span class="num" id="k-hijau">{{ $statistik['tinggi'] }}</span>
-                <div class="label">Tercapai</div>
-                <div style="font-size:.58rem;color:var(--text-muted);margin-top:2px;">>80%</div>
+            <div class="kategori-card kuning-card" onclick="filterByCategory('kuning')" style="border-top: 3px solid #f1c40f;">
+                <span class="dot"></span><span class="num" id="k-kuning">0</span>
+                <div class="label">Sedang</div>
+                <div style="font-size:.58rem;color:var(--text-muted);margin-top:2px;">50–69%</div>
+            </div>
+            <div class="kategori-card hijau-card" onclick="filterByCategory('hijau')" style="border-top: 3px solid #27ae60;">
+                <span class="dot"></span><span class="num" id="k-hijau">0</span>
+                <div class="label">Tinggi</div>
+                <div style="font-size:.58rem;color:var(--text-muted);margin-top:2px;">&ge;70%</div>
             </div>
         </div>
     </div>
-
+<!-- Search -->
     <div class="sidebar-section">
-        <div class="sidebar-title"><i class="fa-solid fa-magnifying-glass"></i> Cari Puskesmas</div>
-        <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" id="searchInput" placeholder="Nama atau kecamatan..." oninput="filterList(this.value)">
-        </div>
-    </div>
+        <input
+        type="text"
+        id="searchInput"
+        placeholder="Cari puskesmas..."
+        onkeyup="filterList(this.value)"
+        style="width:100%;padding:.7rem;border:1px solid #ddd;border-radius:8px;"
+    >
+</div>
 
-    <div class="sidebar-section" style="border:none;padding-bottom:.25rem;">
+<!-- Daftar Puskesmas -->
+    <div class="sidebar-section">
         <div class="sidebar-title">
-            <i class="fa-solid fa-list"></i> Daftar Puskesmas
-            <span id="listCount" style="margin-left:auto;background:var(--bg-card2);padding:.1rem .4rem;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:.65rem;"></span>
+            <i class="fa-solid fa-hospital"></i>
+            Daftar Puskesmas
+            <span id="listCount" style="margin-left:auto;">0</span>
         </div>
-    </div>
-
-    <div class="puskesmas-list" id="puskesmasList">
-        <div style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.78rem;">
-            <i class="fa-solid fa-spinner fa-spin"></i> Memuat data...
+        <div
+        id="puskesmasList"
+        style="
+            height: calc(100vh - 355px);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 6px;
+        ">
+            </div>
         </div>
-    </div>
-
 </aside>
 
 {{-- ── MAP AREA ── --}}
@@ -75,9 +88,10 @@
 
     <div class="map-legend">
         <div class="legend-title"><i class="fa-solid fa-palette"></i> Capaian (%)</div>
-        <div class="legend-item"><div class="legend-color" style="background:#e74c3c"></div><span>&lt;60% <span style="color:var(--text-muted);font-size:.62rem;">(Belum Tercapai)</span></span></div>
-        <div class="legend-item"><div class="legend-color" style="background:#f1c40f"></div><span>60-80% <span style="color:var(--text-muted);font-size:.62rem;">(Cukup Tercapai)</span></span></div>
-        <div class="legend-item" style="margin-bottom:0"><div class="legend-color" style="background:#27ae60"></div><span>>80% <span style="color:var(--text-muted);font-size:.62rem;">(Tercapai)</span></span></div>
+        <div class="legend-item"><div class="legend-color" style="background:#e74c3c"></div><span>&lt;30% <span style="color:var(--text-muted);font-size:.62rem;">(Sangat Rendah)</span></span></div>
+        <div class="legend-item"><div class="legend-color" style="background:#e67e22"></div><span>30–49% <span style="color:var(--text-muted);font-size:.62rem;">(Rendah)</span></span></div>
+        <div class="legend-item"><div class="legend-color" style="background:#f1c40f"></div><span>50–69% <span style="color:var(--text-muted);font-size:.62rem;">(Sedang)</span></span></div>
+        <div class="legend-item" style="margin-bottom:0"><div class="legend-color" style="background:#27ae60"></div><span>&ge;70% <span style="color:var(--text-muted);font-size:.62rem;">(Tinggi)</span></span></div>
     </div>
 
     <div class="map-info-panel" id="infoPanel" role="region" aria-label="Detail puskesmas" tabindex="-1">
@@ -131,15 +145,17 @@ let geojsonLayer = null;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function getColor(pct) {
-    if (pct <= 60) return '#e74c3c';
-    if (pct <= 80) return '#f1c40f';
-    return '#27ae60';
+    if (pct < 30) return '#e74c3c';   // Sangat Rendah (Merah)
+    if (pct < 50) return '#e67e22';   // Rendah (Oranye)
+    if (pct < 70) return '#f1c40f';   // Sedang (Toska / Biru Laut)
+    return '#27ae60';                 // Tinggi (Hijau)
 }
 function getStatusColors(status) {
     const m = {
-        'Belum Tercapai': ['rgba(230,126,34,.2)', '#e67e22'],
-        'Cukup Tercapai': ['rgba(241,196,15,.2)', '#f1c40f'],
-        'Tercapai':       ['rgba(39,174,96,.2)',  '#27ae60'],
+        'Sangat Rendah': ['rgba(231,76,60,.2)',  '#e74c3c'],
+        'Rendah':        ['rgba(230,126,34,.2)', '#e67e22'],
+        'Sedang':        ['rgba(241,196,15,.2)', '#f1c40f'],
+        'Tinggi':        ['rgba(39,174,96,.2)',  '#27ae60'],
     };
     return m[status] || ['#222','#fff'];
 }
@@ -236,6 +252,8 @@ async function loadGeoJSON(showLoading = true) {
 
         const data = await res.json();
 
+        updateStats(data.features);
+
         if (geojsonLayer) { map.removeLayer(geojsonLayer); geojsonLayer = null; }
 
         geojsonLayer = L.geoJSON(data, {
@@ -275,29 +293,44 @@ async function loadList() {
     renderList(allListData);
     updateSidebarPeriode();
 }
-
+function getKategoriColor(pct) {
+    if (pct < 30) return '#e74c3c';      // merah
+    if (pct < 50) return '#e67e22';      // oranye
+    if (pct < 70) return '#f1c40f';      // kuning
+    return '#2ecc71';                    // hijau
+}
 function renderList(data) {
     document.getElementById('listCount').textContent = data.length;
     const container = document.getElementById('puskesmasList');
-    if (!data.length) {
-        container.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.78rem;"><i class="fa-solid fa-magnifying-glass" style="font-size:1.4rem;opacity:.35;display:block;margin-bottom:.5rem"></i>Tidak ditemukan</div>`;
-        return;
-    }
-    container.innerHTML = data.map(p => `
-        <div class="pkm-item" id="pkm-item-${p.id}" role="button" tabindex="0" aria-label="${p.nama_puskesmas}, ${parseFloat(p.persentase_capaian).toFixed(1)} persen" onclick="selectPuskesmas(${p.id})" onkeydown="if(event.key==='Enter'||event.key===' '||event.key==='Spacebar'){ event.preventDefault(); selectPuskesmas(${p.id}); }">
-            <div class="pkm-color-bar" style="background:${p.warna}"></div>
-            <div class="pkm-info">
-                <div class="pkm-name">${p.nama_puskesmas}</div>
-                <div class="pkm-sub">
-                    <span>${p.kecamatan}</span><span>·</span>
-                    <span>${p.jumlah_kk_total} jiwa</span>
+    container.innerHTML = data.map(item => {
+
+        const pct = parseFloat(item.persentase_capaian || 0);
+        const warna = getKategoriColor(pct);
+
+        return `
+            <div style="
+                padding:10px;
+                border-left:5px solid ${warna};
+                background:#fff;
+                border-radius:8px;
+                margin-bottom:8px;
+            ">
+                <div style="font-weight:600;">
+                    ${item.nama_puskesmas}
                 </div>
-                <div class="pct-bar">
-                    <div class="pct-fill" style="width:${p.persentase_capaian}%;background:${p.warna}"></div>
+
+                <div style="
+                    color:${warna};
+                    font-weight:bold;
+                    font-size:16px;
+                ">
+                    ${pct.toFixed(1)}%
                 </div>
             </div>
-            <div class="pkm-pct" style="color:${p.warna}">${parseFloat(p.persentase_capaian).toFixed(1)}%</div>
-        </div>`).join('');
+        `;
+    }).join('');
+
+    document.getElementById('listCount').textContent = data.length;
 }
 
 // Map control helpers: zoom and pan via accessible buttons and keyboard
@@ -367,7 +400,14 @@ function filterByCategory(cat) {
     activeFilter = cat;
     document.querySelectorAll('.kategori-card').forEach(c => c.style.opacity = '.45');
     document.querySelector('.' + cat + '-card').style.opacity = '1';
-    const ranges = { merah:[0,25], oranye:[26,50], kuning:[51,75], hijau:[76,100] };
+    
+    // Sesuaikan range kondisi objek data list puskesmas
+    const ranges = { 
+        merah:  [0, 29.9], 
+        oranye: [30, 49.9], 
+        kuning: [50, 69.9], 
+        hijau:  [70, 100] 
+    };
     const [lo, hi] = ranges[cat];
     renderList(allListData.filter(p => p.persentase_capaian >= lo && p.persentase_capaian <= hi));
 }
@@ -376,12 +416,16 @@ function filterByCategory(cat) {
 function updateStats(features) {
     const pcts = features.map(f => f.properties.persentase_capaian);
     const avg  = pcts.length ? (pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(1) : 0;
-    document.getElementById('statTotal').textContent = pcts.length;
-    document.getElementById('statAvg').textContent   = avg + '%';
-    document.getElementById('k-merah').textContent   = pcts.filter(p => p <= 25).length;
-    document.getElementById('k-oranye').textContent  = pcts.filter(p => p > 25 && p <= 50).length;
-    document.getElementById('k-kuning').textContent  = pcts.filter(p => p > 50 && p <= 75).length;
-    document.getElementById('k-hijau').textContent   = pcts.filter(p => p > 75).length;
+    
+    // Jika elemen statTotal & statAvg ada di blade Anda
+    if(document.getElementById('statTotal')) document.getElementById('statTotal').textContent = pcts.length;
+    if(document.getElementById('statAvg')) document.getElementById('statAvg').textContent = avg + '%';
+    
+    // Sinkronisasi jumlah counter card berdasarkan pembagian gambar baru
+    document.getElementById('k-merah').textContent  = pcts.filter(p => p < 30).length;
+    document.getElementById('k-oranye').textContent = pcts.filter(p => p >= 30 && p < 50).length;
+    document.getElementById('k-kuning').textContent = pcts.filter(p => p >= 50 && p < 70).length;
+    document.getElementById('k-hijau').textContent  = pcts.filter(p => p >= 70).length;
 }
 
 function updateSidebarPeriode() {

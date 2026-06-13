@@ -256,7 +256,6 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
 </style>
 </head>
 <body>
-
 {{-- SIDEBAR --}}
 <aside class="sidebar">
     <div class="sb-brand">
@@ -325,13 +324,44 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
             </div>
         </div>
     </div>
+<<<<<<< HEAD
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-section">Menu Utama</div>
+    <a href="{{ route('dashboard') }}" class="nav-item">
+      <i class="fa-solid fa-house"></i> Beranda
+    </a>
+    <a href="{{ route('phbs.index') }}" class="nav-item active">
+      <i class="fa-solid fa-chart-bar"></i> Laporan PHBS
+    </a>
+    <a href="{{ route('phbs.form') }}" class="nav-item">
+      <i class="fa-solid fa-plus"></i> Input Laporan
+    </a>
+    <div class="nav-section">Akun</div>
+    <form method="POST" action="{{ route('logout') }}">
+      @csrf
+      <button type="submit" class="nav-item"
+        style="width:100%;background:none;border:none;cursor:pointer;text-align:left">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </form>
+  </nav>
+  <div class="sb-footer">
+    <div class="user-name">{{ auth()->user()->name ?? 'User' }}</div>
+    <div class="user-role">{{ ucfirst(auth()->user()->role->role ?? 'dinkes') }} • SIP-PHBS</div>
+  </div>
+=======
+>>>>>>> a0aff25b32e0e6d800417eb10bc7249656eea7fd
 </aside>
 
 {{-- MAIN --}}
 <div class="main">
   <div class="topbar">  
     <div class="tb-left">
-      <h2><i class="fa-solid fa-chart-bar" style="color:var(--blue);margin-right:7px"></i>Laporan Rekapitulasi PHBS</h2>
+      <h2>
+        <i class="fa-solid fa-chart-bar" style="color:var(--blue);margin-right:7px"></i>
+        Laporan Rekapitulasi PHBS
+      </h2>
       <p>Tatanan Rumah Tangga • Tahun {{ $tahun }}</p>
     </div>
     {{-- <div class="tb-right"> --}}
@@ -348,7 +378,9 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
 
     {{-- ALERT --}}
     @if(session('success'))
-      <div class="alert alert-ok"><i class="fa-solid fa-circle-check"></i> {{ session('success') }}</div>
+      <div class="alert alert-ok">
+        <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+      </div>
     @endif
 
     {{-- STAT CARDS --}}
@@ -357,8 +389,14 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
       $barColor = $rata >= 80 ? '#16a34a' : ($rata >= 60 ? '#f59e0b' : '#ef4444');
       $katTxt   = $rata >= 80 ? 'Kategori Baik' : ($rata >= 60 ? 'Kategori Cukup' : 'Kategori Kurang');
     @endphp
+<<<<<<< HEAD
+
+    <div class="stat-row">
+      <div class="sc">
+=======
     {{-- <div class="stat-row"> --}}
       {{-- <div class="sc">
+>>>>>>> a0aff25b32e0e6d800417eb10bc7249656eea7fd
         <div class="sc-top">
           <div>
             <div class="lbl">Total Laporan</div>
@@ -396,7 +434,9 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
           </div>
           <div class="sc-ico sc-ico-yellow"><i class="fa-solid fa-chart-line"></i></div>
         </div>
-        <div class="pbar"><div class="pbar-fill" style="width:{{ $rata }}%;background:{{ $barColor }}"></div></div>
+        <div class="pbar">
+          <div class="pbar-fill" style="width:{{ $rata }}%;background:{{ $barColor }}"></div>
+        </div>
         <div class="sub" style="margin-top:6px">{{ $katTxt }}</div>
       </div> --}}
     {{-- </div> --}}
@@ -426,7 +466,8 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
           <select name="puskesmas_id">
             <option value="0">Semua Puskesmas</option>
             @foreach($puskesmasList as $pkm)
-              <option value="{{ $pkm->id_puskesmas }}" {{ $pkmId==$pkm->id_puskesmas?'selected':'' }}>
+              <option value="{{ $pkm->id_puskesmas }}"
+                {{ $pkmId==$pkm->id_puskesmas?'selected':'' }}>
                 {{ $pkm->nama_puskesmas }}
               </option>
             @endforeach
@@ -470,29 +511,47 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
               <th style="text-align:right">Ber-PHBS</th>
               <th style="text-align:right">% PHBS</th>
               <th>Kategori</th>
-              <th>Status</th>
-              <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
-            @forelse($laporan as $i=>$row)
+            @forelse($laporan as $i => $row)
             @php
               $pct = $row->persen_phbs;
-              $pc  = $pct>=80?'#166534':($pct>=60?'#92400e':'#991b1b');
-              $bk  = $pct>=80?'b-baik':($pct>=60?'b-cukup':'b-kurang');
-              $kt  = $pct>=80?'Baik':($pct>=60?'Cukup':'Kurang');
+              $pc  = $pct >= 80 ? '#166534' : ($pct >= 60 ? '#92400e' : '#991b1b');
+              $bk  = $pct >= 80 ? 'b-baik'  : ($pct >= 60 ? 'b-cukup'  : 'b-kurang');
+              $kt  = $pct >= 80 ? 'Baik'    : ($pct >= 60 ? 'Cukup'    : 'Kurang');
             @endphp
             <tr>
+<<<<<<< HEAD
+              <td style="color:var(--s5);font-size:.7rem">{{ $i + 1 }}</td>
+              <td class="td-pkm">{{ $row->puskesmas->nama_puskesmas ?? '-' }}</td>
+              <td style="font-size:.73rem;color:var(--s5)">
+                {{ $namaBulan[$row->bulan] ?? '-' }}
+              </td>
+=======
               <td style="color:var(--s5);font-size:.7rem">{{ $i+1 }}</td>
               <td class="td-pkm">{{ $row->nama_puskesmas }}</td>
               <td style="font-size:.73rem;color:var(--s5)">{{ $namaBulan[$row->bulan]??'Januari' }}</td>
+>>>>>>> a0aff25b32e0e6d800417eb10bc7249656eea7fd
               <td style="font-size:.73rem;color:var(--s5)">{{ $row->tahun }}</td>
+<<<<<<< HEAD
               <td class="td-num">{{ number_format($row->jumlah_kk_total_l) }}</td>
               <td class="td-num">{{ number_format($row->jumlah_kk_total_p) }}</td>
               <td class="td-num"><strong>{{ number_format($row->jumlah_kk_total_total) }}</strong></td>
+=======
+              <td class="td-num">{{ number_format($row->jumlah_kk_lk) }}</td>
+              <td class="td-num">{{ number_format($row->jumlah_kk_pr) }}</td>
+              <td class="td-num">
+                <strong>{{ number_format($row->jumlah_kk_total) }}</strong>
+              </td>
+>>>>>>> c5bd410bf616519ac078a6e7f4976fcb8ea3f1cb
               <td class="td-num">{{ number_format($row->ber_phbs) }}</td>
-              <td class="td-num"><strong style="color:{{ $pc }}">{{ number_format($pct,1) }}%</strong></td>
+              <td class="td-num">
+                <strong style="color:{{ $pc }}">{{ number_format($pct, 1) }}%</strong>
+              </td>
               <td><span class="badge {{ $bk }}">{{ $kt }}</span></td>
+<<<<<<< HEAD
+=======
               <td>
                 <span class="badge {{ $row->status_laporan=='terkirim'?'b-kirim':'b-draft' }}">
                   {{ $row->status_laporan=='terkirim'?'Terkirim':'Draft' }}
@@ -512,9 +571,12 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
                   </form>
                 </div>
               </td>
+>>>>>>> a0aff25b32e0e6d800417eb10bc7249656eea7fd
             </tr>
             @empty
-            <tr class="empty"><td colspan="12">📭 Belum ada data untuk filter ini.</td></tr>
+            <tr class="empty">
+              <td colspan="10">📭 Belum ada data untuk filter ini.</td>
+            </tr>
             @endforelse
           </tbody>
         </table>
@@ -523,5 +585,6 @@ tbody td{padding:11px 14px;vertical-align:middle;font-size:13px;}
 
   </div>
 </div>
+
 </body>
 </html>

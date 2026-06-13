@@ -9,122 +9,34 @@ use App\Models\data_phbs as ModelsData_phbs;
 
 class Puskesmas extends Model
 {
-    use HasFactory;
-    protected $table = 'puskesmas';
-
+    protected $table      = 'puskesmas';
     protected $primaryKey = 'id_puskesmas';
 
-    public $incrementing = true;
-    protected $keyType = 'int';
-
     protected $fillable = [
+        'id_user',
+        'id_kecamatan',
         'nama_puskesmas',
         'alamat',
-        'kecamatan',
-        'kabupaten',
-        'provinsi',
-        'kode_pos',
-        'no_telepon',
         'email',
-        'kepala_puskesmas',
-        'latitude',
-        'longitude',
         'status_aktif',
-        'persentase_capaian',
-        'jumlah_kk_total',
-        'status_kategori',
-        'geojson_polygon',
-        'warna',
     ];
 
     protected $casts = [
-        'geojson_polygon' => 'array',
-        'persentase_capaian' => 'float',
         'status_aktif' => 'boolean',
     ];
 
-    public function scopeAktif($query)
+    public function user()
     {
-        return $query->where('status_aktif', true);
+        return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | RELASI
-    |--------------------------------------------------------------------------
-    */
-
-    public function phbs()
+    public function kecamatan()
     {
-        return $this->hasMany(
-            data_phbs::class,
-            'id_puskesmas',
-            'id_puskesmas'
-        );
+        return $this->belongsTo(Kecamatan::class, 'id_kecamatan', 'id_kecamatan');
     }
 
-    public function latestPhbs()
+    public function dataPhbs()
     {
-        return $this->hasOne(
-            data_phbs::class,
-            'id_puskesmas',
-            'id_puskesmas'
-        )->latestOfMany('id_phbs');
-    }
-
-    public function capaianBulanan()
-    {
-        return $this->hasMany(
-            CapaianBulanan::class,
-            'id_puskesmas',
-            'id_puskesmas'
-        );
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | HELPER WARNA & STATUS PETA
-    |--------------------------------------------------------------------------
-    */
-
-    public function getWarnaByPersentase(): string
-    {
-        $persen = $this->persentase_capaian;
-
-        if ($persen < 60) return '#e74c3c';
-        if ($persen < 80) return '#f1c40f';
-        return '#27ae60';
-    }
-
-    public function getStatusByPersentase(): string
-    {
-        $persen = $this->persentase_capaian;
-
-        if ($persen < 60) return 'Rendah';
-        if ($persen < 80) return 'Sedang';
-        return 'Tinggi';
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | GEOJSON UNTUK PETA
-    |--------------------------------------------------------------------------
-    */
-
-    public function toGeoJsonFeature(): array
-    {
-        return [
-            'type' => 'Feature',
-            'geometry' => $this->geojson_polygon,
-            'properties' => [
-                'id' => $this->id_puskesmas,
-                'nama_puskesmas' => $this->nama_puskesmas,
-                'kecamatan' => $this->kecamatan,
-                'persentase_capaian' => $this->persentase_capaian,
-                'jumlah_kk_total' => $this->jumlah_kk_total,
-                'status_kategori' => $this->getStatusByPersentase(),
-                'warna' => $this->getWarnaByPersentase(),
-            ],
-        ];
+        return $this->hasMany(DataPhbs::class, 'id_puskesmas', 'id_puskesmas');
     }
 }

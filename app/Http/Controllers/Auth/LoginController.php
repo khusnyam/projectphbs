@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\PhbsController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +13,7 @@ class LoginController extends Controller
     {
         
         if (Auth::check()) {
-            return redirect('/beranda');
+            return redirect()->route('dashboard');
         }
         return view('auth.login');
     }
@@ -30,14 +30,20 @@ class LoginController extends Controller
             'password.min'      => 'Password minimal 6 karakter.',
         ]);
 
-        $user = \App\Models\User::where('email', $request->email)->first();
+        // Cek apakah email terdaftar
+        $user = User::where('email', $request->email)->first();
 
         if (!$user) {
-            return back()->withErrors(['email' => 'Email tidak terdaftar.'])->withInput($request->only('email'));
+            return back()
+                ->withErrors(['email' => 'Email tidak terdaftar.'])
+                ->withInput($request->only('email'));
         }
 
-        if ($user->status_aktif == 0) {
-            return back()->withErrors(['email' => 'Akun Anda tidak aktif. Hubungi Admin.'])->withInput($request->only('email'));
+        // Cek status aktif
+        if (!$user->status_aktif) {
+            return back()
+                ->withErrors(['email' => 'Akun Anda tidak aktif. Hubungi Admin.'])
+                ->withInput($request->only('email'));
         }
 
         // Authenticate role 1 or 2 as before, but redirect everyone to `/peta`
@@ -49,7 +55,16 @@ class LoginController extends Controller
             return redirect()->intended('/peta');
         }
 
-        return back()->withErrors(['password' => 'Password yang Anda masukkan salah.'])->withInput($request->only('email'));
+        $request->session()->regenerate();
+
+        // Redirect berdasarkan role
+        $role = Auth::user()->role->role ?? 'puskesmas';
+
+        if ($role === 'dinkes') {
+            return redirect()->route('dashboard.dinkes');
+        }
+
+        return redirect()->route('dashboard.puskesmas');
     }
 
     public function logout(Request $request)
@@ -57,6 +72,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }

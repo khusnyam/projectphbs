@@ -1,71 +1,94 @@
 <?php
+
 namespace App\Http\Controllers;
 
+use App\Models\DataPhbs;
+use App\Models\Puskesmas;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
-use App\Models\NewDataPHBSDetail;
 use Illuminate\Support\Facades\Auth;
 
 class PhbsController extends Controller
 {
-    // halaman dashboard & req data grafik
     public function index(Request $request)
     {
-        $tahun = $request->tahun ?? date('Y');
-      
+        $user     = Auth::user();
+        $role     = $user->role->role ?? 'puskesmas';
+        $tahun    = $request->get('tahun', date('Y'));
+        $bulan    = $request->get('bulan', 0);
+        $pkmId    = $request->get('puskesmas_id', 0);
+        $kategori = $request->get('kategori', '');
 
-        // $idPuskesmas = Auth::user()->id_puskesmas;
-        // $idPuskesmas = Auth::user()->puskesmas->id_puskesmas;
-        $user = Auth::user();
-        $puskesmas = $user->puskesmas;
+        // Ambil daftar puskesmas untuk filter
+        $puskesmasList = Puskesmas::where('status_aktif', true)
+            ->orderBy('nama_puskesmas')
+            ->get();
 
-        $idPuskesmas = $puskesmas->id_puskesmas;
+        // Query laporan
+        $query = DataPhbs::with('puskesmas')
+            ->where('tahun', $tahun);
 
-        if (!$idPuskesmas) {
-        abort(403, 'Akun ini belum terhubung dengan puskesmas.');
-    }
+        // Kalau role puskesmas, hanya tampilkan data miliknya
+        if ($role === 'puskesmas') {
+            $pkm = $user->puskesmas;
 
-    // dd($user, $puskesmas, $idPuskesmas);
+            if ($pkm) {
+                $query->where('id_puskesmas', $pkm->id_puskesmas);
+            }
+        } elseif ($pkmId > 0) {
+            $query->where('id_puskesmas', $pkmId);
+        }
 
-        $data = NewDataPHBSDetail::with(['header','indikator'])
-            // ->where('id_puskesmas', $idPuskesmas)
-            // ->where('tahun', $tahun)
-            ->whereHas('header', function ($query) use ($idPuskesmas, $tahun) {
-            $query->where('id_puskesmas', $idPuskesmas)
-                  ->where('tahun', $tahun);
-            })
-            ->get()
-            ->sortBy(function ($item) {
-            $months = [
-                'Januari' => 1, 'Februari' => 2, 'Maret' => 3, 'April' => 4, 
-                'Mei' => 5, 'Juni' => 6, 'Juli' => 7, 'Agustus' => 8, 
-                'September' => 9, 'Oktober' => 10, 'November' => 11, 'Desember' => 12
-            ];
-            return $months[$item->header->bulan] ?? 99;
-            })
-            ->values();
-            
+        if ($bulan > 0) {
+            $query->where('bulan', $bulan);
+        }
 
-        $latestDetail = $data->last();
-        $latestHeader = $latestDetail ? $latestDetail->header : null;
-        $totalKK = $latestHeader ? $latestHeader->jumlah_kk_total : 0;
-        $berPHBS = $latestHeader ? $latestHeader->ber_phbs : 0;
-        $pct = $totalKK > 0
-            ? round(($berPHBS / $totalKK) * 100, 1)
-            : 0;
+        $laporan = $query->orderBy('bulan')->get();
 
-        $datadashboard = [
-            'nama_puskesmas' => $puskesmas->nama_puskesmas,
-            'total_kk'       => $totalKK,
-            'ber_phbs'       => $berPHBS,
-            'pct'            => $pct,
-            'months'         => $data,
+        // Filter kategori setelah query (pakai accessor)
+        if ($kategori) {
+            $laporan = $laporan->filter(function ($row) use ($kategori) {
+                $pct = $row->persen_phbs;
+
+                if ($kategori === 'baik') {
+                    return $pct >= 80;
+                }
+
+                if ($kategori === 'cukup') {
+                    return $pct >= 60 && $pct < 80;
+                }
+
+                if ($kategori === 'kurang') {
+                    return $pct < 60;
+                }
+
+                return true;
+            });
+        }
+
+        // Hitung stats
+        $stats = [
+            'total_laporan'  => $laporan->count(),
+            'total_kk'       => $laporan->sum('jumlah_kk_total'),
+            'total_ber_phbs' => $laporan->sum('ber_phbs'),
+            'rata_phbs'      => $laporan->count() > 0
+                ? round($laporan->avg('persen_phbs'), 1)
+                : 0,
         ];
 
-        if ($request->ajax()) {
-            return response()->json($datadashboard);
-        }
+        $namaBulan = [
+            1  => 'Januari',
+            2  => 'Februari',
+            3  => 'Maret',
+            4  => 'April',
+            5  => 'Mei',
+            6  => 'Juni',
+            7  => 'Juli',
+            8  => 'Agustus',
+            9  => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+        ];
 
         return view('phbs.dashboard', compact('datadashboard'));
     }
