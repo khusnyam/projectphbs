@@ -30,6 +30,7 @@ class PhbsController extends Controller
         // Kalau role puskesmas, hanya tampilkan data miliknya
         if ($role === 'puskesmas') {
             $pkm = $user->puskesmas;
+
             if ($pkm) {
                 $query->where('id_puskesmas', $pkm->id_puskesmas);
             }
@@ -47,34 +48,58 @@ class PhbsController extends Controller
         if ($kategori) {
             $laporan = $laporan->filter(function ($row) use ($kategori) {
                 $pct = $row->persen_phbs;
-                if ($kategori === 'baik')   return $pct >= 80;
-                if ($kategori === 'cukup')  return $pct >= 60 && $pct < 80;
-                if ($kategori === 'kurang') return $pct < 60;
+
+                if ($kategori === 'baik') {
+                    return $pct >= 80;
+                }
+
+                if ($kategori === 'cukup') {
+                    return $pct >= 60 && $pct < 80;
+                }
+
+                if ($kategori === 'kurang') {
+                    return $pct < 60;
+                }
+
                 return true;
             });
         }
 
         // Hitung stats
         $stats = [
-            'total_laporan'   => $laporan->count(),
-            'total_kk'        => $laporan->sum('jumlah_kk_total'),
-            'total_ber_phbs'  => $laporan->sum('ber_phbs'),
-            'rata_phbs'       => $laporan->count() > 0
+            'total_laporan'  => $laporan->count(),
+            'total_kk'       => $laporan->sum('jumlah_kk_total'),
+            'total_ber_phbs' => $laporan->sum('ber_phbs'),
+            'rata_phbs'      => $laporan->count() > 0
                 ? round($laporan->avg('persen_phbs'), 1)
                 : 0,
         ];
 
         $namaBulan = [
-            1  => 'Januari',   2  => 'Februari', 3  => 'Maret',
-            4  => 'April',     5  => 'Mei',       6  => 'Juni',
-            7  => 'Juli',      8  => 'Agustus',   9  => 'September',
-            10 => 'Oktober',   11 => 'November',  12 => 'Desember',
+            1  => 'Januari',
+            2  => 'Februari',
+            3  => 'Maret',
+            4  => 'April',
+            5  => 'Mei',
+            6  => 'Juni',
+            7  => 'Juli',
+            8  => 'Agustus',
+            9  => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
         ];
 
         return view('phbs.index', compact(
-            'laporan', 'stats', 'puskesmasList',
-            'tahun', 'bulan', 'pkmId', 'kategori',
-            'namaBulan', 'role'
+            'laporan',
+            'stats',
+            'puskesmasList',
+            'tahun',
+            'bulan',
+            'pkmId',
+            'kategori',
+            'namaBulan',
+            'role'
         ));
     }
 }
