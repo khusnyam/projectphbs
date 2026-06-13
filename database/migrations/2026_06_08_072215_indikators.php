@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_phbs', function (Blueprint $table) {
-            $table->id();
+        Schema::create('indikator_phbs', function (Blueprint $table) {
+            $table->id('id_indikator');
+            $table->string('kode_indikator')->unique();
+            $table->string('nama_indikator');
+            $table->string('deskripsi');
+            $table->boolean('status_aktif');
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_phbs');
+        Schema::dropIfExists('indikator_phbs');
     }
 };

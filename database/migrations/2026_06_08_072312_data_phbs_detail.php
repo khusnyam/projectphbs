@@ -11,15 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('data_phbs_details', function (Blueprint $table) {
+        Schema::create('data_phbs_detail', function (Blueprint $table) {
             $table->id('id_detail_phbs');
-            $table->foreignId('id_phbs');
-            $table->foreignId('id_indikator');
-            $table->integer('jumlah_sasaran');
+            $table->unsignedBigInteger('id_phbs');
+            $table->unsignedBigInteger('id_indikator');
+            $table->integer('jumlah_sasaran')->nullable();
             $table->integer('jumlah_capaian');
-            $table->integer('persentase');
-            $table->enum('kategori_capaian', ['Tinggi','Sedang','Rendah']);
-            $table->text('keterangan');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('data_phbs_details');
+        Schema::dropIfExists('data_phbs_detail');
     }
 };

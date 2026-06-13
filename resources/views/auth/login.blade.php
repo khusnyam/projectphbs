@@ -11,8 +11,14 @@
 </head>
 <body>
 <div class="wrap">
+  <div class="bg-c4"></div>
   <div class="bg-c1"></div>
   <div class="bg-c2"></div>
+<<<<<<< HEAD
+=======
+  <div class="bg-c3"></div>
+  
+>>>>>>> a0aff25b32e0e6d800417eb10bc7249656eea7fd
 
   {{-- KIRI --}}
   <div class="left">
@@ -110,7 +116,7 @@
       <div class="role-row">
         <div class="role-badge"><i class="fa-solid fa-hospital"></i>Puskesmas</div>
         <div class="role-badge"><i class="fa-solid fa-building-columns"></i>Dinkes</div>
-        <div class="role-badge"><i class="fa-solid fa-user-shield"></i>Admin</div>
+        {{-- <div class="role-badge"><i class="fa-solid fa-user-shield"></i>Admin</div> --}}
       </div>
       <div class="foot">SIP-PHBS &copy; {{ date('Y') }}</div>
     </div>

@@ -17,9 +17,26 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+       // User::factory()->create([
+         //   'name' => 'Test User',
+           // 'email' => 'test@example.com',
+        //]);
+    
+    $this->call([
+        // UserSeeder::class,
+        // RoleSeeder::class,
+        // PuskesmasSeeder::class,
+        // CapaianBulananSeeder::class,
+        // IndikatorSeeder::class,
+        // KategoriSeeder::class,
+        NewRoleSeeder::class,
+        NewIndikatorSeeder::class,
+        NewKecamatanSeeder::class,
+        NewUserSeeder::class,
+        NewPuskesmasSeeder::class,
+        NewDataPHBSDetailSeeder::class,
+        
+        // Kamu bisa tambah seeder lain di sini nanti, misal: PuskesmasSeeder::class
+    ]);
     }
 }

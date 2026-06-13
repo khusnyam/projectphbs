@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use app\Models\data_phbs;
+use App\Models\data_phbs as ModelsData_phbs;
 
 class Puskesmas extends Model
 {

@@ -13,18 +13,12 @@ return new class extends Migration
     {
         Schema::create('puskesmas', function (Blueprint $table) {
             $table->id('id_puskesmas');
+            $table->unsignedBigInteger('id_user');
+            $table->unsignedBigInteger('id_kecamatan');
             $table->string('nama_puskesmas');
             $table->text('alamat');
-            $table->string('kecamatan');
-            $table->string('kabupaten');
-            $table->string('provinsi');
-            $table->string('kode_pos');
-            $table->string('no_telepon');
             $table->string('email');
-            $table->string('kepala_puskesmas');
-            $table->integer('latitude');
-            $table->integer('longitude');
-            $table->boolean('status_aktif');
+            $table->boolean('status_aktif')->default(true);
             $table->timestamps();
         });
     }

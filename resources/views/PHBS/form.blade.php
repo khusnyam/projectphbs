@@ -88,7 +88,7 @@ body{font-family:var(--fm);background:#f0f7f3;min-height:100vh;display:flex}
 
   <div class="content">
     @php
-      $action = $data ? route('phbs.update',$data->id_data) : route('phbs.store');
+      $action = $data ? route('phbs.update',$data->id_phbs) : route('phbs.store');
       $v = fn($k,$d='') => old($k, $data?->{$k} ?? $d);
       $inds = [
         1=>'Persalinan ditolong oleh Nakes',

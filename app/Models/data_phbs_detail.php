@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+// namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+// use App\Models\data_phbs;
 
 class DataPhbsDetail extends Model
 {
