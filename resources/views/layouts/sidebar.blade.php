@@ -8,6 +8,7 @@
 
     {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('css/dinkes.beranda.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/puskesmas.dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dinkes.dashboard.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">

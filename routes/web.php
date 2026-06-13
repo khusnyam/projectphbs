@@ -18,7 +18,7 @@ use App\Http\Controllers\DashboardPhbsController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
-
+Route::get('/dashboard', [PhbsController::class, 'index'])->name('dashboard');
 //guest
 // Route::middleware('guest')->group(function () {
 //     Route::get('/login',  [LoginController::class, 'showLoginForm'])->name('login');
