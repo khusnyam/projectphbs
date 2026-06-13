@@ -62,7 +62,7 @@ class LoginController extends Controller
             return redirect()->route('beranda');
         }
 
-        return redirect()->route('puskesmas.dashboard.index');
+        return redirect()->route('dashboard');
     }
 
     public function logout(Request $request)
