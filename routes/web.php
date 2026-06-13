@@ -13,6 +13,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PhbsInputController;
 use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\DashboardPhbsController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -28,6 +29,17 @@ Route::post('/login', [LoginController::class, 'login']);
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
+// ── Input & History PHBS (single-page, dua tab) ──────────────────────────
+    // PENTING: /phbs/create harus SEBELUM /phbs/{id_phbs}/edit
+    // supaya Laravel tidak menganggap "create" sebagai {id_phbs}
+    Route::get('/phbs/create',         [PhbsInputController::class, 'index']  )->name('phbs.create');
+    Route::get('/phbs',                [PhbsInputController::class, 'index']  )->name('puskesmas.formulir.input');
+    Route::post('/phbs/store',         [PhbsInputController::class, 'store']  )->name('phbs.store');
+    Route::get('/phbs/{id_phbs}/edit', [PhbsInputController::class, 'edit']   )->name('phbs.edit');
+    Route::put('/phbs/{id_phbs}',      [PhbsInputController::class, 'update'] )->name('phbs.update');
+    Route::delete('/phbs/{id_phbs}',   [PhbsInputController::class, 'destroy'])->name('phbs.destroy');
+ 
+
 // Route::get('/dashboard-phbs', [DashboardController::class, 'dinkes'])->name('phbs.dashboard');
 
 //auth
@@ -35,7 +47,7 @@ Route::middleware('auth:web')->group(function () {
     // Route::get('/beranda', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda');
-        Route::get('/dashboard-phbs', [DashboardController::class, 'dinkes'])->name('phbs.dashboard');
+        Route::get('/dashboard-phbs', [DashboardPhbsController::class, 'index'])->name('dashboard.phbs');
         Route::get('/peta', [PetaController::class, 'index'])->name('peta.index');
 
         // 3. Kelompok Rute API Puskesmas & Peta (Dibutuhkan oleh AJAX / JavaScript)
@@ -55,12 +67,12 @@ Route::middleware('auth:web')->group(function () {
         });
 
         // PHBS puskesmas gatau ini punya siapa, vanda keknya. iya punya vanda. laporan phbs
-        Route::get('/laporan-phbs',              [LaporanController::class, 'index'])->name('phbs.index');
-        Route::get('/laporan-phbs/export',       [LaporanController::class, 'exportExcel'])->name('phbs.export');
-        Route::get('/laporan-phbs/form',         [LaporanController::class, 'form'])->name('phbs.form');
-        // Route::post('/laporan-phbs',             [LaporanController::class, 'store'])->name('phbs.store');
-        Route::get('/laporan-phbs/{id}/edit',    [LaporanController::class, 'edit'])->name('laporan.edit');
-        Route::put('/laporan-phbs/{id}',         [LaporanController::class, 'update'])->name('laporan.update');
+        Route::get('/laporan-phbs',              [LaporanController::class, 'index'])->name('laporan-phbs.index');
+        Route::get('/laporan-phbs/export',       [LaporanController::class, 'exportExcel'])->name('laporan-phbs.export');
+        Route::get('/laporan-phbs/form',         [LaporanController::class, 'form'])->name('laporan-phbs.form');
+        // Route::post('/laporan-phbs',             [LaporanController::class, 'store'])->name('laporan-phbs.store');
+        Route::get('/laporan-phbs/{id}/edit',    [LaporanController::class, 'edit'])->name('laporan-phbs.edit');
+        Route::put('/laporan-phbs/{id}',         [LaporanController::class, 'update'])->name('laporan-phbs.update');
         Route::delete('/laporan-phbs/{id}',      [LaporanController::class, 'destroy'])->name('laporan.destroy');
 
 
@@ -72,15 +84,16 @@ Route::middleware('auth:web')->group(function () {
         // Route::get('/api/phbs/data', [PhbsController::class, 'getData'])->name('phbs.data');
         Route::post('/api/phbs/simpan', [PhbsController::class, 'simpan'])->name('phbs.simpan');
 
-        //input
-        Route::get('/phbs', [PhbsInputController::class, 'create']);
-        Route::get('/phbs/create',[PhbsInputController::class, 'create'])->name('phbs.create');
-        Route::post('/phbs/store',[PhbsInputController::class, 'store'])->name('phbs.store');
-        Route::get('/phbs/history',[PhbsInputController::class, 'history'])->name('phbs.history');
-        Route::get('/phbs/{id_phbs}/edit',[PhbsInputController::class, 'edit'])->name('phbs.edit');
-        Route::put('/phbs/{id_phbs}',[PhbsInputController::class, 'update'])->name('phbs.update');
-        Route::delete('/phbs/{id_phbs}',[PhbsInputController::class, 'destroy'])->name('phbs.destroy');
-});
+
+//         //input
+//         Route::get('/phbs', [PhbsInputController::class, 'create']);
+//         Route::get('/phbs/create',[PhbsInputController::class, 'create'])->name('phbs.create');
+//         Route::post('/phbs/store',[PhbsInputController::class, 'store'])->name('phbs.store');
+//         Route::get('/phbs/history',[PhbsInputController::class, 'history'])->name('phbs.history');
+//         Route::get('/phbs/{id_phbs}/edit',[PhbsInputController::class, 'edit'])->name('phbs.edit');
+//         Route::put('/phbs/{id_phbs}',[PhbsInputController::class, 'update'])->name('phbs.update');
+//         Route::delete('/phbs/{id_phbs}',[PhbsInputController::class, 'destroy'])->name('phbs.destroy');
+// });
     //dinkes
     // Route::middleware(['can:akses-dinkes'])->group(function(){
         //anies
@@ -222,3 +235,4 @@ Route::middleware('auth:web')->group(function () {
 //     Route::get('/peta/detail/{id}', [PetaController::class, 'show'])->name('api.peta.detail');
     
 // });
+});

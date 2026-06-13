@@ -2,22 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-// use Illuminate\Models\NewDataPHBSDetail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Model untuk tabel indikator_phbs
+ *
+ * Kolom aktual DB:
+ *   id_indikator | kode_indikator | nama_indikator | deskripsi | status_aktif
+ *
+ * TIDAK ADA kolom target_nasional di DB → dihapus dari fillable.
+ */
 class NewIndikator extends Model
 {
-    //
-    protected $table = 'indikator_phbs';
+    use HasFactory;
 
+    protected $table      = 'indikator_phbs';
     protected $primaryKey = 'id_indikator';
 
     protected $fillable = [
         'kode_indikator',
         'nama_indikator',
-        'kategori_indikator',
+        'deskripsi',
         'status_aktif',
     ];
 
@@ -25,13 +31,10 @@ class NewIndikator extends Model
         'status_aktif' => 'boolean',
     ];
 
-    //relasi
+    // ── Relasi ──────────────────────────────────────────────────────────
+
     public function detailPhbs()
     {
-        return $this->hasMany(
-            NewDataPHBSDetail::class,
-            'id_indikator',
-            'id_indikator'
-        );
+        return $this->hasMany(NewDataPHBSDetail::class, 'id_indikator', 'id_indikator');
     }
 }

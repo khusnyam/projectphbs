@@ -12,12 +12,11 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    protected $table = 'users';
-
+    protected $table      = 'users';
     protected $primaryKey = 'id_user';
 
     protected $fillable = [
-        'id_role',
+        'id_role1',
         'name',
         'email',
         'password',
@@ -35,22 +34,13 @@ class User extends Authenticatable
         'password'          => 'hashed',
     ];
 
-    //relas
     public function role()
     {
-        return $this->belongsTo(
-            NewRole::class,
-            'id_role',
-            'id_role'
-        );
+        return $this->belongsTo(Role::class, 'id_role', 'id_role');
     }
 
     public function puskesmas()
     {
-        return $this->hasOne(
-            NewPuskesmas::class,
-            'id_user',
-            'id_user'
-        );
+        return $this->hasOne(Puskesmas::class, 'id_user', 'id_user');
     }
 }
