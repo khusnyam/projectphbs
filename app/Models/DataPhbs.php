@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DataPhbs extends Model
 {
+    use HasFactory;
+
     protected $table      = 'data_phbs';
     protected $primaryKey = 'id_phbs';
 
@@ -18,7 +21,7 @@ class DataPhbs extends Model
         'ber_phbs',
     ];
 
-    protected $appends = ['jumlah_kk_total', 'persen_phbs'];
+    protected $appends = ['jumlah_kk_total', 'persen_phbs', 'kategori_phbs'];
 
     public function getJumlahKkTotalAttribute()
     {
