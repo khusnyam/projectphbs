@@ -110,7 +110,7 @@ class PetaController extends Controller
             'tinggi'        => $rows->where('persentase_capaian', '>', 80)->count(),
         ];
 
-        return view('peta.index', compact(
+        return view('dinkes.peta.index', compact(
             'totalPuskesmas', 'rataRataCapaian', 'totalKK',
             'statistik', 'bulan', 'tahun', 'bulanList', 'tahunList'
         ));
