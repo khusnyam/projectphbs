@@ -38,10 +38,11 @@ class BerandaController extends Controller
         $rekapData = DB::table('data_phbs as dp')
             ->join('puskesmas as p',          'dp.id_puskesmas', '=', 'p.id_puskesmas')
             ->leftJoin('kecamatans as k',      'p.id_kecamatan',  '=', 'k.id_kecamatan')
+            // ->leftJoin('data_phbs_detail as dpd',      'dp.id_phbs',  '=', 'dpd.id_phbs')
             ->where('dp.tahun', $tahun)
             ->where('p.status_aktif', true)
             ->when($bulan,        fn($q) => $q->where('dp.bulan',        $bulan))
-            ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
+            // ->when($id_puskesmas, fn($q) => $q->where('dp.id_puskesmas', $id_puskesmas))
             ->select(
                 'p.id_puskesmas',
                 'p.nama_puskesmas',

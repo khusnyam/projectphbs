@@ -6,6 +6,7 @@ use App\Models\NewDataPHBS;
 use App\Models\NewPuskesmas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LaporanController extends Controller
 {
@@ -35,10 +36,12 @@ class LaporanController extends Controller
         }
 
         if ($bulan > 0) {
-            $query->where('bulan', $bulan);
+            $namaBulanString = \App\Models\NewDataPHBS::namaBulan($bulan);
+    
+            $query->where('bulan', $namaBulanString);
         }
 
-        $laporan = $query->orderBy('bulan')->get();
+        $laporan = $query->get();
 
         if ($kategori) {
             $laporan = $laporan->filter(function ($row) use ($kategori) {
@@ -79,7 +82,39 @@ class LaporanController extends Controller
 
     public function exportExcel(Request $request)
     {
-        return view('PHBS.export_excel');
+        $tahun    = $request->get('tahun', date('Y'));
+        $bulan    = $request->get('bulan', 0);
+        $pkmId    = $request->get('puskesmas_id', 0);
+        $kategori = $request->get('kategori', '');
+
+        $query = DB::table('NewDataPHBS as d')
+            ->join('puskesmas as p', 'd.id_puskesmas', '=', 'p.id_puskesmas')
+            ->select('d.*', 'p.nama_puskesmas')
+            ->where('d.tahun', $tahun);
+
+        if ($bulan)    $query->where('d.bulan', $bulan);
+        if ($pkmId)    $query->where('d.id_puskesmas', $pkmId);
+        if ($kategori === 'baik')   $query->where('d.persen_phbs', '>=', 80);
+        if ($kategori === 'cukup')  $query->whereBetween('d.persen_phbs', [60, 79.99]);
+        if ($kategori === 'kurang') $query->where('d.persen_phbs', '<', 60);
+
+        $laporan   = $query->orderBy('p.nama_puskesmas')->orderBy('d.bulan')->get();
+        $namaBulan = $this->index($request)->namaBulan;
+
+        $headers = [
+            'Content-Type'        => 'application/vnd.ms-excel; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="Laporan_PHBS_'.$tahun.'.xls"',
+            'Cache-Control'       => 'max-age=0',
+        ];
+
+        $html = view('phbs.export_excel', compact('laporan','namaBulan','tahun','bulan'))->render();
+        return Response::make("\xEF\xBB\xBF".$html, 200, $headers);
+        NewDataPhbs::findOrFail($id)->delete();
+        return redirect()->route('phbs.index')->with('success', 'Data berhasil dihapus.');
+    // }
+    //     $export = $this->index($request)->getData();
+
+    //     return view('dinkes.pelaporan.export_excel',compact('export'));
     }
 
     public function edit($id)

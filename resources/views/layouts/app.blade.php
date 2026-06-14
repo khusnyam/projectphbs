@@ -299,11 +299,6 @@
         <button class="btn-nav" id="btnNext" onclick="navigateBulan(1)" title="Bulan berikutnya">
             <i class="fa-solid fa-chevron-right"></i>
         </button>
-
-        {{-- Badge aktif --}}
-        <span class="periode-active" id="periodeActive">
-            {{ $bulan }} {{ $tahun }}
-        </span>
     </div>
 
     <div class="header-stats">

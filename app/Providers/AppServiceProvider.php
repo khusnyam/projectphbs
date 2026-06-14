@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate; // <--- 1. Tambahkan ini di paling atas!
 use Illuminate\Support\Facades\Log;
+use Illuminate\Pagination\Paginator;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -20,40 +21,32 @@ class AppServiceProvider extends ServiceProvider
     
 
     public function boot(): void
-    {
-        // DEBUG: Log gate checks
-        Gate::after(function ($user, $ability, $result, $arguments) {
-            Log::info('GATE_CHECK', [
-                'ability'   => $ability,
-                'result'    => $result,
-                'user_id'   => $user?->id_user,
-                'user_role' => $user?->id_role,
-                'user_email' => $user?->email,
-            ]);
-        });
+{
+    // Gate::define('akses-dinkes', function ($user) {
+    //     // return session('user_role') === 1 || $user->isDinkes();
+    //     return $user->id_role == 1;
+    // });
 
-        // Gate untuk Dinkes (role 1)
-        Gate::define('akses-dinkes', function ($user) {
-            $allowed = $user && $user->id_role == 1;
-            Log::info('GATE_DINKES', [
-                'user_id' => $user?->id_user,
-                'user_role' => $user?->id_role,
-                'allowed' => $allowed,
-            ]);
-            return $allowed;
-        });
+    // Gate::define('akses-puskesmas', function ($user) {
+    //     // return session('user_role') === 2 || $user->isPuskesmas();
+    //     return $user->id_role == 2;
+    // });
+    Gate::define('akses-puskesmas', function ($user) {
+    dd([
+        'GATE DIPANGGIL' => true,
+        'id_role'        => $user->id_role,
+        'hasil'          => $user->id_role == 2,
+    ]);
+    return $user->id_role == 2;
+});
+}
+};
 
-        // Gate untuk Puskesmas (role 2)
-        Gate::define('akses-puskesmas', function ($user) {
-            $allowed = $user && $user->id_role == 2;
-            Log::info('GATE_PUSKESMAS', [
-                'user_id' => $user?->id_user,
-                'user_role' => $user?->id_role,
-                'allowed' => $allowed,
-            ]);
-            return $allowed;
-        });
-    }
+
+
+
+
+
 
     /**
      * Bootstrap any application services.
@@ -68,4 +61,3 @@ class AppServiceProvider extends ServiceProvider
     //         return $user->id_role == 2; 
     //     });
     // }
-}

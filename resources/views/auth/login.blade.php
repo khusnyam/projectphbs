@@ -6,6 +6,7 @@
 <title>Login – SIP-PHBS</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet"
@@ -25,14 +26,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     {{-- KIRI --}}
     <div class="left">
 
-        <div class="badge-top">
-            <i class="fa-solid fa-shield-halved"></i>
+        {{-- <div class="badge-top">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/>
+            </svg>
             Sistem Informasi PHBS
-        </div>
+        </div> --}}
 
         <h1>
-            Sistem <span>Pelaporan</span><br>
-            PHBS Terpadu
+            Sistem Informasi Pelaporan<span><br>PHBS Tatanan Rumah Tangga</span>
         </h1>
 
         <p class="sub">
@@ -40,17 +42,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
             Perilaku Hidup Bersih dan Sehat secara terintegrasi.
         </p>
 
-        <div class="float-btns">
-            <a class="float-btn">
-                <i class="fa-solid fa-heart-pulse"></i>
-                Monitoring PHBS
-            </a>
-
-            <a class="float-btn">
-                <i class="fa-solid fa-chart-bar"></i>
-                Rekap Laporan
-            </a>
-        </div>
 
         <div class="info-badge">
             <i class="fa-solid fa-hospital"></i>
@@ -76,10 +67,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 
         <div class="right-card">
 
-            <div class="right-header">
+            {{-- <div class="right-header">
 
                 <div class="logo-box">
-                    <i class="fa-solid fa-heart-pulse"></i>
+                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"/>
+            </svg>
                 </div>
 
                 <div class="logo-text">
@@ -87,7 +80,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
                     <p>Sistem Informasi Pelaporan PHBS</p>
                 </div>
 
-            </div>
+            </div> --}}
 
             <h3>Selamat Datang</h3>
             <p class="sub2">

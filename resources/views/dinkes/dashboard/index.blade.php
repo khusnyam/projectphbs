@@ -1,55 +1,26 @@
 @extends('layouts.sidebar')
 @section('title','Dashboard PHBS - SIP-PHBS')
+@section('top')
+    {{-- ─── HERO ───────────────────────────────────────────────────────────── --}}
+    {{-- <div class="hero"> --}}
+        <div class="hero-left">
+            <div class="hero-title">
+                Analisis Indikator
+            </div>
+            <p class="hero-desc">
+                Analisis mendalam 13 indikator PHBS Rumah Tangga
+                Kabupaten Sleman.
+            </p>
+        </div>
+    {{-- </div> --}}
+@endsection
+
 @section('content')
 
 <main class="main">
 
-    {{-- ─── HERO ───────────────────────────────────────────────────────────── --}}
-    <div class="hero">
-        <div class="hero-left">
-            <div class="hero-title">
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                </svg>
-                Dashboard PHBS
-            </div>
-            <p class="hero-desc">
-                Analisis mendalam 13 indikator Perilaku Hidup Bersih dan Sehat (PHBS)
-                tingkat Kabupaten Sleman — temukan indikator yang perlu mendapat perhatian.
-            </p>
-            <div class="hero-badges">
-                <span class="hero-badge">
-                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"/></svg>
-                    13 Indikator PHBS
-                </span>
-                <span class="hero-badge">
-                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                    Tahun {{ $tahun }}
-                </span>
-                <span class="hero-badge">
-                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    Kabupaten Sleman
-                </span>
-            </div>
-        </div>
-        <div class="hero-right">
-            <div class="rata-card">
-                <div class="rata-label">Rata-rata Capaian Indikator</div>
-                <div class="rata-value">{{ number_format($rataKabupaten, 1) }}<span style="font-size:20px;font-weight:600;opacity:.7">%</span></div>
-                <div class="rata-bar"><div class="rata-fill" style="width:{{ min($rataKabupaten,100) }}%"></div></div>
-                <div class="rata-sub">Rata-rata dari 13 indikator PHBS</div>
-            </div>
-        </div>
-    </div>
-
     {{-- ─── FILTER ─────────────────────────────────────────────────────────── --}}
     <div class="filter-section">
-        <div class="filter-title">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path d="M3 4a1 1 0 011-1h16a1 1 0 010 2H4a1 1 0 01-1-1zM6 10a1 1 0 011-1h10a1 1 0 010 2H7a1 1 0 01-1-1zM9 16a1 1 0 011-1h4a1 1 0 010 2h-4a1 1 0 01-1-1z"/>
-            </svg>
-            Filter Dashboard
-        </div>
         <form method="GET" action="{{ route('dashboard.phbs') }}">
             <div class="filter-row">
                 <div class="fg fg-sm">
@@ -173,9 +144,6 @@
             <div class="section-card">
                 <div class="section-head">
                     <div class="section-head-left">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--primary)">
-                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                        </svg>
                         <div>
                             <div class="section-title">Ringkasan 13 Indikator PHBS Tingkat Kabupaten</div>
                             <div class="section-sub">Capaian setiap indikator se-Kabupaten Sleman — Tahun {{ $tahun }}{{ $bulan ? ' / Bulan '.\App\Models\NewDataPHBS::namaBulan($bulan) : '' }}</div>
@@ -275,9 +243,6 @@
             <div class="section-card">
                 <div class="section-head">
                     <div class="section-head-left">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--primary)">
-                            <path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
-                        </svg>
                         <div>
                             <div class="section-title">Tren Capaian per Indikator</div>
                             <div class="section-sub">Perkembangan setiap indikator dari bulan ke bulan selama {{ $tahun }}</div>
@@ -302,9 +267,6 @@
             <div class="section-card">
                 <div class="section-head">
                     <div class="section-head-left">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color:var(--primary)">
-                            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-                        </svg>
                         <div>
                             <div class="section-title">Heatmap Konsistensi Indikator per Bulan</div>
                             <div class="section-sub">Seberapa konsisten capaian tiap indikator sepanjang {{ $tahun }} — warna lebih gelap = capaian lebih tinggi</div>
@@ -312,7 +274,7 @@
                     </div>
                     <span class="card-badge">{{ $tahun }}</span>
                 </div>
-                <div class="table-wrap" style="padding:16px 20px;">
+                <div class="table-wrap">
                     <table class="heatmap-table">
                         <thead>
                             <tr>

@@ -17,7 +17,7 @@ class NewRole extends Model
 
     public function users(): HasMany
     {
-        return $this->hasMany(NewUser::class, 'id_role', 'id_role');
+        return $this->hasMany(User::class, 'id_role', 'id_role');
     }
 }
 

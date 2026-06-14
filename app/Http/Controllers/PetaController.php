@@ -8,6 +8,7 @@ use App\Models\Puskesmas;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\NewPuskesmas;
 
 class PetaController extends Controller
 {
@@ -97,7 +98,7 @@ class PetaController extends Controller
         $bulanStr = $this->monthIntToStr($bulan);
         $tahunStr = (string) $tahun;
 
-        return Puskesmas::join('kecamatans', 'puskesmas.id_kecamatan', '=', 'kecamatans.id_kecamatan')
+        return NewPuskesmas::join('kecamatans', 'puskesmas.id_kecamatan', '=', 'kecamatans.id_kecamatan')
         ->leftJoin('data_phbs', function ($join) use ($bulanStr, $tahunStr) {
             $join->on('puskesmas.id_puskesmas', '=', 'data_phbs.id_puskesmas')
                  ->where('data_phbs.bulan', $bulanStr)

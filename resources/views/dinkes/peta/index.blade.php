@@ -8,7 +8,7 @@
 <aside class="sidebar">
 
     <div class="sidebar-section">
-        <div class="sidebar-title"><i class="fa-solid fa-chart-bar"></i> Rekapitulasi <span id="sidePeriodeLabel" style="margin-left:auto;font-size:.6rem;color:var(--accent);font-family:'IBM Plex Mono',monospace;"></span></div>
+        <div class="sidebar-title"><i class="fa-solid fa-chart-bar"></i> Rekapitulasi </div>
         <div class="kategori-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
             <div class="kategori-card merah-card" onclick="filterByCategory('merah')" style="border-top: 3px solid #e74c3c;">
                 <span class="dot"></span><span class="num" id="k-merah">0</span>

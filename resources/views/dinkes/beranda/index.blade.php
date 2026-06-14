@@ -1,32 +1,26 @@
 @extends('layouts.sidebar')
 @section('title','Beranda - SIP-PHBS')
-@section('content')
-{{-- ══════════════════════ MAIN ══════════════════════ --}}
-<main class="main">
-
+@section('top')
     {{-- ─── HERO ─────────────────────────────────────────────────────── --}}
-    <div class="hero">
         <div class="hero-left">
             <div class="hero-title">
                 Dashboard PHBS Rumah Tangga
             </div>
             <p class="hero-desc">
-                Pemantauan capaian 13 indikator Perilaku Hidup Bersih dan Sehat (PHBS)
+                Pantau capaian PHBS Rumah Tangga
                 berdasarkan laporan seluruh puskesmas di Kabupaten Sleman.
             </p>
         </div>
-    </div>
+@endsection
+
+@section('content')
+{{-- ══════════════════════ MAIN ══════════════════════ --}}
+<main class="main">
+
+    
 
     {{-- ─── FILTER ───────────────────────────────────────────────────── --}}
     <div class="filter-section">
-        <div class="filter-title">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                <path d="M3 4a1 1 0 011-1h16a1 1 0 010 2H4a1 1 0 01-1-1zM6 10a1 1 0 011-1h10a1 1 0 010 2H7a1 1 0 01-1-1zM9 16a1 1 0 011-1h4a1 1 0 010 2h-4a1 1 0 01-1-1z"/>
-            </svg>
-            Filter Dashboard
-        </div>
-        <p class="filter-desc"></p>
-
         <form method="GET" action="{{ route('beranda') }}">
             <div class="filter-row">
                 <div class="fg fg-sm">
@@ -159,7 +153,7 @@
         </div>
 
         {{-- ─── CHARTS: Bar + Donut ───────────────────────────────────── --}}
-        <div class="charts-grid">
+        <div class="charts-grid" style="padding-bottom: 20px">
 
             {{-- Bar: capaian per puskesmas --}}
             <div class="chart-card">
@@ -226,7 +220,7 @@
                     <span class="card-badge">{{ $matriksData->count() }} puskesmas</span>
                 </div>
 
-                <div class="table-wrap" style="padding:10px;">
+                <div class="table-wrap">
                     @if($matriksData->isEmpty())
                         <div class="empty">
                             <svg width="44" height="44" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -301,7 +295,7 @@
                     <span class="card-badge">{{ $rekapData->count() }} puskesmas</span>
                 </div>
 
-                <div class="table-wrap" style="padding:10px;">
+                <div class="table-wrap">
                     @if($rekapData->isEmpty())
                         <div class="empty">
                             <svg width="44" height="44" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -361,76 +355,6 @@
                         </tbody>
                     </table>
                     @endif
-                </div>
-            </div>
-        </div>
-
-        {{-- ─── REKAPITULASI PER INDIKATOR ──────────────────────────── --}}
-        <div class="section">
-            <div class="section-card">
-                <div class="section-head">
-                    <div class="section-head-left">
-                        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2563eb" stroke-width="2.5">
-                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
-                        </svg>
-                        <div>
-                            <div class="section-title">Rekapitulasi per Indikator PHBS</div>
-                            <div class="section-sub">Akumulasi capaian seluruh puskesmas · hanya laporan terkirim · Tahun {{ $tahun }}</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="table-wrap">
-                    <table class="rkp-table">
-                        <thead>
-                            <tr>
-                                <th style="width:36px;text-align:center;">No</th>
-                                <th style="width:80px;">Kode</th>
-                                <th>Nama Indikator</th>
-                                <th class="r">Total Sasaran</th>
-                                <th class="r">Total Capaian</th>
-                                {{-- <th class="min-width:80px">Target</th> --}}
-                                <th style="min-width:200px;">Persentase</th>
-                                <th style="text-align:center;">Level</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($rekapIndikator as $no => $ind)
-                                @php
-                                    $pct = (float) $ind['persentase'];
-                                    // $tgt = (float) $ind['target'];
-                                    [$lvl, $bdg, $pg] = match(true) {
-                                        $pct >= 70 => ['Tinggi',       'b-tinggi',       'pg-green'],
-                                        $pct >= 50 => ['Sedang',       'b-sedang',       'pg-amber'],
-                                        $pct >= 30 => ['Rendah',       'b-rendah',       'pg-orange'],
-                                        default    => ['Sangat Rendah','b-sangatrendah', 'pg-red'],
-                                    };
-                                    // $capaiTarget = $tgt > 0 && $pct >= $tgt;
-                                @endphp
-                                <tr>
-                                    <td style="text-align:center;font-weight:600;color:var(--text-muted);">{{ $no }}</td>
-                                    <td style="font-family:var(--mono);font-size:12px;font-weight:600;color:var(--primary);">{{ $ind['kode'] }}</td>
-                                    <td style="font-weight:500;color:var(--text);">{{ $ind['label'] }}</td>
-                                    <td class="r">{{ number_format($ind['total_sasaran']) }}</td>
-                                    <td class="r">{{ number_format($ind['total_jumlah']) }}</td>
-                                    {{-- <td class="r" style="color:{{ $capaiTarget ? '#15803d' : '#b91c1c' }};"> --}}
-                                        {{-- {{ $tgt > 0 ? number_format($tgt,0).'%' : '–' }} --}}
-                                    </td>
-                                    <td>
-                                        <div class="prog-wrap">
-                                            <div class="prog-bar">
-                                                <div class="prog-fill {{ $pg }}" style="width:{{ min($pct,100) }}%;"></div>
-                                            </div>
-                                            <span class="prog-pct">{{ number_format($pct,1) }}%</span>
-                                        </div>
-                                    </td>
-                                    <td style="text-align:center;">
-                                        <span class="badge {{ $bdg }}">{{ $lvl }}</span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>

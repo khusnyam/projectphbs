@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\NewUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,10 +11,6 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        
-        if (Auth::check()) {
-            return redirect()->route('dashboard');
-        }
         return view('auth.login');
     }
 
@@ -31,7 +27,7 @@ class LoginController extends Controller
         ]);
 
         // Cek apakah email terdaftar
-        $user = NewUser::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
         if (!$user) {
             return back()
@@ -46,25 +42,29 @@ class LoginController extends Controller
                 ->withInput($request->only('email'));
         }
 
-        // Authenticate role 1 or 2 as before, but redirect everyone to `/peta`
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role'=>1], $request->has('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->intended('/peta');
-        } elseif (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'id_role'=>2], $request->has('remember'))) {
-            $request->session()->regenerate();
-            return redirect()->intended('/peta');
+        // Attempt login
+        if (!Auth::attempt(
+            ['email' => $request->email, 'password' => $request->password],
+            $request->boolean('remember')
+        )) {
+            return back()
+                ->withErrors(['email' => 'Email atau password salah.'])
+                ->withInput($request->only('email'));
         }
 
         $request->session()->regenerate();
 
+        // Simpan role ke session
+        // $user = Auth::user();
+        session([
+            'user_role'      => (int) $user->id_role,
+            'user_name'      => $user->name,
+        ]);
+
         // Redirect berdasarkan role
-        $role = Auth::user()->id_role ?? 2;
-
-        if ($role = 1) {
-            return redirect()->route('beranda');
-        }
-
-        return redirect()->route('dashboard');
+        return $user->isDinkes()
+            ? redirect()->route('beranda')
+            : redirect()->route('dashboard');
     }
 
     public function logout(Request $request)

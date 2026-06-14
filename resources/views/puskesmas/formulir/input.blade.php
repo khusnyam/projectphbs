@@ -1,29 +1,15 @@
 @extends('layouts.sidebar')
 @section('title','Formulir - SIP-PHBS')
-@section('content')
-
-<main class="main">
-  <div class="content">
-
-    {{-- Hero --}}
-    <div class="header-card" style="align-items:flex-start">
-  <div style="flex:1">
-    <h1 style="margin:0 0 6px"><i class="fa-solid fa-notes-medical"></i> Data PHBS Puskesmas</h1>
-    <p style="margin:0">Input laporan baru dan pantau riwayat capaian indikator PHBS dalam satu halaman.</p>
-  </div>
-  <span class="header-badge" style="margin-top:4px;flex-shrink:0"><i class="fa-solid fa-database"></i> Pelaporan Terpadu</span>
+@section('top')
+  <div class="hero-left">
+    <div class="hero-title">
+        Formulir
+    </div>
+      <p class="hero-desc">
+       Input Data PHBS Tatanan Rumah Tangga.
+      </p>
 </div>
-
-    {{-- Alert --}}
-    @if(session('success'))
-      <div class="alert alert-success"><i class="fa-solid fa-circle-check"></i> {{ session('success') }}</div>
-    @endif
-    @if($errors->any())
-      <div class="alert alert-error"><i class="fa-solid fa-triangle-exclamation"></i> {{ $errors->first() }}</div>
-    @endif
-
-    {{-- Tab switcher --}}
-    <div class="phbs-tabs">
+<div class="phbs-tabs" style="width: 23%; margin:5px">
       <button class="phbs-tab" id="tab-input" onclick="switchTab('input')">
         <i class="fa-solid fa-pen-to-square"></i> Input Data
       </button>
@@ -35,43 +21,35 @@
         @endif
       </button>
     </div>
+@endsection
 
+@section('content')
+<main class="main">
+  <div class="content">
+    {{-- Alert --}}
+    @if(session('success'))
+      <div class="alert alert-success"><i class="fa-solid fa-circle-check"></i> {{ session('success') }}</div>
+    @endif
+    @if($errors->any())
+      <div class="alert alert-error"><i class="fa-solid fa-triangle-exclamation"></i> {{ $errors->first() }}</div>
+    @endif
+    
     {{-- ═══ TAB INPUT ═══ --}}
     <section class="tab-section" id="section-input">
-
-      <div class="method-grid">
-        <div class="chart-card method-card" id="card-manual" onclick="showManual()">
-          <div>
-            <div class="chart-title"><i class="fa-solid fa-pen-to-square" style="color:var(--primary)"></i> Input Manual</div>
-            <div class="chart-sub" style="margin-top:6px">Isi data utama dan 13 indikator PHBS langsung melalui formulir.</div>
-          </div>
-          <div class="method-actions">
-            <button type="button" class="btn btn-primary btn-sm"><i class="fa-solid fa-file-lines"></i> Buka Formulir</button>
-          </div>
-        </div>
-        <div class="chart-card method-card" id="card-import" onclick="showImport()">
-          <div>
-            <div class="chart-title"><i class="fa-solid fa-file-excel" style="color:#16a34a"></i> Import Excel</div>
-            <div class="chart-sub" style="margin-top:6px">Upload file .xlsx / .xls sesuai format template pelaporan PHBS.</div>
-          </div>
-          <div class="method-actions">
-            <button type="button" class="btn btn-green btn-sm"><i class="fa-solid fa-folder-open"></i> Buka Import</button>
-          </div>
-        </div>
-      </div>
-
       {{-- Form Manual --}}
-      <div id="manualBox" class="form-panel is-hidden">
-        <form method="POST" action="{{ route('phbs.store') }}" id="formInput">
+      <div id="manualBox" class="form-panel">
+        <form method="POST" action="{{ route('formulir.store') }}" id="formInput">
           @csrf
 
-          <div class="detail-panel">
-            <div class="section-head">
+          <div class="filter-section">
+            <div class="section-head" style="margin-top: -15px;margin-left:-15px;">
               <div>
-                <h3><i class="fa-solid fa-clipboard-list"></i> Informasi Laporan</h3>
+                <h3>Perhatian!</h3>
                 <p>Lengkapi data utama laporan sebelum mengisi capaian indikator.</p>
               </div>
-              <span class="count-badge">Data Utama</span>
+              <div class="method-actions" onclick="showImport()">
+              <button type="button" class="btn btn-green btn-sm"><i class="fa-solid fa-folder-open"></i>Import Excel</button>
+            </div>
             </div>
 
             <div class="kk-grid">
@@ -95,34 +73,28 @@
                 <label>Jumlah KK Perempuan</label>
                 <input type="number" name="jumlah_kk_pr" id="kk_pr" value="{{ old('jumlah_kk_pr', 0) }}" min="0" oninput="updateKkTotal()" required>
               </div>
-            </div>
-
-            <div style="margin-top:14px">
               <div class="kk-total-badge">
-                <i class="fa-solid fa-house-user"></i>
                 Total KK: <span id="kk_total_display">0</span>
-                <span style="font-size:12px;font-weight:400;color:#15803d;margin-left:4px">(otomatis)</span>
+                <span style="font-size:12px;font-weight:400;color:darkblue;margin-left:4px">(otomatis)</span>
               </div>
             </div>
-          </div>
+            </div>
 
           {{-- Tabel 13 indikator --}}
-          <div class="table-card">
-            <div class="table-header">
+          <div class="section" style="margin: 15px;margin-top:-5px">
+          <div class="section-card">
+            <div class="section-head">
               <div>
-                <div class="table-title"><i class="fa-solid fa-list-check"></i> 13 Indikator PHBS</div>
-                <div class="table-sub">Input sasaran dan capaian. Persentase dihitung otomatis per baris.</div>
+                <div class="section-title">Indikator PHBS</div>
+                <div class="section-sub">Input sasaran dan capaian. Persentase dihitung otomatis per baris.</div>
               </div>
-              <span class="count-badge" style="background:var(--green-bg);color:#15803d">
-                <i class="fa-solid fa-percent"></i> Auto %
-              </span>
             </div>
 
-            <div class="table-wrap">
+            <div class="table-wrap" style="margin: 15px">
               <table>
                 <thead>
                   <tr>
-                    <th style="width:44px">No</th>
+                    <th style="width:44px;color:#1e3a5f">No</th>
                     <th>Indikator</th>
                     <th style="text-align:center;width:110px">Sasaran</th>
                     <th style="text-align:center;width:110px">Capaian</th>
@@ -148,6 +120,7 @@
                           class="input-sm sasaran-inp"
                           min="0"
                           placeholder="{{ $ind->id_indikator <= 3 ? 'opsional' : '' }}"
+                          {{ $ind->id_indikator >= 4 ? 'readonly' : '' }}
                         >
                       </td>
                       <td style="text-align:center">
@@ -167,6 +140,7 @@
                 </tbody>
               </table>
             </div>
+          </div>
 
             <div class="footer-actions">
               <button type="reset" class="btn btn-outline" onclick="resetPercent()">
@@ -183,6 +157,11 @@
       {{-- Import Excel --}}
       <div id="importBox" class="is-hidden">
         <div class="detail-panel import-box">
+            <div style="margin-bottom:16px; text-align:left;">
+            <button type="button" class="btn btn-outline" onclick="showManual()">
+                <i class="fa-solid fa-arrow-left"></i> Kembali
+            </button>
+        </div>
           <div class="upload-icon"><i class="fa-solid fa-file-excel"></i></div>
           <h2>Upload Excel PHBS</h2>
           <p>Import file Excel format .xlsx / .xls sesuai template.</p>
@@ -204,18 +183,8 @@
     <section class="tab-section" id="section-history">
 
       {{-- Filter --}}
-      <div class="filter-card">
-        <div class="section-head" style="margin-bottom:0">
-          <div>
-            <h3><i class="fa-solid fa-sliders"></i> Filter History</h3>
-            <p>Saring data berdasarkan periode.</p>
-          </div>
-        </div>
-        {{--
-          PERBAIKAN: action pakai route('puskesmas.formulir.input')
-          bukan route('phbs.index') yang sekarang tidak ada
-        --}}
-        <form method="GET" action="{{ route('puskesmas.formulir.input') }}" class="filter-form" id="filterForm">
+      <div class="filter-section">
+        <form method="GET" action="{{ route('formulir.input') }}" class="filter-row" id="filterForm">
           <input type="hidden" name="tab" value="history">
           <div class="fg">
             <label>Bulan</label>
@@ -233,7 +202,7 @@
 
           {{--
             PERBAIKAN: cek id_role langsung dari kolom, bukan via relasi role->nama_role
-            karena relasi role di NewUser masih di-comment
+            karena relasi role di User masih di-comment
           --}}
           @if(!Auth::check() || Auth::user()->id_role != 2)
           <div class="fg">
@@ -251,13 +220,13 @@
 
           <div style="display:flex;gap:8px">
             <button type="submit" class="btn btn-primary"><i class="fa-solid fa-filter"></i> Filter</button>
-            <a href="{{ route('puskesmas.formulir.input', ['tab'=>'history']) }}" class="btn btn-outline"><i class="fa-solid fa-xmark"></i></a>
+            <a href="{{ route('formulir.input', ['tab'=>'history']) }}" class="btn btn-outline"><i class="fa-solid fa-xmark"></i></a>
           </div>
         </form>
       </div>
 
       {{-- Report list --}}
-      <div class="report-list">
+      <div class="report-list" style="padding: 0px 15px 15px 15px">
         @forelse($historyData as $item)
           @php
             $terpenuhi  = $item->details->where('jumlah_capaian', '>', 0)->count();
@@ -266,7 +235,7 @@
           @endphp
 
           <div class="report-card">
-            <div class="report-head">
+            <div class="report-head" onclick="toggleReport({{ $item->id_phbs }})" style="cursor:pointer">
               <div>
                 <h2><i class="fa-solid fa-hospital"></i> {{ $item->puskesmas->nama_puskesmas ?? '—' }}</h2>
                 <p>
@@ -280,7 +249,7 @@
               </span>
             </div>
 
-            <div class="report-body">
+            <div class="report-body is-hidden" id="report-body-{{ $item->id_phbs }}">
 
               {{-- Quick stats --}}
               <div class="quick-grid">
@@ -325,7 +294,7 @@
                 <div class="table-header">
                   <div class="table-title"><i class="fa-solid fa-table"></i> Detail per Indikator</div>
                 </div>
-                <div class="table-wrap">
+                <div class="table-wrap" style="margin-top: 1px">
                   <table>
                     <thead>
                       <tr>
@@ -363,10 +332,10 @@
 
               {{-- Actions --}}
               <div class="actions">
-                <a href="{{ route('phbs.edit', $item->id_phbs) }}" class="btn btn-warning btn-sm">
+                <a href="{{ route('formulir.edit', $item->id_phbs) }}" class="btn btn-warning btn-sm">
                   <i class="fa-solid fa-pen-to-square"></i> Edit
                 </a>
-                <form id="delForm{{ $item->id_phbs }}" action="{{ route('phbs.destroy', $item->id_phbs) }}" method="POST" style="display:inline">
+                <form id="delForm{{ $item->id_phbs }}" action="{{ route('formulir.destroy', $item->id_phbs) }}" method="POST" style="display:inline">
                   @csrf @method('DELETE')
                   <button type="button" onclick="openDeleteModal({{ $item->id_phbs }})" class="btn btn-danger btn-sm">
                     <i class="fa-solid fa-trash"></i> Hapus
@@ -383,15 +352,9 @@
           </div>
         @endforelse
       </div>
-
-      @if($historyData->hasPages())
-        <div class="pagination-wrap">
-          {{ $historyData->links() }}
-        </div>
-      @endif
-
     </section>
-
+    <div>
+    </div>
   </div>
 </main>
 
@@ -408,6 +371,16 @@
 </div>
 
 <script>
+function toggleReport(id) {
+    const body = document.getElementById('report-body-' + id);
+    const arrow = document.getElementById('arrow-' + id);
+
+    body.classList.toggle('is-hidden');
+
+    arrow.classList.toggle('fa-chevron-down');
+    arrow.classList.toggle('fa-chevron-up');
+}
+
 function switchTab(tab) {
   ['input','history'].forEach(t => {
     document.getElementById('tab-' + t).classList.toggle('active', t === tab);
@@ -440,7 +413,18 @@ function showImport() {
 function updateKkTotal() {
   const lk = parseInt(document.getElementById('kk_lk').value) || 0;
   const pr = parseInt(document.getElementById('kk_pr').value) || 0;
+  const total = lk + pr;
   document.getElementById('kk_total_display').textContent = (lk + pr).toLocaleString('id-ID');
+
+  for (let i = 4; i <= 13; i++) {
+    const sasaranInput = document.getElementById('sasaran_' + i);
+    if (sasaranInput) {
+      sasaranInput.value = total;
+      
+      // Mentrigger event 'input' agar perhitungan persentase di baris tersebut ikut terupdate
+      sasaranInput.dispatchEvent(new Event('input'));
+    }
+  }
 }
 updateKkTotal();
 
@@ -473,7 +457,11 @@ function closeDeleteModal() {
   document.getElementById('deleteModal').classList.add('hidden');
 }
 document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-  if (selectedDeleteId) document.getElementById('delForm' + selectedDeleteId).submit();
+  // Jika ID kosong/tidak ada, baru batalkan proses (return)
+  if (!selectedDeleteId) return; 
+  
+  // Jika ID ada, kirim form ke Controller
+  document.getElementById('delForm' + selectedDeleteId).submit();
 });
 document.getElementById('deleteModal').addEventListener('click', function(e) {
   if (e.target === this) closeDeleteModal();

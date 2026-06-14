@@ -49,7 +49,7 @@ class PhbsInputController extends Controller
         $footerRole    = Auth::user()->role->nama_role ?? 'Puskesmas';
         $footerInitial = strtoupper(substr($footerName, 0, 1));
 
-        return view('puskesmas.dashboard.formulir.input', compact(
+        return view('puskesmas.formulir.input', compact(
             'puskesmas',
             'allIndikator',
             'historyData',
@@ -116,7 +116,7 @@ class PhbsInputController extends Controller
         // Redirect ke route puskesmas.formulir.input (= GET /phbs)
         // dengan tab history langsung terbuka
         return redirect()
-            ->route('puskesmas.dashboard.formulir.input', ['tab' => 'history'])
+            ->route('formulir.input', ['tab' => 'history'])
             ->with('success', 'Data PHBS berhasil disimpan.');
     }
 
@@ -128,14 +128,15 @@ class PhbsInputController extends Controller
     {
         $phbs = NewDataPHBS::findOrFail($id_phbs);
 
-        if (Auth::check() && Auth::user()->id_role == 2 && $phbs->id_puskesmas != Auth::user()->id_puskesmas) {
-            abort(403);
-        }
+        // if (Auth::check() && Auth::user()->id_role == 2 && $phbs->id_puskesmas != Auth::user()->id_puskesmas) {
+        //     abort(403);
+        // }
 
         $phbs->delete();
 
         return redirect()
-            ->route('puskesmas.dashboard.formulir.input', ['tab' => 'history'])
+            // ->back()
+            ->route('formulir.input', ['tab' => 'history'])
             ->with('success', 'Data berhasil dihapus.');
     }
 
@@ -153,7 +154,7 @@ class PhbsInputController extends Controller
 $footerRole    = 'Puskesmas';
 $footerInitial = Auth::check() ? strtoupper(substr(Auth::user()->name, 0, 1)) : 'G';
 
-        return view('puskesmas.dashboard.formulir.edit', compact(
+        return view('puskesmas.formulir.edit', compact(
             'phbs', 'puskesmas', 'allIndikator',
             'footerName', 'footerRole', 'footerInitial'
         ));
@@ -203,7 +204,7 @@ $footerInitial = Auth::check() ? strtoupper(substr(Auth::user()->name, 0, 1)) : 
         }
 
         return redirect()
-            ->route('puskesmas.dashboard.formulir.input', ['tab' => 'history'])
+            ->route('formulir.input', ['tab' => 'history'])
             ->with('success', 'Data PHBS berhasil diperbarui.');
     }
 }

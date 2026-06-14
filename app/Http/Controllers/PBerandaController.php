@@ -25,9 +25,9 @@ class PBerandaController extends Controller
 
         // Get puskesmas dari auth user
         $puskesmas = $user;
-        // if (!$puskesmas) {
-        //     abort(403, 'Pengguna belum terhubung dengan puskesmas');
-        // }
+        if (!$puskesmas) {
+            abort(403, 'Pengguna belum terhubung dengan puskesmas');
+        }
 
         // Parameters
         $tahun = $request->query('tahun', date('Y'));

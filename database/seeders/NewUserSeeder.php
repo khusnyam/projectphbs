@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\NewUser;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class NewUserSeeder extends Seeder
@@ -50,7 +50,7 @@ class NewUserSeeder extends Seeder
         ];
 
         foreach ($users as $user) {
-            NewUser::create($user);
+            User::create($user);
         }
     }
 }

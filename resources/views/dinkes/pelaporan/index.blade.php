@@ -1,112 +1,29 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Laporan PHBS – SIP-PHBS</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-<link rel="stylesheet" href="{{ asset('css/laporan.css') }}">
-</head>
-<body>
-
-{{-- SIDEBAR --}}
-<aside class="sidebar">
-  <div class="sb-brand">
-    <div class="sb-logo">
-      <i class="fa-solid fa-heart-pulse"></i>
-    </div>
-    <div class="sb-name">
-      <strong>SIP-PHBS</strong>
-      <span>Sistem Informasi Pelaporan PHBS</span>
-    </div>
-  </div>
-  <nav class="sb-nav">
-    <div class="sb-section">
-      <span class="sb-label">Menu Utama</span>
-      <a href="{{ route('beranda') }}" class="sb-item">
-        <i class="fa-solid fa-house"></i> Beranda
-      </a>
-      <a href="{{ route('phbs.dashboard') }}" class="sb-item">
-        <i class="fa-solid fa-chart-line"></i> Dashboard
-      </a>
-      <a href="{{ route('phbs.index') }}" class="sb-item active">
-        <i class="fa-solid fa-table-list"></i> Laporan PHBS
-      </a>
-      <a href="{{ route('peta.index') }}" class="sb-item">
-        <i class="fa-solid fa-map-location-dot"></i> Peta PHBS
-      </a>
-    </div>
-    <div class="sb-section">
-      <span class="sb-label">Akun</span>
-      <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="sb-item">
-          <i class="fa-solid fa-right-from-bracket"></i> Logout
-        </button>
-      </form>
-    </div>
-  </nav>
-  <div class="sb-footer">
-    <div class="sb-user">
-      <div class="sb-avatar">
-        {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
-      </div>
-      <div class="sb-user-info">
-        <strong>{{ auth()->user()->name ?? 'User' }}</strong>
-        <span>{{ ucfirst(auth()->user()->role->role ?? 'dinkes') }}</span>
-      </div>
-    </div>
-  </div>
-</aside>
-
-{{-- MAIN --}}
-<div class="main">
-
+@extends('layouts.sidebar')
+@section('title','Pelaporan - SIP-PHBS')
+@section('top')
   {{-- HERO --}}
-  <div class="hero">
     <div class="hero-left">
       <div class="hero-title">
-        <i class="fa-solid fa-table-list"></i>
         Laporan Rekapitulasi PHBS
       </div>
       <div class="hero-desc">
-        Tatanan Rumah Tangga • Tahun {{ $tahun }}
+        Laporan tahun {{ $tahun }}
       </div>
-      <div class="hero-badges">
+    </div>
+    <div class="hero-badges">
         <span class="hero-badge">
-          <i class="fa-solid fa-calendar"></i> Tahun {{ $tahun }}
-        </span>
-        <span class="hero-badge">
-          <i class="fa-solid fa-file-lines"></i> {{ $stats['total_laporan'] }} Laporan
-        </span>
-        @if($role === 'dinkes')
-        <a href="{{ route('phbs.export', request()->query()) }}"
-           class="btn btn-export" style="padding:5px 14px;font-size:12px">
+          <a href="{{ route('phbs.export', request()->query()) }}"
+           class="btn btn-export" style="padding:3px 10px;font-size:12px">
           <i class="fa-solid fa-file-excel"></i> Export Excel
         </a>
-        @endif
-      </div>
+        </span>        
     </div>
-    <div class="hero-right">
-      <div class="rata-card">
-        <div class="rata-label">Rata-rata PHBS</div>
-        @php
-          $rata     = $stats['rata_phbs'] ?? 0;
-          $barColor = $rata >= 80 ? '#22c55e' : ($rata >= 60 ? '#f59e0b' : '#ef4444');
-          $katTxt   = $rata >= 80 ? 'Kategori Baik' : ($rata >= 60 ? 'Kategori Cukup' : 'Kategori Kurang');
-        @endphp
-        <div class="rata-value">{{ $rata }}%</div>
-        <div class="rata-bar">
-          <div class="rata-fill" style="width:{{ $rata }}%;background:{{ $barColor }}"></div>
-        </div>
-        <div class="rata-sub">{{ $katTxt }}</div>
-      </div>
-    </div>
-  </div>
+@endsection
+@section('content')
 
-  <div class="content">
+{{-- MAIN --}}
+<div class="main">
+  <div class="page-wrap">
 
     {{-- ALERT --}}
     @if(session('success'))
@@ -137,8 +54,13 @@
         <div class="stat-value">{{ number_format($stats['total_ber_phbs']) }}</div>
         <div class="stat-sub">Memenuhi indikator</div>
       </div>
-      <div class="stat-card primary">
+      <div class="stat-card red">
         <div class="stat-label">Rata-rata % PHBS</div>
+        @php
+          $rata     = $stats['rata_phbs'] ?? 0;
+          $barColor = $rata >= 80 ? '#22c55e' : ($rata >= 60 ? '#f59e0b' : '#ef4444');
+          $katTxt   = $rata >= 80 ? 'Kategori Baik' : ($rata >= 60 ? 'Kategori Cukup' : 'Kategori Kurang');
+        @endphp
         <div class="stat-value" style="color:{{ $barColor }}">{{ $rata }}%</div>
         <div class="pbar">
           <div class="pbar-fill" style="width:{{ $rata }}%;background:{{ $barColor }}"></div>
@@ -148,11 +70,7 @@
     </div>
 
     {{-- FILTER --}}
-    <div class="filter-section">
-      <div class="filter-title">
-        <i class="fa-solid fa-filter"></i> Filter Data
-      </div>
-      <div class="filter-desc">Pilih tahun, bulan, puskesmas, atau kategori untuk menampilkan data.</div>
+    <div class="filter-section" style="margin: 10px 5px 10px 5px">
       <form method="GET" action="{{ route('phbs.index') }}">
         <div class="filter-row">
           <div class="fg">
@@ -206,10 +124,9 @@
     </div>
 
     {{-- TABEL --}}
-    <div class="table-card">
-      <div class="table-head">
-        <div class="card-title">
-          <i class="fa-solid fa-table" style="color:var(--primary);margin-right:6px"></i>
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-title">
           Data Laporan PHBS
         </div>
         <span class="count-badge">{{ $laporan->count() }} data</span>
@@ -244,7 +161,7 @@
             <tr>
               <td style="color:var(--text-muted);font-size:12px">{{ $i + 1 }}</td>
               <td class="td-pkm">{{ $row->puskesmas->nama_puskesmas ?? '-' }}</td>
-              <td style="color:var(--text-muted);font-size:12px">{{ $namaBulan[$row->bulan] ?? '-' }}</td>
+              <td style="color:var(--text-muted);font-size:12px">{{ $row->bulan ?? '-' }}</td>
               <td style="color:var(--text-muted);font-size:12px">{{ $row->tahun }}</td>
               <td class="td-num">{{ number_format($row->jumlah_kk_lk) }}</td>
               <td class="td-num">{{ number_format($row->jumlah_kk_pr) }}</td>
@@ -292,5 +209,4 @@
   </div>
 </div>
 
-</body>
-</html>
+@endsection

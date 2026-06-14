@@ -1,46 +1,55 @@
 <?php
 
-// namespace App\Models;
+namespace App\Models;
 
-// use Illuminate\Database\Eloquent\Factories\HasFactory;
-// use Illuminate\Foundation\Auth\User as Authenticatable;
-// use Illuminate\Notifications\Notifiable;
-// use App\Models\NewRole;
-// use App\Models\NewPuskesmas;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use App\Models\NewRole;
+use App\Models\NewPuskesmas;
 
-// class User extends Authenticatable
-// {
-//     use Notifiable;
+class User extends Authenticatable
+{
+        use Notifiable;
+        protected $table = 'users';
+        protected $primaryKey = 'id_user';
+        protected $fillable = [
+            'name',
+            'email',
+            'password',
+            'status_aktif',
+        ];
+        protected $hidden = [
+            'password',
+            'remember_token',
+        ];
+        protected $casts = [
+            'id_role'           => 'integer',
+            'email_verified_at' => 'datetime',
+            'status_aktif'      => 'boolean',
+            'password'          => 'hashed',
+        ];
 
-//     protected $table      = 'users';
-//     protected $primaryKey = 'id_user';
+    //relasi
+    public function role()
+    {
+        return $this->belongsTo(NewRole::class, 'id_role', 'id_role');
+    }
 
-//     protected $fillable = [
-//         'id_role1',
-//         'name',
-//         'email',
-//         'password',
-//         'status_aktif',
-//     ];
+    public function puskesmas()
+    {
+        return $this->hasOne(NewPuskesmas::class, 'id_user', 'id_user');
+    }
 
-//     protected $hidden = [
-//         'password',
-//         'remember_token',
-//     ];
+    //helper
+    public function isDinkes()
+{
+    return (int) $this->id_role === 1;
+}
 
-//     protected $casts = [
-//         'email_verified_at' => 'datetime',
-//         'status_aktif'      => 'boolean',
-//         'password'          => 'hashed',
-//     ];
+public function isPuskesmas()
+{
+    return (int) $this->id_role === 2;
+}
+}
 
-//     public function role()
-//     {
-//         return $this->belongsTo(Role::class, 'id_role', 'id_role');
-//     }
 
-//     public function puskesmas()
-//     {
-//         return $this->hasOne(Puskesmas::class, 'id_user', 'id_user');
-//     }
-// }
