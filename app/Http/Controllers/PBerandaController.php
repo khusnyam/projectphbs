@@ -16,15 +16,8 @@ class PBerandaController extends Controller
      */
     public function index(Request $request)
     {
-        $user = Auth::user();
-
-        // // Validasi user adalah puskesmas
-        // if ($user->id_role != 2) {
-        //     abort(403, 'Akses hanya untuk pengguna Puskesmas');
-        // }
-
-        // Get puskesmas dari auth user
-        $puskesmas = $user;
+        $puskesmas = NewPuskesmas::where('id_user', Auth::id())->first();
+        
         if (!$puskesmas) {
             abort(403, 'Pengguna belum terhubung dengan puskesmas');
         }

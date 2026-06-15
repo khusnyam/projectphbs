@@ -3,10 +3,7 @@
 @section('top')
     <div class="hero-left">
             <div class="hero-title">
-                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                </svg>
-                Dashboard PHBS — {{ Auth::user()->puskesmas->nama_puskesmas ?? 'Puskesmas' }}
+                Dashboard
             </div>
             <p class="hero-desc">
                 Pemantauan capaian 13 indikator Perilaku Hidup Bersih dan Sehat (PHBS)
@@ -204,50 +201,6 @@
                 </table>
             </div>
         </div>
-
-        {{-- ─── PROGRESS INDIKATOR ──────────────────────────────────── --}}
-        <div class="section">
-            <div class="section-card">
-            <div class="section-head">
-                <div>
-                    <h3 class="section-title">
-                        Progress Per Indikator
-                    </h3>
-                    <p class="card-desc">Visualisasi pencapaian masing-masing indikator PHBS</p>
-                </div>
-            </div>
-
-            <div class="progress-grid">
-                @forelse($indicators as $idx => $ind)
-                    <div class="progress-item">
-                        <div class="progress-header">
-                            <span class="progress-label">
-                                {{ $ind['kode'] ?? 'PHB-' . str_pad($idx + 1, 2, '0', STR_PAD_LEFT) }}
-                            </span>
-                            <span class="progress-value">
-                                {{ number_format($ind['persentase'] ?? 0, 1) }}%
-                            </span>
-                        </div>
-                        <div class="progress-bar">
-                            @php
-                                $pct = min($ind['persentase'] ?? 0, 100);
-                                if ($pct >= 100) $bgColor = '#16a34a';
-                                elseif ($pct >= 80) $bgColor = '#0ea5e9';
-                                elseif ($pct >= 60) $bgColor = '#f59e0b';
-                                else $bgColor = '#ef4444';
-                            @endphp
-                            <div class="progress-fill" style="width:{{ $pct }}%; background-color:{{ $bgColor }};"></div>
-                        </div>
-                    </div>
-                @empty
-                    <div style="grid-column:1/-1;text-align:center;padding:24px;color:#94a3b8;">
-                        Belum ada data untuk periode ini
-                    </div>
-                @endforelse
-            </div>
-            </div>
-        </div>
-
     </div>
 
 </main>

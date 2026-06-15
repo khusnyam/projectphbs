@@ -7,6 +7,7 @@ use App\Models\NewPuskesmas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\NewIndikator;
 
 class LaporanController extends Controller
 {
@@ -80,41 +81,86 @@ class LaporanController extends Controller
         return view('PHBS.form');
     }
 
+    /**
+     * Export History PHBS ke Excel
+     */
+    /**
+     * Export History PHBS ke Excel
+     */
+    /**
+     * Export History PHBS ke Excel
+     */
     public function exportExcel(Request $request)
     {
-        $tahun    = $request->get('tahun', date('Y'));
-        $bulan    = $request->get('bulan', 0);
-        $pkmId    = $request->get('puskesmas_id', 0);
-        $kategori = $request->get('kategori', '');
+        // 1. Query data dasar dengan relasi lengkap
+        $query = NewDataPHBS::with(['puskesmas', 'details.indikator']);
 
-        $query = DB::table('NewDataPHBS as d')
-            ->join('puskesmas as p', 'd.id_puskesmas', '=', 'p.id_puskesmas')
-            ->select('d.*', 'p.nama_puskesmas')
-            ->where('d.tahun', $tahun);
+        // 2. FILTER AKUN / HAK AKSES PUSKESMAS
+        if (Auth::check() && Auth::user()->id_role == 2) {
+            $userPuskesmas = NewPuskesmas::where('id_user', Auth::id())->first();
+            $id_puskesmas = $userPuskesmas ? $userPuskesmas->id_puskesmas : null;
+            $query->where('id_puskesmas', $id_puskesmas);
+            
+            $currentPuskesmas = $userPuskesmas;
+        } else {
+            // PERBAIKAN 1: Nama request dari blade adalah 'puskesmas_id'. Nilai > 0 berarti difilter
+            if ($request->has('puskesmas_id') && $request->puskesmas_id > 0) {
+                $query->where('id_puskesmas', $request->puskesmas_id);
+                $currentPuskesmas = NewPuskesmas::find($request->puskesmas_id);
+            } else {
+                $currentPuskesmas = null;
+            }
+        }
 
-        if ($bulan)    $query->where('d.bulan', $bulan);
-        if ($pkmId)    $query->where('d.id_puskesmas', $pkmId);
-        if ($kategori === 'baik')   $query->where('d.persen_phbs', '>=', 80);
-        if ($kategori === 'cukup')  $query->whereBetween('d.persen_phbs', [60, 79.99]);
-        if ($kategori === 'kurang') $query->where('d.persen_phbs', '<', 60);
+        // 3. FILTER BULAN & TAHUN
+        // PERBAIKAN 2: Jika > 0, konversikan angka dari option value menjadi String nama bulan
+        if ($request->has('bulan') && $request->bulan > 0) {
+            $namaBulanString = \App\Models\NewDataPHBS::namaBulan($request->bulan);
+            $query->where('bulan', $namaBulanString);
+        }
 
-        $laporan   = $query->orderBy('p.nama_puskesmas')->orderBy('d.bulan')->get();
-        $namaBulan = $this->index($request)->namaBulan;
+        if ($request->has('tahun') && $request->tahun > 0) {
+            $query->where('tahun', $request->tahun);
+        }
+
+        // Ambil data hasil query (Tanpa pagination)
+        $historyData = $query->orderBy('tahun', 'desc')
+                            ->orderBy('bulan', 'desc')
+                            ->get();
+
+        // 4. FILTER KATEGORI (Sama persis seperti di fungsi index)
+        // PERBAIKAN 3: Jika user memfilter kategori Baik/Cukup/Kurang, terapkan di Excel juga
+        if ($request->filled('kategori')) {
+            $kategori = $request->kategori;
+            $historyData = $historyData->filter(function ($row) use ($kategori) {
+                $pct = $row->persen_phbs;
+                if ($kategori === 'baik')   return $pct >= 80;
+                if ($kategori === 'cukup')  return $pct >= 60 && $pct < 80;
+                if ($kategori === 'kurang') return $pct < 60;
+                return true;
+            });
+        }
+
+        $allIndikator = NewIndikator::orderBy('id_indikator')->get();
+
+        // 5. Penamaan file excel dinamis sesuai filter
+        $namaPkm = $currentPuskesmas ? str_replace(' ', '_', $currentPuskesmas->nama_puskesmas) : 'Semua_Puskesmas';
+        $filterBulan = ($request->has('bulan') && $request->bulan > 0) ? '_' . \App\Models\NewDataPHBS::namaBulan($request->bulan) : '';
+        $filterTahun = $request->has('tahun') ? '_' . $request->tahun : '';
+        
+        $filename = "Laporan_PHBS_" . $namaPkm . $filterBulan . $filterTahun . "_" . date('Ymd_His') . ".xls";
 
         $headers = [
             'Content-Type'        => 'application/vnd.ms-excel; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="Laporan_PHBS_'.$tahun.'.xls"',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
             'Cache-Control'       => 'max-age=0',
         ];
 
-        $html = view('phbs.export_excel', compact('laporan','namaBulan','tahun','bulan'))->render();
-        return Response::make("\xEF\xBB\xBF".$html, 200, $headers);
-        NewDataPhbs::findOrFail($id)->delete();
-        return redirect()->route('phbs.index')->with('success', 'Data berhasil dihapus.');
-    // }
-    //     $export = $this->index($request)->getData();
-
-    //     return view('dinkes.pelaporan.export_excel',compact('export'));
+        // Sesuaikan dengan letak view Excel Anda yang ada di LaporanController
+        // (contoh: 'dinkes.pelaporan.export_excel' atau 'puskesmas.formulir.export_history_excel')
+        $html = view('dinkes.pelaporan.export_excel', compact('historyData', 'allIndikator', 'currentPuskesmas'))->render();
+        
+        return response("\xEF\xBB\xBF" . $html, 200, $headers);
     }
 
     public function edit($id)

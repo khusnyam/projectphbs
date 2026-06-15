@@ -134,7 +134,7 @@
                 <div class="info-body">
                     <div class="info-label">Rata-rata Kabupaten</div>
                     <div class="info-value">{{ number_format($rataKabupaten, 1) }}%</div>
-                    <div class="info-sub">Rata-rata 13 indikator PHBS</div>
+                    <div class="info-sub">Berdasarkan 13 indikator PHBS</div>
                 </div>
             </div>
         </div>

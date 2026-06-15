@@ -13,12 +13,6 @@ class CheckRole
     {
         $user = Auth::user();
 
-        dd([
-    'kelas_user'  => $user ? get_class($user) : 'NULL',
-    'id_role'     => $user?->id_role,
-    'role_param'  => $role,
-]);
-
         if (!$user) {
             return redirect()->route('login');
         }

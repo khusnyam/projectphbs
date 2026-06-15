@@ -16,7 +16,7 @@ class BerandaController extends Controller
     {
         // ── Filter ─────────────────────────────────────────────────────────────
         $tahun        = (int) $request->get('tahun', date('Y'));
-        $bulan        = $request->filled('bulan')        ? (int) $request->get('bulan')        : null;
+        $bulan        = $request->filled('bulan')        ? $request->get('bulan')        : null;
         $id_puskesmas = $request->filled('id_puskesmas') ? (int) $request->get('id_puskesmas') : null;
  
         // ── Dropdown puskesmas aktif ────────────────────────────────────────────

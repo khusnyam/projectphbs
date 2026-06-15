@@ -9,7 +9,7 @@
        Input Data PHBS Tatanan Rumah Tangga.
       </p>
 </div>
-<div class="phbs-tabs" style="width: 23%; margin:5px">
+<div class="phbs-tabs" style="width: 23%; margin:2px">
       <button class="phbs-tab" id="tab-input" onclick="switchTab('input')">
         <i class="fa-solid fa-pen-to-square"></i> Input Data
       </button>
@@ -73,10 +73,11 @@
                 <label>Jumlah KK Perempuan</label>
                 <input type="number" name="jumlah_kk_pr" id="kk_pr" value="{{ old('jumlah_kk_pr', 0) }}" min="0" oninput="updateKkTotal()" required>
               </div>
-              <div class="kk-total-badge">
-                Total KK: <span id="kk_total_display">0</span>
-                <span style="font-size:12px;font-weight:400;color:darkblue;margin-left:4px">(otomatis)</span>
-              </div>
+              {{-- <div class="kk-total-badge"> --}}
+                <button type="button" class="tab-input" onclick="isiOtomatisSasaran();">
+                    Total KK: <span id="kk_total_display">0</span><br>
+                </button>
+              {{-- </div> --}}
             </div>
             </div>
 
@@ -188,12 +189,20 @@
           <input type="hidden" name="tab" value="history">
           <div class="fg">
             <label>Bulan</label>
-            <select name="bulan">
-              <option value="">Semua Bulan</option>
-              @foreach(['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'] as $bln)
-                <option value="{{ $bln }}" {{ request('bulan') == $bln ? 'selected' : '' }}>{{ $bln }}</option>
+            <select name="bulan" required>
+              <option value="" disabled {{ old('bulan') ? '' : 'selected' }}>-- Pilih Bulan --</option>
+              @php
+                  $daftarBulan = [
+                      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+              @endphp
+
+              @foreach($daftarBulan as $bulan)
+                  <option value="{{ $bulan }}" {{ old('bulan') == $bulan ? 'selected' : '' }}>
+                      {{ $bulan }}
+                  </option>
               @endforeach
-            </select>
+          </select>
           </div>
           <div class="fg">
             <label>Tahun</label>
@@ -371,6 +380,26 @@
 </div>
 
 <script>
+function isiOtomatisSasaran() {
+    // 1. Ambil angka Total KK dari display span
+    let totalKkText = document.getElementById('kk_total_display').innerText;
+    let totalKk = parseInt(totalKkText) || 0;
+
+    // 2. Isi ke kolom input sasaran indikator 4 sampai 13 secara lokal di browser
+    for (let i = 4; i <= 13; i++) {
+        // Mencari input berdasarkan name="sasaran_input[4]" sampai name="sasaran_input[13]"
+        let inputSasaran = document.querySelector(`input[name="sasaran_input[${i}]"]`);
+        
+        if (inputSasaran) {
+            // Mengisi nilai input di layar
+            inputSasaran.value = totalKk;
+            
+            // Opsional: Beri warna abu-abu tipis sebagai penanda bahwa ini terisi otomatis
+            inputSasaran.style.backgroundColor = '#f3f4f6'; 
+        }
+    }
+}
+
 function toggleReport(id) {
     const body = document.getElementById('report-body-' + id);
     const arrow = document.getElementById('arrow-' + id);

@@ -36,10 +36,14 @@
                     <label>Bulan</label>
                     <select name="bulan">
                         <option value="">Semua Bulan</option>
-                        @foreach(range(1,12) as $b)
-                            <option value="{{ $b }}" @selected($b == $bulan)>
-                                {{ \App\Models\NewDataPHBS::namaBulan($b) }}
-                            </option>
+                        @php
+                            $daftarBulan = [
+                                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                            ];
+                        @endphp
+                        @foreach($daftarBulan as $namaBulan)
+                            <option value="{{ $namaBulan }}" @selected($namaBulan == $bulan)>{{ $namaBulan }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -123,7 +127,7 @@
                 <div class="info-body">
                     <div class="info-label">Rata-rata Ber-PHBS</div>
                     <div class="info-value">{{ number_format($rataRataPhbs, 1) }}%</div>
-                    <div class="info-sub">{{ $rekapData->count() }} puskesmas terpantau</div>
+                    <div class="info-sub">Berdasarkan {{ $rekapData->count() }} puskesmas yang terpantau</div>
                 </div>
             </div>
         </div>
@@ -191,21 +195,6 @@
                 </div>
             </div>
         </div>
-
-        {{-- ─── TREN BULANAN ──────────────────────────────────────────── --}}
-        @if(count($trenLabels) > 0)
-        <div class="tren-wrap">
-            <div class="chart-card">
-                <div class="card-head">
-                    <div class="card-head-left">
-                        <span class="card-title">Tren Rata-rata Capaian Ber-PHBS per Bulan</span>
-                    </div>
-                    <span class="card-badge">{{ $tahun }}</span>
-                </div>
-                <div style="height:200px;"><canvas id="chartTren"></canvas></div>
-            </div>
-        </div>
-        @endif
 
         {{-- ─── MATRIKS 13 INDIKATOR × PUSKESMAS ───────────────────── --}}
         <div class="section">

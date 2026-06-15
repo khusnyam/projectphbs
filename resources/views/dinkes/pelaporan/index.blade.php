@@ -12,7 +12,7 @@
     </div>
     <div class="hero-badges">
         <span class="hero-badge">
-          <a href="{{ route('phbs.export', request()->query()) }}"
+          <a href="{{ route('formulir.export_history', request()->query()) }}"
            class="btn btn-export" style="padding:3px 10px;font-size:12px">
           <i class="fa-solid fa-file-excel"></i> Export Excel
         </a>
@@ -37,40 +37,8 @@
       </div>
     @endif
 
-    {{-- STAT GRID --}}
-    <div class="stat-grid">
-      <div class="stat-card green">
-        <div class="stat-label">Total Laporan</div>
-        <div class="stat-value">{{ $stats['total_laporan'] }}</div>
-        <div class="stat-sub">Periode ditampilkan</div>
-      </div>
-      <div class="stat-card teal">
-        <div class="stat-label">Total KK Dipantau</div>
-        <div class="stat-value">{{ number_format($stats['total_kk']) }}</div>
-        <div class="stat-sub">Kepala Keluarga</div>
-      </div>
-      <div class="stat-card amber">
-        <div class="stat-label">KK Ber-PHBS</div>
-        <div class="stat-value">{{ number_format($stats['total_ber_phbs']) }}</div>
-        <div class="stat-sub">Memenuhi indikator</div>
-      </div>
-      <div class="stat-card red">
-        <div class="stat-label">Rata-rata % PHBS</div>
-        @php
-          $rata     = $stats['rata_phbs'] ?? 0;
-          $barColor = $rata >= 80 ? '#22c55e' : ($rata >= 60 ? '#f59e0b' : '#ef4444');
-          $katTxt   = $rata >= 80 ? 'Kategori Baik' : ($rata >= 60 ? 'Kategori Cukup' : 'Kategori Kurang');
-        @endphp
-        <div class="stat-value" style="color:{{ $barColor }}">{{ $rata }}%</div>
-        <div class="pbar">
-          <div class="pbar-fill" style="width:{{ $rata }}%;background:{{ $barColor }}"></div>
-        </div>
-        <div class="stat-sub">{{ $katTxt }}</div>
-      </div>
-    </div>
-
     {{-- FILTER --}}
-    <div class="filter-section" style="margin: 10px 5px 10px 5px">
+    <div class="filter-section" style="margin: 10px -25px 10px -25px;">
       <form method="GET" action="{{ route('phbs.index') }}">
         <div class="filter-row">
           <div class="fg">
@@ -145,9 +113,6 @@
               <th style="text-align:right">Ber-PHBS</th>
               <th style="text-align:right">% PHBS</th>
               <th>Kategori</th>
-              @if($role === 'dinkes')
-              <th>Aksi</th>
-              @endif
             </tr>
           </thead>
           <tbody>
@@ -176,22 +141,6 @@
                 </div>
               </td>
               <td><span class="badge {{ $bk }}">{{ $kt }}</span></td>
-              @if($role === 'dinkes')
-              <td>
-                <div class="acts">
-                  <a href="{{ route('laporan.edit', $row->id_phbs) }}" class="btn-sm-edit">
-                    <i class="fa-solid fa-pen"></i>
-                  </a>
-                  <form method="POST" action="{{ route('laporan.destroy', $row->id_phbs) }}"
-                    onsubmit="return confirm('Hapus data ini?')">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="btn-sm-del">
-                      <i class="fa-solid fa-trash"></i>
-                    </button>
-                  </form>
-                </div>
-              </td>
-              @endif
             </tr>
             @empty
             <tr>

@@ -63,10 +63,9 @@
                 <label>Jumlah KK Perempuan</label>
                 <input type="number" name="jumlah_kk_pr" id="kk_pr" value="{{ old('jumlah_kk_pr', $phbs->jumlah_kk_pr) }}" min="0" oninput="updateKkTotal()" required>
               </div>
-              <div class="kk-total-badge">
-                Total KK: <span id="kk_total_display">0</span>
-                <span style="font-size:12px;font-weight:400;color:darkblue;margin-left:4px">(otomatis)</span>
-              </div>
+              <button type="button" class="tab-input" onclick="isiOtomatisSasaran();">
+                    Total KK: <span id="kk_total_display">0</span><br>
+                </button>
             </div>
           </div>
 
