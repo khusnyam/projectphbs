@@ -74,7 +74,7 @@
                 <input type="number" name="jumlah_kk_pr" id="kk_pr" value="{{ old('jumlah_kk_pr', 0) }}" min="0" oninput="updateKkTotal()" required>
               </div>
               {{-- <div class="kk-total-badge"> --}}
-                <button type="button" class="tab-input" onclick="isiOtomatisSasaran();">
+                <button type="button" class="tab-input" onclick="isiOtomatisSasaran();" style="background:linear-gradient(135deg, #2563eb, #1d4ed8";color:#fff;padding: 12px 24px;>
                     Total KK: <span id="kk_total_display">0</span><br>
                 </button>
               {{-- </div> --}}
